@@ -1,0 +1,267 @@
+.main-sesion {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0c192c;
+}
+
+/*main-nav*/
+
+/*sesion-nav*/
+
+.nombreUsuario {
+  color: white;
+}
+.nombreSesion {
+  color: white;
+  font-size: 1.2em;
+}
+
+.sesion-nav {
+  height: 6%;
+  display: flex;
+  justify-content: space-between;
+  color: black;
+  width: 100%;
+  position: relative;
+}
+/*Diseño olas de POKERUNITED*/
+
+.poker {
+  color: #5898b7;
+}
+
+.united {
+  color: #5898b7;
+}
+
+.letter {
+  font-size: 5vmin;
+  position: absolute;
+}
+
+.border {
+  color: black;  
+  text-shadow:
+    -1px -1px 0 white, 
+    1px -1px 0 white,
+    -1px 1px 0 white,
+    1px 1px 0 white;  
+}
+
+.wave {
+  color: #09f;
+  animation: wave 3s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% {
+    clip-path: polygon(
+      0% 47%,
+      10% 48%,
+      33% 54%,
+      54% 60%,
+      70% 61%,
+      84% 59%,
+      100% 52%,
+      100% 100%,
+      0% 100%
+    );
+  }
+
+  50% {
+    clip-path: polygon(0% 60%,
+    15% 65%,
+    34% 66%,
+    51% 62%,
+    67% 50%,
+    84% 45%,
+    100% 46%,
+    100% 100%,
+    0% 100%
+    );
+  }
+}
+
+/*general sobre poker-united*/
+
+.poker-united{
+  margin-left: 2px;
+}
+
+/*Diseño boton de salur*/
+
+.button-salir {
+  background: none;
+  border: none;
+  font-size: 1em; /* Esto hará que el texto sea un poco más grande */
+  margin-right: 5px; /* Esto añadirá un margen a la derecha del botón */
+  color: white;
+}
+
+/*otros*/
+
+.sesion-juego {
+  width: 100%; /* Añade esta línea */
+  display: flex; /* Añade esta línea */
+  justify-content: center; /* Añade esta línea */
+  margin-bottom: 7%;
+}
+
+.sesion-cartas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.sesion-cartas ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.sesion-cartas ul li {
+  margin: 0 3px;
+  border: none;
+}
+
+.sesion-cartas ul li button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  transition: transform 0.3s ease; /* Añade esta línea */
+}
+
+.sesion-cartas ul li button:active {
+  transform: translateY(-10px); /* Añade esta línea */
+}
+
+.carta {
+  width: 45px;
+  height: 45px;
+}
+
+.sesion-juego .carta-reverso {
+  margin: 0 3px; /* Añade esta línea */
+}
+
+.carta-reverso {
+  width: 150px;
+}
+
+.sesion-juego ul {
+  padding: 0;
+  display: flex; /* Añade esta línea */
+  justify-content: center; /* Añade esta línea */
+}
+
+/*Tareas*/
+
+.sesion-tareas {
+  padding: 20px;
+  color: white;
+  width: 100%;
+  height: 25%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-control {
+  margin-bottom: 10px;
+  border: none; /* Elimina los bordes */
+  background-color: #0c192c; /* Cambia el color de fondo */
+  color: white; /* Cambia el color del texto */
+}
+
+.btn {
+  margin-right: 5px;
+  margin-top: auto;
+}
+
+#sesion-tarea span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sesion-tarea-valor {
+  text-align: right;
+  flex-grow: 1;
+}
+
+.editing {
+  border: 1px solid white;
+}
+
+:root{
+  --color: #5898b7;
+}
+
+.sesion-tareas {
+  position: relative;
+  padding: 20px 50px;
+  color: #fff;
+  border: 3px solid var(--color);
+  z-index: 2;
+  box-shadow: 0 0 20px var(--color);
+}
+
+.btn-2 {
+  position: relative;
+  padding: 10px 25px;
+  color: #fff;
+  border: 3px solid var(--color);
+  z-index: 2;
+  background-color: #0c192c;
+  margin-top: 30px;
+}
+
+.btn-2 span:nth-child(n) {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 3px solid var(--color);
+  transition: all 0.6s ease;
+  color: var(--color);
+  background-color: var(--color);
+}
+
+.btn-2 span:nth-child(1) {
+  right: 10%;
+  top: -10px;
+}
+
+.btn-2 span:nth-child(2) {
+  left: 10%;
+  bottom: -10px;
+}
+
+.btn-2:hover {
+  box-shadow: 0 0 20px var(--color);
+  border-color: var(--color);
+}
+
+.btn-2:hover span:nth-child(1) {
+  right: 80%;
+  transform: rotate(90deg);
+}
+
+.btn-2:hover span:nth-child(2) {
+  left: 80%;
+  transform: rotate(90deg);
+}
+
+/*Nombre de la sesion*/
+
+.nombre-sesion {
+  color: white;
+  font-size: 0.8em;
+}

@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin:0; /*Elimina espacios no deseados alrededor elementos*/
+    padding: 0; /*Eliminar espacio no deseados dentro de los elementos*/
+    box-sizing: border-box; /*Cambia la forma en que se calculan el ancho y la altura de los elementos. En lugar de agregar el relleno y el borde al ancho y la altura especificados, estos se incluyen en el ancho y la altura. */
+    font-family: 'Poppins', sans-serif;
+}
+
+.body {
+    display: flex; /*Sus elementos serán flexibles*/
+    justify-content: center; /*Con flex, los elementos se centrarán horizontalmente*/
+    align-items: center; /*Con flex, los elementos se centrarán verticalmente*/
+    min-height: 100vh; /*Altura mínima al 100% de la altura de la ventana*/
+    background-color: #1c1c1c;
+}
+
+.box {
+    position:relative; /*Posición relativa para que el elemento sea relativo a su posición normal*/
+    width: 380px;
+    height: 420px;
+    background-color: #1c1c1c;
+    border-radius: 8px;
+    overFlow: hidden; /*Evita que el contenido se desborde*/
+}
+
+.box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 380px;
+    height: 420px;
+    background: linear-gradient(0deg,transparent,
+    transparent,#45f3ff, #45f3ff, #45f3ff);h2 {
+        font-size: 15vmin;
+        position: absolute;
+      }
+      .border {
+        color: black;  
+        text-shadow:
+          -1px -1px 0 white, 
+          1px -1px 0 white,
+          -1px 1px 0 white,
+          1px 1px 0 white;  
+      }
+      
+      .wave {
+        color: #5CC1CE;
+        animation: wave 3s ease-in-out infinite;
+      }
+      
+      @keyframes wave {
+        0%, 100% {
+          clip-path: polygon(
+            0% 47%,
+            10% 48%,
+            33% 54%,
+            54% 60%,
+            70% 61%,
+            84% 59%,
+            100% 52%,
+            100% 100%,
+            0% 100%
+          );
+        }
+      
+        50% {
+          clip-path: polygon(0% 60%,
+          15% 65%,
+          34% 66%,
+          51% 62%,
+          67% 50%,
+          84% 45%,
+          100% 46%,
+          100% 100%,
+          0% 100%
+          );
+        }
+      }
+      
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        background: black;
+        display: flex;  
+        height: 100vh;
+        width: 100vw;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      * {
+        margin: 0;
+        padding: 0;
+      }
+    z-index: 1;
+    transform-origin: bottom right; 
+    animation: animate 6s linear infinite; 
+}
+
+.box::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 380px;
+    height: 420px;
+    background: linear-gradient(0deg,transparent,
+    transparent,#45f3ff, #45f3ff, #45f3ff);
+    z-index: 1;
+    transform-origin: bottom right; 
+    animation: animate 6s linear infinite; 
+    animation-delay: -3s;
+}
+
+.borderline {
+    position: absolute;
+    top: 0;
+    inset: 0;
+}
+
+.borderline::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 380px;
+    height: 420px;
+    background: linear-gradient(0deg,transparent,
+    transparent,#ff2770, #ff2770, #ff2770);
+    z-index: 1;
+    transform-origin: bottom right; 
+    animation: animate 6s linear infinite; 
+    animation-delay: -1.5s;
+}
+
+.borderline::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 380px;
+    height: 420px;
+    background: linear-gradient(0deg,transparent,
+    transparent,#ff2770, #ff2770, #ff2770);
+    z-index: 1;
+    transform-origin: bottom right; 
+    animation: animate 6s linear infinite; 
+    animation-delay: -4.5s;
+}
+
+@keyframes animate {
+    0%
+    {
+        transform: rotate(0deg);
+    }
+    100%
+    {
+        transform: rotate(360deg);
+    }
+}
+
+.box form {
+    position:absolute; /*Posición absoluta para que el elemento sea relativo a su primer elemento padre con posición relativa*/
+    inset: 4px; /*Posiciona el elemento a 4px de todos los lados*/
+    background-color:#222;
+    padding: 50px 40px;
+    border-radius: 8px;
+    z-index: 2; /*Posiciona el elemento por encima de los demás*/
+    display: flex;
+    flex-direction: column;
+}
+
+.box form h2 {
+    color: #fff;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0.1em; /*Espaciado entre letras*/
+}
+
+.box form .inputBox {
+    position: relative;
+    width: 300px;
+    margin-top: 35px;
+}
+
+.box form .inputBox input {
+    position: relative;
+    width: 100%;
+    padding: 20px 10px 10px; /*Arriba, derecha, abajo, izquierda*/
+    background: transparent;
+    outline: none; /*Elimina el borde al hacer click*/
+    border: none;
+    box-shadow: none; /*Elimina la sombra al hacer click*/
+    color: #23242a;
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    transition: 0.5s; 
+    z-index: 10; /*Posiciona el elemento por encima de los demás*/
+}
+
+.box form .inputBox span {
+    position: absolute;
+    left: 0; 
+    padding: 20px 0px 10px; /*Arriba, derecha, abajo, izquierda*/
+    pointer-events: none; /*Evita que el elemento sea seleccionado*/
+    color: #8f8f8f;
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    transition: 0.5s;
+} 
+
+.box form .inputBox input:valid ~ span,
+.box form .inputBox input:focus ~ span {
+    color: #fff;
+    font-size: 0.75em;
+    transform: translateY(-34px);
+}
+
+.box form .inputBox i {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.box form .inputBox input:valid ~ i, 
+.box form .inputBox input:focus ~ i {
+    height: 44px; 
+}
+
+.box form .links {
+    display: flex;
+    justify-content: space-between;
+}
+
+.box form .links a {
+    margin: 10px 0;
+    font-size: 0.75em;
+    color: #8f8f8f;
+    text-decoration: none;
+}
+
+.box form .links a:hover,
+.box form .links a:nth-child(2)
+{
+    color: #fff;
+}
+
+.box form input[type="submit"] {
+    border: none;
+    outline: none;
+    padding: 9px 25px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.9em;
+    border-radius: 4px;
+    font-weight: 600;
+    width: 100px;
+    margin-top: 10px
+}
+
+.box form input[type="submit"]:active {
+    opacity: 0.4;
+}
