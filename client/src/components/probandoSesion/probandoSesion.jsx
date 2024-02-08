@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import "./probandoSesion.css";
 import "./sesionCartas.css";
+
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from 'prop-types';
@@ -50,6 +51,7 @@ function ProbandoSesion({ rol, nombre }) {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef();
   const [usuarios, setUsuarios] = useState([]);
+  const usuariosOrdenados = usuarios.sort((a, b) => a.nombre === nombre ? -1 : b.nombre === nombre ? 1 : 0);
 
   const location = useLocation();
   const [nombreSesion, setNombreSesion] = useState(location.state ? location.state.nombreSesion : '');
@@ -100,9 +102,6 @@ function ProbandoSesion({ rol, nombre }) {
     });
   
     // Escuchar el evento 'nuevo-usuario' y agregarlo a la lista de usuarios
-    socket.on('nuevo-usuario', (nombreUsuario) => {
-      setUsuarios((usuariosActuales) => [...usuariosActuales, { nombre: nombreUsuario, isRevealed: false, revealedCard: null }]);
-    });
   
     // Escuchar el evento 'usuario-desconectado' y eliminarlo de la lista de usuarios
     socket.on('usuario-desconectado', (nombreUsuario) => {
@@ -127,7 +126,6 @@ function ProbandoSesion({ rol, nombre }) {
   
     return () => {
       socket.off('usuarios-actuales');
-      socket.off('nuevo-usuario');
       socket.off('usuario-desconectado');
       socket.off('sesion-disponible');
       socket.off('tarea-actualizada');
@@ -138,10 +136,11 @@ function ProbandoSesion({ rol, nombre }) {
   const handleCardClick = (carta) => {
     setSelectedCard(carta.value);
     setRevealedCard(carta.image);
-    setUsuarios(usuarios.map(usuario => usuario.nombre === nombre ? { ...usuario, revealedCard: carta.image, isRevealed: true } : usuario));
-  
-    // Emitir un evento 'usuario-votado' al servidor
-    socket.emit('usuario-votado', nombre);
+    setUsuarios(prevUsuarios => prevUsuarios.map(usuario => 
+      usuario.nombre === nombre 
+        ? { ...usuario, revealedCard: carta.image, isRevealed: true } 
+        : usuario
+    ));
   };
   
   return (
@@ -200,14 +199,14 @@ function ProbandoSesion({ rol, nombre }) {
 
       <div className="sesion-juego">
         <ul>
-          {usuarios.map((usuario, index) => (
+          {usuariosOrdenados.map((usuario, index) => (
             <li key={index}>
-              <img src={usuario.isRevealed ? usuario.revealedCard : reverso} alt="Carta Reverso" className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''}`} />        
+              <img src={usuario.nombre === nombre && usuario.isRevealed ? usuario.revealedCard : reverso} alt="Carta Reverso" className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''}`} />        
               <div className="nombreUsuario">{usuario.nombre}</div>
             </li>
           ))}
         </ul>
-      </div>
+  </div>
 
       <div className="sesion-cartas">
         {tarea !== 'No hay tarea seleccionada' && (
