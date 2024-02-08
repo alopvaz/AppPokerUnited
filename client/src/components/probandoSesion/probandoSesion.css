@@ -109,8 +109,8 @@
 .sesion-juego {
   width: 100%; /* Añade esta línea */
   display: flex; /* Añade esta línea */
-  justify-content: center; /* Añade esta línea */
-  margin-bottom: 7%;
+  justify-content: flex-start; /* Añade esta línea */
+  margin-left: 2%;
 }
 
 .sesion-cartas {
@@ -147,10 +147,6 @@
 .carta {
   width: 45px;
   height: 45px;
-}
-
-.sesion-juego .carta-reverso {
-  margin: 0 3px; /* Añade esta línea */
 }
 
 .carta-reverso {

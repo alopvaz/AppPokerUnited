@@ -88,6 +88,8 @@ function ProbandoSesion({ rol, nombre }) {
   };
 
   useEffect(() => {
+
+
     // Emitir un evento 'unirse-a-sesion' solo cuando el componente se monta
     socket.emit('unirse-a-sesion', nombre);
   
@@ -119,32 +121,45 @@ function ProbandoSesion({ rol, nombre }) {
       setTarea(tareaActualizada);
     });
 
-   // Escucha el evento 'usuario-votado' y actualiza el estado de voto del usuario
-socket.on('usuario-votado', (nombreUsuario) => {
-  setUsuarios((usuariosActuales) => usuariosActuales.map(usuario => usuario.nombre === nombreUsuario ? { ...usuario, hasVoted: true } : usuario));
-});
-  
+    
+    socket.on('usuario-votado', (usuario) => {
+      setUsuarios((usuariosActuales) => usuariosActuales.map(usuarioActual => 
+        usuarioActual.nombre === usuario.nombre 
+          ? { ...usuario, hasVoted: true, isRevealed: true } // Asegúrate de que hasVoted y isRevealed se actualizan
+          : usuarioActual
+      ));
+    });
+
     return () => {
+      socket.off('usuario-votado');
       socket.off('usuarios-actuales');
       socket.off('usuario-desconectado');
       socket.off('sesion-disponible');
       socket.off('tarea-actualizada');
-      socket.off('usuario-votado');
     };
   }, [nombre, nombreSesion]);
 
   const handleCardClick = (carta) => {
     setSelectedCard(carta.value);
     setRevealedCard(carta.image);
-    setUsuarios(prevUsuarios => prevUsuarios.map(usuario => 
-      usuario.nombre === nombre 
-        ? { ...usuario, revealedCard: carta.image, isRevealed: true } 
-        : usuario
-    ));
-  
-    // Emit an event to the server indicating that the user has voted
-    socket.emit('usuario-votado', { nombre: nombre, revealedCard: carta });
-  };
+    setUsuarios(prevUsuarios => {
+        const updatedUsuarios = prevUsuarios.map(usuario => 
+            usuario.nombre === nombre 
+                ? { ...usuario, revealedCard: carta.image, isRevealed: true, hasVoted: true }
+                : usuario
+        );
+
+        // Imprime aquí para ver el estado actualizado de los usuarios en este cliente
+        console.log("Usuarios después de votar:", updatedUsuarios);
+
+        return updatedUsuarios;
+    });
+
+    // Emitir un evento al servidor indicando que el usuario ha votado
+    console.log("El nombre del usuario es: " + nombre + " y la carta votada es: " + carta.image);
+    socket.emit('usuario-votado', { nombre: nombre, revealedCard: carta.image, hasVoted: true }); 
+};
+
   
   return (
     <div className="main-sesion">
@@ -203,13 +218,21 @@ socket.on('usuario-votado', (nombreUsuario) => {
       <div className="sesion-juego">
         <ul>
         {usuariosOrdenados.map((usuario, index) => (
-          <li key={index}>
-            <img src={usuario.nombre === nombre && usuario.isRevealed ? usuario.revealedCard : reverso} 
-                alt="Carta Reverso" 
-                className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''} ${usuario.hasVoted ? 'has-voted' : ''}`} />        
-        <div className="nombreUsuario">{usuario.nombre}</div>
+  <li key={index}>
+    <img 
+      src={usuario.nombre === nombre && usuario.isRevealed ? usuario.revealedCard : reverso}
+      alt="Carta Reverso" 
+      className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''} ${usuario.hasVoted ? 'has-voted' : ''}`}
+      style={{
+        boxShadow: usuario.hasVoted ? `0 0 5px 2px #5898b7` : 'none', // Sombra azul si ha votado
+        border: usuario.hasVoted ? '2px solid #5898b7' : 'none', // Borde azul si ha votado
+      }}
+    />        
+    <div className="nombreUsuario">{usuario.nombre}</div>
   </li>
 ))}
+
+
         </ul>
   </div>
 

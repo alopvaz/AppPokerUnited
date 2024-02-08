@@ -19,6 +19,7 @@ const socketLogic = (server) => {
         nombre: nombreUsuario,
         isRevealed: false,
         revealedCard: null,
+        hasVoted: false, 
       };
     
       // Verificar si el usuario ya está en la lista
@@ -61,21 +62,22 @@ const socketLogic = (server) => {
   // Notificar a los demás usuarios que el usuario ha dejado la sesión
   io.emit('usuario-desconectado', socket.nombreUsuario); // Modificado para emitir a todos los usuarios
 });
-  
+
 socket.on('usuario-votado', ({ nombre, revealedCard }) => {
-  // Encuentra al usuario que ha votado
   const usuarioVotado = usuarios.find(usuario => usuario.nombre === nombre);
-
-  // Si el usuario existe, actualiza su estado, la carta revelada y la propiedad hasVoted
   if (usuarioVotado) {
-    usuarioVotado.isRevealed = true;
+    usuarioVotado.isRevealed = true; // Esta línea podría ser opcional, dependiendo de si quieres revelar la carta ahora o más tarde.
     usuarioVotado.revealedCard = revealedCard;
-    usuarioVotado.hasVoted = true; // Establece hasVoted en true
+    usuarioVotado.hasVoted = true; // Actualiza que el usuario ha votado.
 
-    // Emite la lista actualizada de usuarios a todos los clientes
-    io.emit('usuarios-actuales', usuarios);
+    // Aquí está el cambio clave: asegúrate de emitir la lista completa de usuarios actualizada.
+    io.emit('usuarios-actuales', usuarios); // Esto asegura que todos los clientes reciban la lista actualizada.
+    io.emit('usuario-votado', nombre); // Esto asegura que todos los clientes reciban la lista actualizada.
+
   }
 });
+
+
   })
   
   return io;
