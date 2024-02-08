@@ -1,13 +1,11 @@
+/* eslint-disable no-unused-vars */
 import "./probandoSesion.css";
-import "./sesionCartas.css"
+import "./sesionCartas.css";
 import { useState, useRef, useEffect } from 'react';
-//import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
-
+import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from 'prop-types';
-
 import io from 'socket.io-client';
+
 const socket = io('http://localhost:3000');
 
 // Importacion de imagenes de cartas
@@ -43,12 +41,9 @@ const cartas = [
 ];
 
 function ProbandoSesion({ rol, nombre }) {
-
+  
   const [selectedCard, setSelectedCard] = useState(null);
-
   const [isRevealed, setIsRevealed] = useState(false);
-
-  // eslint-disable-next-line no-unused-vars
   const [revealedCard, setRevealedCard] = useState(null);
   const [buttonText, setButtonText] = useState('Revelar');
   const [tarea, setTarea] = useState('No hay tarea seleccionada');
@@ -89,8 +84,6 @@ function ProbandoSesion({ rol, nombre }) {
     socket.emit('actualizar-tarea', tarea);
   };
 
-  // ...
-
   useEffect(() => {
     // Emitir un evento 'unirse-a-sesion' solo cuando el componente se monta
     socket.emit('unirse-a-sesion', nombre);
@@ -127,11 +120,10 @@ function ProbandoSesion({ rol, nombre }) {
       setTarea(tareaActualizada);
     });
 
-    
-  // Escuchar el evento 'usuario-votado' y actualizar el estado de votación del usuario
-  socket.on('usuario-votado', (nombreUsuario) => {
-    setUsuarios((usuariosActuales) => usuariosActuales.map(usuario => usuario.nombre === nombreUsuario ? { ...usuario, hasVoted: true } : usuario));
-  });
+    // Escuchar el evento 'usuario-votado' y actualizar el estado de votación del usuario
+    socket.on('usuario-votado', (nombreUsuario) => {
+      setUsuarios((usuariosActuales) => usuariosActuales.map(usuario => usuario.nombre === nombreUsuario ? { ...usuario, hasVoted: true } : usuario));
+    });
   
     return () => {
       socket.off('usuarios-actuales');
@@ -140,9 +132,7 @@ function ProbandoSesion({ rol, nombre }) {
       socket.off('sesion-disponible');
       socket.off('tarea-actualizada');
       socket.off('usuario-votado');
-
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nombre, nombreSesion]);
 
   const handleCardClick = (carta) => {
@@ -156,41 +146,40 @@ function ProbandoSesion({ rol, nombre }) {
   
   return (
     <div className="main-sesion">
+      <div className="sesion-nav">
+        <div className="poker-united">
+          <h2 className="border letter">POKERUNITED</h2>
+          <h2 className="wave letter">
+            <span className="poker">POKER</span>
+            <span className="united">UNITED</span>
+          </h2>
+        </div>
+        <h2 className="nombreSesion">{nombreSesion}</h2> {/* Aquí se muestra el nombre de la sesión */}
+        <button className="button-salir" onClick={handleSalirClick}>Salir</button>
+      </div>
 
-<div className="sesion-nav">
-  <div className="poker-united">
-    <h2 className="border letter">POKERUNITED</h2>
-    <h2 className="wave letter">
-      <span className="poker">POKER</span>
-      <span className="united">UNITED</span>
-    </h2>
-  </div>
-  <h2 className="nombreSesion">{nombreSesion}</h2> {/* Aquí se muestra el nombre de la sesión */}
-  <button className="button-salir" onClick={handleSalirClick}>Salir</button>
-</div>
-
-<div className="sesion-tareas">
+      <div className="sesion-tareas">
         <span></span>
         <div id="sesion-tarea">
           <div style={{
             fontSize: '17px', marginTop: '20px', color: "#5898b7", fontWeight: 'bold'
           }}>Tarea:
             <input
-  ref={inputRef}
-  style={{
-    height: '30px',
-    width: '300px',
-    fontSize: '16px',
-    fontStyle: tarea === 'No hay tarea seleccionada' ? 'italic' : 'normal'
-  }}
-  type="text"
-  className={`form-control ${isEditing ? 'editing' : ''}`}
-  value={tarea}
-  onChange={e => setTarea(e.target.value)}
-  onBlur={handleTareaBlur} // Usar handleTareaBlur en lugar de setIsEditing(false)
-  required
-  disabled={!isEditing}
-/>
+              ref={inputRef}
+              style={{
+                height: '30px',
+                width: '300px',
+                fontSize: '16px',
+                fontStyle: tarea === 'No hay tarea seleccionada' ? 'italic' : 'normal'
+              }}
+              type="text"
+              className={`form-control ${isEditing ? 'editing' : ''}`}
+              value={tarea}
+              onChange={e => setTarea(e.target.value)}
+              onBlur={handleTareaBlur} // Usar handleTareaBlur en lugar de setIsEditing(false)
+              required
+              disabled={!isEditing}
+            />
           </div>
           {rol === 'admin' && (
             <div className="botones-centrados">
@@ -210,29 +199,30 @@ function ProbandoSesion({ rol, nombre }) {
       </div>
 
       <div className="sesion-juego">
-  <ul>
-    {usuarios.map((usuario, index) => (
-      <li key={index}>
-<img src={usuario.isRevealed ? usuario.revealedCard : reverso} alt="Carta Reverso" className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''}`} />        <div className="nombreUsuario">{usuario.nombre}</div>
-      </li>
-    ))}
-  </ul>
-</div>
+        <ul>
+          {usuarios.map((usuario, index) => (
+            <li key={index}>
+              <img src={usuario.isRevealed ? usuario.revealedCard : reverso} alt="Carta Reverso" className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''}`} />        
+              <div className="nombreUsuario">{usuario.nombre}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-<div className="sesion-cartas">
-    {tarea !== 'No hay tarea seleccionada' && (
-      <ul>
-        {cartas.map((carta) => (
-          <li key={carta.value}>
-            <button value={carta.value} className={`carta-btn ${carta.value === selectedCard ? 'selected' : ''}`} onClick={() => handleCardClick(carta)}>
-              <img src={carta.image} alt={carta.value.toString()} className="carta" />
-            </button>
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-          </div>
+      <div className="sesion-cartas">
+        {tarea !== 'No hay tarea seleccionada' && (
+          <ul>
+            {cartas.map((carta) => (
+              <li key={carta.value}>
+                <button value={carta.value} className={`carta-btn ${carta.value === selectedCard ? 'selected' : ''}`} onClick={() => handleCardClick(carta)}>
+                  <img src={carta.image} alt={carta.value.toString()} className="carta" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
   );
 }
 
