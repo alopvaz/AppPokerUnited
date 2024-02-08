@@ -46,7 +46,7 @@ const socketLogic = (server) => {
     socket.on('crear-sesion', (nombreSesion) => {
       nombreSesionActual = nombreSesion;
       io.emit('sesion-disponible', nombreSesionActual);
-    });
+    });z
   
     socket.on('actualizar-tarea', (nuevaTarea) => {
       io.emit('tarea-actualizada', nuevaTarea);
@@ -75,6 +75,10 @@ socket.on('usuario-votado', ({ nombre, revealedCard }) => {
     io.emit('usuario-votado', nombre); // Esto asegura que todos los clientes reciban la lista actualizada.
 
   }
+});
+
+socket.on('reveal-all-cards', () => {
+  io.emit('reveal-all-cards');
 });
 
 

@@ -53,6 +53,8 @@ function ProbandoSesion({ rol, nombre }) {
   const inputRef = useRef();
   const [usuarios, setUsuarios] = useState([]);
   const usuariosOrdenados = usuarios.sort((a, b) => a.nombre === nombre ? -1 : b.nombre === nombre ? 1 : 0);
+  const [allCardsRevealed, setAllCardsRevealed] = useState(false);
+
 
   const location = useLocation();
   const [nombreSesion, setNombreSesion] = useState(location.state ? location.state.nombreSesion : '');
@@ -63,19 +65,21 @@ function ProbandoSesion({ rol, nombre }) {
     navigate('/poker'); // Cambia esto por la ruta a la que quieres navegar
   };
 
-  const handleButtonClick = () => {
-    if (isRevealed) {
-      // If the card is already revealed, reset it
-      setIsRevealed(false);
-      setRevealedCard(null);
-      setButtonText('Revelar');
-    } else {
-      // If the card is not revealed, reveal it
-      setIsRevealed(true);
-      setRevealedCard(cinco); // Aquí puedes poner la carta que quieras revelar
-      setButtonText('Resetear');
-    }
-  };  
+  // Paso 2 y 3: Modifica la función handleButtonClick
+const handleButtonClick = () => {
+  if (isRevealed) {
+    setIsRevealed(false);
+    setRevealedCard(null);
+    setButtonText('Revelar');
+    setAllCardsRevealed(false); // Reset allCardsRevealed when resetting
+  } else {
+    setIsRevealed(true);
+    setRevealedCard(cinco);
+    setButtonText('Resetear');
+    setAllCardsRevealed(true); // Set allCardsRevealed to true when revealing
+    socket.emit('reveal-all-cards'); // Emit an event to the server
+  }
+};
 
   const handleCrearTareaClick = () => {
     setIsEditing(true);
@@ -130,12 +134,19 @@ function ProbandoSesion({ rol, nombre }) {
       ));
     });
 
+    socket.on('reveal-all-cards', () => {
+      setAllCardsRevealed(true);
+    });
+  
+
     return () => {
       socket.off('usuario-votado');
       socket.off('usuarios-actuales');
       socket.off('usuario-desconectado');
       socket.off('sesion-disponible');
       socket.off('tarea-actualizada');
+      socket.off('reveal-all-cards');
+
     };
   }, [nombre, nombreSesion]);
 
@@ -220,18 +231,17 @@ function ProbandoSesion({ rol, nombre }) {
         {usuariosOrdenados.map((usuario, index) => (
   <li key={index}>
     <img 
-      src={usuario.nombre === nombre && usuario.isRevealed ? usuario.revealedCard : reverso}
+      src={allCardsRevealed || (usuario.nombre === nombre && usuario.isRevealed) ? usuario.revealedCard : reverso}
       alt="Carta Reverso" 
       className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''} ${usuario.hasVoted ? 'has-voted' : ''}`}
       style={{
-        boxShadow: usuario.hasVoted ? `0 0 5px 2px #5898b7` : 'none', // Sombra azul si ha votado
-        border: usuario.hasVoted ? '2px solid #5898b7' : 'none', // Borde azul si ha votado
+        boxShadow: usuario.hasVoted ? `0 0 5px 2px #5898b7` : 'none',
+        border: usuario.hasVoted ? '2px solid #5898b7' : 'none',
       }}
     />        
     <div className="nombreUsuario">{usuario.nombre}</div>
   </li>
 ))}
-
 
         </ul>
   </div>
