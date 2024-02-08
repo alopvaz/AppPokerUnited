@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import "./probandoSesion.css";
 import "./sesionCartas.css";
+import "./sesionJuego.css";
 
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
@@ -95,7 +96,6 @@ function ProbandoSesion({ rol, nombre }) {
       socket.emit('crear-sesion', nombreSesion);
     }
   
-    // Escuchar el evento 'usuarios-actuales' y actualizar la lista de usuarios
     socket.on('usuarios-actuales', (usuariosActuales) => {
       console.log('Usuarios actuales:', usuariosActuales); // Imprimir por consola los usuarios actuales
       setUsuarios(usuariosActuales);
@@ -119,10 +119,10 @@ function ProbandoSesion({ rol, nombre }) {
       setTarea(tareaActualizada);
     });
 
-    // Escuchar el evento 'usuario-votado' y actualizar el estado de votación del usuario
-    socket.on('usuario-votado', (nombreUsuario) => {
-      setUsuarios((usuariosActuales) => usuariosActuales.map(usuario => usuario.nombre === nombreUsuario ? { ...usuario, hasVoted: true } : usuario));
-    });
+   // Escucha el evento 'usuario-votado' y actualiza el estado de voto del usuario
+socket.on('usuario-votado', (nombreUsuario) => {
+  setUsuarios((usuariosActuales) => usuariosActuales.map(usuario => usuario.nombre === nombreUsuario ? { ...usuario, hasVoted: true } : usuario));
+});
   
     return () => {
       socket.off('usuarios-actuales');
@@ -141,6 +141,9 @@ function ProbandoSesion({ rol, nombre }) {
         ? { ...usuario, revealedCard: carta.image, isRevealed: true } 
         : usuario
     ));
+  
+    // Emit an event to the server indicating that the user has voted
+    socket.emit('usuario-votado', { nombre: nombre, revealedCard: carta });
   };
   
   return (
@@ -199,12 +202,14 @@ function ProbandoSesion({ rol, nombre }) {
 
       <div className="sesion-juego">
         <ul>
-          {usuariosOrdenados.map((usuario, index) => (
-            <li key={index}>
-              <img src={usuario.nombre === nombre && usuario.isRevealed ? usuario.revealedCard : reverso} alt="Carta Reverso" className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''}`} />        
-              <div className="nombreUsuario">{usuario.nombre}</div>
-            </li>
-          ))}
+        {usuariosOrdenados.map((usuario, index) => (
+          <li key={index}>
+            <img src={usuario.nombre === nombre && usuario.isRevealed ? usuario.revealedCard : reverso} 
+                alt="Carta Reverso" 
+                className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''} ${usuario.hasVoted ? 'has-voted' : ''}`} />        
+        <div className="nombreUsuario">{usuario.nombre}</div>
+  </li>
+))}
         </ul>
   </div>
 

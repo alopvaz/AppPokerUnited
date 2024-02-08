@@ -62,15 +62,17 @@ const socketLogic = (server) => {
   io.emit('usuario-desconectado', socket.nombreUsuario); // Modificado para emitir a todos los usuarios
 });
   
-socket.on('usuario-votado', (nombreUsuario) => {
-  // Encontrar el usuario que ha votado
-  const usuarioVotado = usuarios.find(usuario => usuario.nombre === nombreUsuario);
+socket.on('usuario-votado', ({ nombre, revealedCard }) => {
+  // Encuentra al usuario que ha votado
+  const usuarioVotado = usuarios.find(usuario => usuario.nombre === nombre);
 
-  // Si el usuario existe, actualizar su estado
+  // Si el usuario existe, actualiza su estado, la carta revelada y la propiedad hasVoted
   if (usuarioVotado) {
-    usuarioVotado.hasVoted = true;
+    usuarioVotado.isRevealed = true;
+    usuarioVotado.revealedCard = revealedCard;
+    usuarioVotado.hasVoted = true; // Establece hasVoted en true
 
-    // Emitir la lista de usuarios actuales a todos los usuarios
+    // Emite la lista actualizada de usuarios a todos los clientes
     io.emit('usuarios-actuales', usuarios);
   }
 });
