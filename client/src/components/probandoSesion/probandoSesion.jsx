@@ -1,4 +1,5 @@
 import "./probandoSesion.css";
+import "./sesionCartas.css"
 import { useState, useRef, useEffect } from 'react';
 //import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -43,8 +44,11 @@ const cartas = [
 
 function ProbandoSesion({ rol, nombre }) {
 
+  const [selectedCard, setSelectedCard] = useState(null);
+
   const [isRevealed, setIsRevealed] = useState(false);
 
+  // eslint-disable-next-line no-unused-vars
   const [revealedCard, setRevealedCard] = useState(null);
   const [buttonText, setButtonText] = useState('Revelar');
   const [tarea, setTarea] = useState('No hay tarea seleccionada');
@@ -75,35 +79,6 @@ function ProbandoSesion({ rol, nombre }) {
     }
   };  
 
-  useEffect(() => {
-    // Emitir un evento 'unirse-a-sesion' solo cuando el componente se monta
-    socket.emit('unirse-a-sesion', nombre);
-  }, []); // Dependencia vacía para que se ejecute solo una vez
-
-
-  useEffect(() => {
-    // Emitir el nombre de la sesión al servidor cuando se establece
-    if (nombreSesion) {
-      socket.emit('crear-sesion', nombreSesion);
-    }
-  
-    socket.on('sesion-disponible', (nombreSesion) => {
-      console.log(nombreSesion + " en el useeeffect");
-      setNombreSesion(nombreSesion);
-    });
-  
-    // Escucha el evento 'tarea-actualizada' y actualiza la tarea
-    socket.on('tarea-actualizada', (tareaActualizada) => {
-      console.log("tarea actualizada " + tareaActualizada);
-      setTarea(tareaActualizada);
-    });
-  
-    return () => {
-      socket.off('sesion-disponible');
-      socket.off('tarea-actualizada');
-    };
-  }, [nombreSesion]); // Dependencia en nombreSesion para que se ejecute cada vez que cambie
-
   const handleCrearTareaClick = () => {
     setIsEditing(true);
   };
@@ -114,17 +89,71 @@ function ProbandoSesion({ rol, nombre }) {
     socket.emit('actualizar-tarea', tarea);
   };
 
+  // ...
+
   useEffect(() => {
-    socket.on('nuevo-usuario', (nombreUsuario) => {
-      setUsuarios((usuariosActuales) => [...usuariosActuales, nombreUsuario]);
+    // Emitir un evento 'unirse-a-sesion' solo cuando el componente se monta
+    socket.emit('unirse-a-sesion', nombre);
+  
+    // Emitir el nombre de la sesión al servidor cuando se establece
+    if (nombreSesion) {
+      socket.emit('crear-sesion', nombreSesion);
+    }
+  
+    // Escuchar el evento 'usuarios-actuales' y actualizar la lista de usuarios
+    socket.on('usuarios-actuales', (usuariosActuales) => {
+      console.log('Usuarios actuales:', usuariosActuales); // Imprimir por consola los usuarios actuales
+      setUsuarios(usuariosActuales);
     });
   
-    return () => {
-      socket.off('nuevo-usuario');
-    };
-  }, []); 
+    // Escuchar el evento 'nuevo-usuario' y agregarlo a la lista de usuarios
+    socket.on('nuevo-usuario', (nombreUsuario) => {
+      setUsuarios((usuariosActuales) => [...usuariosActuales, { nombre: nombreUsuario, isRevealed: false, revealedCard: null }]);
+    });
   
+    // Escuchar el evento 'usuario-desconectado' y eliminarlo de la lista de usuarios
+    socket.on('usuario-desconectado', (nombreUsuario) => {
+      setUsuarios((usuariosActuales) => usuariosActuales.filter(usuario => usuario.nombre !== nombreUsuario));
+    });
+  
+    socket.on('sesion-disponible', (nombreSesion) => {
+      console.log("El nombre de la sesion es: " + nombreSesion);
+      setNombreSesion(nombreSesion);
+    });
+  
+    // Escucha el evento 'tarea-actualizada' y actualiza la tarea
+    socket.on('tarea-actualizada', (tareaActualizada) => {
+      console.log("El nombre de la tarea es " + tareaActualizada);
+      setTarea(tareaActualizada);
+    });
 
+    
+  // Escuchar el evento 'usuario-votado' y actualizar el estado de votación del usuario
+  socket.on('usuario-votado', (nombreUsuario) => {
+    setUsuarios((usuariosActuales) => usuariosActuales.map(usuario => usuario.nombre === nombreUsuario ? { ...usuario, hasVoted: true } : usuario));
+  });
+  
+    return () => {
+      socket.off('usuarios-actuales');
+      socket.off('nuevo-usuario');
+      socket.off('usuario-desconectado');
+      socket.off('sesion-disponible');
+      socket.off('tarea-actualizada');
+      socket.off('usuario-votado');
+
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nombre, nombreSesion]);
+
+  const handleCardClick = (carta) => {
+    setSelectedCard(carta.value);
+    setRevealedCard(carta.image);
+    setUsuarios(usuarios.map(usuario => usuario.nombre === nombre ? { ...usuario, revealedCard: carta.image, isRevealed: true } : usuario));
+  
+    // Emitir un evento 'usuario-votado' al servidor
+    socket.emit('usuario-votado', nombre);
+  };
+  
   return (
     <div className="main-sesion">
 
@@ -182,27 +211,28 @@ function ProbandoSesion({ rol, nombre }) {
 
       <div className="sesion-juego">
   <ul>
-  {usuarios.map((usuario, index) => (
-  <li key={index}>
-    <img src={isRevealed ? revealedCard : reverso} alt="Carta Reverso" className={`carta-reverso ${isRevealed ? 'is-revealed' : ''}`} />
-    <div className="nombreUsuario">{usuario}</div>
-  </li>
-))}
+    {usuarios.map((usuario, index) => (
+      <li key={index}>
+<img src={usuario.isRevealed ? usuario.revealedCard : reverso} alt="Carta Reverso" className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''}`} />        <div className="nombreUsuario">{usuario.nombre}</div>
+      </li>
+    ))}
   </ul>
 </div>
 
-      <div className="sesion-cartas">
-        <ul>
-          {cartas.map((carta) => (
-            <li key={carta.value}>
-              <button value={carta.value}>
-                <img src={carta.image} alt={carta.value.toString()} className="carta" />
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+<div className="sesion-cartas">
+    {tarea !== 'No hay tarea seleccionada' && (
+      <ul>
+        {cartas.map((carta) => (
+          <li key={carta.value}>
+            <button value={carta.value} className={`carta-btn ${carta.value === selectedCard ? 'selected' : ''}`} onClick={() => handleCardClick(carta)}>
+              <img src={carta.image} alt={carta.value.toString()} className="carta" />
+            </button>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+          </div>
   );
 }
 

@@ -1,0 +1,13 @@
+
+.carta-btn {
+    transition: transform 0.3s ease-in-out; /* Asegura una transición suave */
+  }
+  
+  .carta-btn:hover {
+    transform: translateY(-10px); /* Mueve la carta 10px hacia arriba */
+  }
+
+  .carta-btn.selected {
+    transform: translateY(-10px); /* Mantiene la carta elevada */
+    box-shadow: 0 0 12px #5898b7; /* Agrega una sombra azul */
+  }

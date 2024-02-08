@@ -1,0 +1,27 @@
+1. Configurar client: 
+    a. Crear proyecto React usando Vite con el comando "npx create-vite . --template react"
+    b. Instalamos dependencias: 
+        - "npm install bootstrap"
+        - "npm install axios"
+        - "npm install react-router-dom"
+        - "npm install react-icons"
+        - "npm socket.io-client"
+    c. Estructura (personal): 
+        - Dentro de "src": 
+            - "components" para guardar los componentes
+            - "style" para los estilos de componente principal
+            - "localStorage" para configuracion de almacenaje local
+
+2. Configurar server: 
+    a. Crear proyecto node con el comando "npm init"
+    b. Instalamos dependencias: 
+        - "npm install mysql"
+        - "npm install express"
+        - "npm install express-session"
+        - "npm install socket.io"
+        - "npm install cors"
+    c. Estructura (personal): 
+        - "conexion.js" para conectar con la base de datos
+        - "index.js" para iniciar la aplicacion con express
+        - "routes.js" para tener las rutas express para metodos CRUD
+        - "sockets.js" para tener las rutas sockets para sincronizar datos
