@@ -42,7 +42,7 @@ nav{
     padding: 5px 10px;
     cursor: pointer;
     color: #fff;
-    z-index: 4; /* Asegúrate de que el z-index sea mayor que el de .superior-div */
+    z-index: 9999; /* Asegúrate de que el z-index sea mayor que el de cualquier otro elemento */
 }
 
 .logo {

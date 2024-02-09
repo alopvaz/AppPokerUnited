@@ -76,7 +76,6 @@ socket.on('usuario-votado', ({ nombre, revealedCard }) => {
 
   }
 
-
 });
 
 socket.on('reveal-all-cards', () => {

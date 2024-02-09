@@ -1,0 +1,122 @@
+
+/*Tareas*/
+
+.sesion-tareas {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+    height: 20%;
+  }
+  
+  .form-control {
+    border: none; /* Elimina los bordes */
+    background-color: #0c192c; /* Cambia el color de fondo */
+    color: white; /* Cambia el color del texto */
+  }
+  
+  
+  
+  #sesion-tarea span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .sesion-tarea-valor {
+    text-align: right;
+    flex-grow: 1;
+  }
+  
+  .editing {
+    border: 1px solid white;
+  }
+  
+  :root{
+    --color: #5898b7;
+  }
+  
+  .sesion-tareas {
+    color: #fff;
+    border: 3px solid var(--color);
+    z-index: 2;
+    box-shadow: 0 0 20px var(--color);
+  }
+  
+  .btn-2 {
+    position: relative;
+    padding: 10px 25px;
+    color: #fff;
+    border: 3px solid var(--color);
+    z-index: 2;
+    background-color: #0c192c;
+  }
+  
+ 
+  .btn-2:hover {
+    box-shadow: 0 0 20px var(--color);
+    border-color: var(--color);
+  }
+  
+  
+  /*Nombre de la sesion*/
+  
+  .nombre-sesion {
+    color: white;
+    font-size: 0.8em;
+  }
+
+  .tarea-title {
+    font-size: 17px;
+    color: #5898b7;
+    font-weight: bold;
+}
+
+.tarea-input {
+    font-size: 100%;
+}
+
+.tarea-input.italic {
+    font-style: italic;
+}
+
+.tarea-input.normal {
+    font-style: normal;
+}
+
+
+.sesion-tareas {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-div {
+    width: 50%;
+    height: 100%; /* Ocupa todo el espacio vertical de .sesion-tareas */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.left-div-upper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1; /* Ocupa la mitad del espacio vertical de .left-div */
+}
+
+.left-div-lower {
+    display: flex;
+    justify-content: space-between;
+    flex: 1; /* Ocupa la mitad del espacio vertical de .left-div */
+}
+
+.right-div {
+    width: 50%;
+    height: 100%; /* Ocupa todo el espacio vertical de .sesion-tareas */
+    background-color: blue;
+}
+
+
+

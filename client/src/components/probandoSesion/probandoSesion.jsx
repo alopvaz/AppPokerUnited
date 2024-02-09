@@ -2,6 +2,8 @@
 import "./probandoSesion.css";
 import "./sesionCartas.css";
 import "./sesionJuego.css";
+import "./sesionNav.css";
+import "./sesionTareas.css";
 
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
@@ -218,47 +220,42 @@ socket.on('update-users', (usuariosActualizados) => {
         <h2 className="nombreSesion">{nombreSesion}</h2> {/* Aquí se muestra el nombre de la sesión */}
         <button className="button-salir" onClick={handleSalirClick}>Salir</button>
       </div>
-
       <div className="sesion-tareas">
-        <span></span>
-        <div id="sesion-tarea">
-          <div style={{
-            fontSize: '17px', marginTop: '20px', color: "#5898b7", fontWeight: 'bold'
-          }}>Tarea:
+    <div className="left-div">
+        <div className="left-div-upper">
+            Tarea: 
             <input
-              ref={inputRef}
-              style={{
-                height: '30px',
-                width: '300px',
-                fontSize: '16px',
-                fontStyle: tarea === 'No hay tarea seleccionada' ? 'italic' : 'normal'
-              }}
-              type="text"
-              className={`form-control ${isEditing ? 'editing' : ''}`}
-              value={tarea}
-              onChange={e => setTarea(e.target.value)}
-              onBlur={handleTareaBlur} // Usar handleTareaBlur en lugar de setIsEditing(false)
-              required
-              disabled={!isEditing}
+                ref={inputRef}
+                type="text"
+                className={`form-control tarea-input ${isEditing ? 'editing' : ''} ${tarea === 'No hay tarea seleccionada' ? 'italic' : 'normal'}`}
+                value={tarea}
+                onChange={e => setTarea(e.target.value)}
+                onBlur={handleTareaBlur} // Usar handleTareaBlur en lugar de setIsEditing(false)
+                required
+                disabled={!isEditing}
             />
-          </div>
-          {rol === 'admin' && (
-            <div className="botones-centrados">
-              <button onClick={handleCrearTareaClick} className="btn btn-2">
-                {tarea === 'No hay tarea seleccionada' ? 'Crear Tarea' : 'Editar Tarea'}
-                <span></span>
-                <span></span>
-              </button>
-              <button className="btn btn-2" onClick={handleButtonClick}>
-                {buttonText}
-                <span></span>
-                <span></span>
-              </button>
-            </div>
-          )}
         </div>
-      </div>
-
+        <div className="left-div-lower">
+            {rol === 'admin' && (
+                <div className="botones-centrados">
+                    <button onClick={handleCrearTareaClick} className="btn btn-2">
+                        {tarea === 'No hay tarea seleccionada' ? 'Crear Tarea' : 'Editar Tarea'}
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <button className="btn btn-2" onClick={handleButtonClick}>
+                        {buttonText}
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            )}
+        </div>
+    </div>
+    <div className="right-div">
+        {/* Contenido del div derecho */}
+    </div>
+</div>
       <div className="sesion-juego">
   <ul>
     {usuariosOrdenados.map((usuario, index) => (

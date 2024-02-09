@@ -1,0 +1,109 @@
+.sesion-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 8%;
+  }
+  
+  .sesion-nav > div, .sesion-nav > h2, .sesion-nav > button {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+/*Estilos olas para POKERUNITED*/
+
+.poker-united {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+  
+/*Modificar para tener color empresa*/
+.poker {
+    color: #5898b7;
+  }
+  
+/*Modificar para tener color empresa*/
+  .united {
+    color: #5898b7;
+  }
+
+  .poker-united h2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .letter {
+    font-size: 5vmin;
+  }
+  
+  .border {
+    color: black;  
+    text-shadow:
+      -1px -1px 0 white, 
+      1px -1px 0 white,
+      -1px 1px 0 white,
+      1px 1px 0 white;  
+  }
+  
+  .wave {
+    color: #09f;
+    animation: wave 3s ease-in-out infinite;
+  }
+  
+  @keyframes wave {
+    0%, 100% {
+      clip-path: polygon(
+        0% 47%,
+        10% 48%,
+        33% 54%,
+        54% 60%,
+        70% 61%,
+        84% 59%,
+        100% 52%,
+        100% 100%,
+        0% 100%
+      );
+    }
+  
+    50% {
+      clip-path: polygon(0% 60%,
+      15% 65%,
+      34% 66%,
+      51% 62%,
+      67% 50%,
+      84% 45%,
+      100% 46%,
+      100% 100%,
+      0% 100%
+      );
+    }
+  }
+
+/*Estilos para el nombre de la sesion*/
+
+.nombreSesion {
+    color: white;
+    font-size: 1em;
+    font-weight: normal;
+  }
+  
+  .button-salir {
+    background: none;
+    border: none;
+    font-size: 1em; /* Esto hará que el texto sea un poco más grande */
+    color: white;
+    transition: background-color 0.3s ease; /* Añade una transición suave al cambiar el color de fondo */
+    cursor: pointer; /* Cambia el icono del ratón al de hacer click */
+  }
+  
+  .button-salir:hover {
+    color: #5898b7; /* Cambia esto al color que quieras cuando el cursor esté sobre el botón */
+  }
+
