@@ -1,19 +1,21 @@
 
 /*Tareas*/
-
 .sesion-tareas {
     display: flex;
     flex-direction: row;
-
     justify-content: space-between;
+    align-items: center; /* Centra los elementos hijos verticalmente */
     height: 20%;
-  }
+    margin-bottom: 20px;
+    width: 100%;
+}
   
   .form-control {
     border: none; /* Elimina los bordes */
     background-color: #0c192c; /* Cambia el color de fondo */
     color: white; /* Cambia el color del texto */
-  }
+
+}
   
   
   
@@ -110,13 +112,26 @@
     display: flex;
     justify-content: space-between;
     flex: 1; /* Ocupa la mitad del espacio vertical de .left-div */
+    background-color: green;
 }
+
 
 .right-div {
     width: 50%;
-    height: 100%; /* Ocupa todo el espacio vertical de .sesion-tareas */
-    background-color: blue;
 }
 
+.left-div-lower {
+    display: flex;
+    justify-content: space-between;
+    flex: 1; /* Ocupa la mitad del espacio vertical de .left-div */
+}
 
+.botones-centrados {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Ocupa todo el espacio horizontal de .left-div-lower */
+}
 
+.botones-centrados button {
+    flex: 1;
+}
