@@ -46,7 +46,7 @@ const socketLogic = (server) => {
     socket.on('crear-sesion', (nombreSesion) => {
       nombreSesionActual = nombreSesion;
       io.emit('sesion-disponible', nombreSesionActual);
-    });z
+    });
   
     socket.on('actualizar-tarea', (nuevaTarea) => {
       io.emit('tarea-actualizada', nuevaTarea);
@@ -75,13 +75,20 @@ socket.on('usuario-votado', ({ nombre, revealedCard }) => {
     io.emit('usuario-votado', nombre); // Esto asegura que todos los clientes reciban la lista actualizada.
 
   }
+
+
 });
 
 socket.on('reveal-all-cards', () => {
-  io.emit('reveal-all-cards');
+  // Actualizar el estado de todas las cartas para todos los usuarios
+  usuarios.forEach(usuario => {
+    usuario.revealedCard = usuario.hasVoted ? usuario.revealedCard : interrogacion; // Cambiar 'reverso' por 'interrogacion' si el usuario no ha votado
+    usuario.isRevealed = true;
+  });
+
+  // Emitir la lista de usuarios actualizada a todos los clientes
+  io.emit('usuarios-actuales', usuarios);
 });
-
-
   })
   
   return io;

@@ -65,22 +65,55 @@ function ProbandoSesion({ rol, nombre }) {
     navigate('/poker'); // Cambia esto por la ruta a la que quieres navegar
   };
 
-  // Paso 2 y 3: Modifica la función handleButtonClick
-const handleButtonClick = () => {
-  if (isRevealed) {
-    setIsRevealed(false);
-    setRevealedCard(null);
-    setButtonText('Revelar');
-    setAllCardsRevealed(false); // Reset allCardsRevealed when resetting
-  } else {
-    setIsRevealed(true);
-    setRevealedCard(cinco);
-    setButtonText('Resetear');
-    setAllCardsRevealed(true); // Set allCardsRevealed to true when revealing
-    socket.emit('reveal-all-cards'); // Emit an event to the server
-  }
-};
+  const handleButtonClick = () => {
+    if (isRevealed) {
 
+      setSelectedCard(null);
+      setIsRevealed(false);
+      setButtonText('Revelar');
+      setAllCardsRevealed(false); // Establecer allCardsRevealed en false al resetear
+  
+      // Emitir un evento al servidor para resetear todas las cartas
+      socket.emit('reset-all-cards');
+
+
+
+
+
+    } else {
+      setIsRevealed(true);
+      setButtonText('Resetear');
+      setAllCardsRevealed(true); // Establecer allCardsRevealed en true al revelar
+      console.log("se llama a reveal-all-cards");
+      socket.emit('reveal-all-cards'); // Emitir un evento al servidor para revelar todas las cartas
+
+  
+      // Manejar la lógica de la carta de interrogación si no se ha seleccionado ninguna carta
+      if (!selectedCard) {
+        setRevealedCard(interrogacion);
+      }
+  
+
+// En el cliente
+// En el cliente
+
+      setUsuarios(prevUsuarios => {
+        const updatedUsuarios = prevUsuarios.map(usuario => {
+          if (usuario.nombre === nombre && !usuario.hasVoted) {
+            return { ...usuario, revealedCard: selectedCard ? selectedCard : interrogacion, hasVoted: true, isRevealed: true };
+          }
+          return usuario.hasVoted ? { ...usuario, isRevealed: true } : usuario;
+        });
+        return updatedUsuarios;
+      });
+  
+      // Resetear la selección de cartas y su revelación
+      setSelectedCard(null);
+      setIsRevealed(false);
+
+    }
+  };
+ 
   const handleCrearTareaClick = () => {
     setIsEditing(true);
   };
@@ -102,12 +135,15 @@ const handleButtonClick = () => {
       socket.emit('crear-sesion', nombreSesion);
     }
   
-    socket.on('usuarios-actuales', (usuariosActuales) => {
-      console.log('Usuarios actuales:', usuariosActuales); // Imprimir por consola los usuarios actuales
-      setUsuarios(usuariosActuales);
-    });
-  
-    // Escuchar el evento 'nuevo-usuario' y agregarlo a la lista de usuarios
+   // En el cliente
+socket.on('usuarios-actuales', (usuariosActuales) => {
+  console.log('Usuarios actuales:', usuariosActuales); // Imprimir por consola los usuarios actuales
+  setUsuarios(usuariosActuales);
+
+  // Establecer allCardsRevealed en true si todas las cartas han sido reveladas
+  const allCardsAreRevealed = usuariosActuales.every(usuario => usuario.isRevealed);
+  setAllCardsRevealed(allCardsAreRevealed);
+});
   
     // Escuchar el evento 'usuario-desconectado' y eliminarlo de la lista de usuarios
     socket.on('usuario-desconectado', (nombreUsuario) => {
@@ -129,16 +165,23 @@ const handleButtonClick = () => {
     socket.on('usuario-votado', (usuario) => {
       setUsuarios((usuariosActuales) => usuariosActuales.map(usuarioActual => 
         usuarioActual.nombre === usuario.nombre 
-          ? { ...usuario, hasVoted: true, isRevealed: true } // Asegúrate de que hasVoted y isRevealed se actualizan
+          ? { ...usuario, hasVoted: true, isRevealed: allCardsRevealed } // Asegúrate de que isRevealed se actualiza basado en allCardsRevealed
           : usuarioActual
       ));
     });
 
     socket.on('reveal-all-cards', () => {
       setAllCardsRevealed(true);
+      setUsuarios((usuariosActuales) => usuariosActuales.map(usuarioActual => 
+        !usuarioActual.hasVoted 
+          ? { ...usuarioActual, revealedCard: interrogacion, hasVoted: true, isRevealed: true } // Actualiza los usuarios que no han votado
+          : { ...usuarioActual, revealedCard: usuarioActual.revealedCard, isRevealed: true } // Asegúrate de que revealedCard e isRevealed se actualizan para todos los usuarios
+      ));
     });
-  
-
+   // En el cliente
+socket.on('update-users', (usuariosActualizados) => {
+  setUsuarios(usuariosActualizados);
+});
     return () => {
       socket.off('usuario-votado');
       socket.off('usuarios-actuales');
@@ -146,31 +189,32 @@ const handleButtonClick = () => {
       socket.off('sesion-disponible');
       socket.off('tarea-actualizada');
       socket.off('reveal-all-cards');
+      socket.off('update-users');
+
 
     };
-  }, [nombre, nombreSesion]);
 
-  const handleCardClick = (carta) => {
+
+  }, [nombre, nombreSesion]);const handleCardClick = (carta) => {
     setSelectedCard(carta.value);
     setRevealedCard(carta.image);
     setUsuarios(prevUsuarios => {
         const updatedUsuarios = prevUsuarios.map(usuario => 
             usuario.nombre === nombre 
-                ? { ...usuario, revealedCard: carta.image, isRevealed: true, hasVoted: true }
+                ? { ...usuario, revealedCard: carta.image, hasVoted: true }
                 : usuario
         );
-
+  
         // Imprime aquí para ver el estado actualizado de los usuarios en este cliente
         console.log("Usuarios después de votar:", updatedUsuarios);
-
+  
         return updatedUsuarios;
     });
-
+  
     // Emitir un evento al servidor indicando que el usuario ha votado
     console.log("El nombre del usuario es: " + nombre + " y la carta votada es: " + carta.image);
     socket.emit('usuario-votado', { nombre: nombre, revealedCard: carta.image, hasVoted: true }); 
-};
-
+  };
   
   return (
     <div className="main-sesion">
@@ -227,38 +271,41 @@ const handleButtonClick = () => {
       </div>
 
       <div className="sesion-juego">
-        <ul>
-        {usuariosOrdenados.map((usuario, index) => (
-  <li key={index}>
-    <img 
-      src={allCardsRevealed || (usuario.nombre === nombre && usuario.isRevealed) ? usuario.revealedCard : reverso}
-      alt="Carta Reverso" 
-      className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''} ${usuario.hasVoted ? 'has-voted' : ''}`}
-      style={{
-        boxShadow: usuario.hasVoted ? `0 0 5px 2px #5898b7` : 'none',
-        border: usuario.hasVoted ? '2px solid #5898b7' : 'none',
-      }}
-    />        
-    <div className="nombreUsuario">{usuario.nombre}</div>
-  </li>
-))}
+  <ul>
+    {usuariosOrdenados.map((usuario, index) => (
+      <li key={index}>
+        <img 
+          src={
+            allCardsRevealed || (usuario.nombre === nombre && usuario.isRevealed) 
+              ? (usuario.hasVoted ? usuario.revealedCard : interrogacion) 
+              : reverso
+          }
+          alt="Carta Reverso" 
+          className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''} ${usuario.hasVoted ? 'has-voted' : ''}`}
+          style={{
+            boxShadow: usuario.hasVoted ? `0 0 5px 2px #5898b7` : 'none',
+            border: usuario.hasVoted ? '2px solid #5898b7' : 'none',
+          }}
+        />        
+        <div className="nombreUsuario">{usuario.nombre}</div>
+      </li>
+    ))}
+  </ul>
+</div>
 
-        </ul>
-  </div>
-
-      <div className="sesion-cartas">
-        {tarea !== 'No hay tarea seleccionada' && (
-          <ul>
-            {cartas.map((carta) => (
-              <li key={carta.value}>
-                <button value={carta.value} className={`carta-btn ${carta.value === selectedCard ? 'selected' : ''}`} onClick={() => handleCardClick(carta)}>
-                  <img src={carta.image} alt={carta.value.toString()} className="carta" />
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+<div className="sesion-cartas">
+  {tarea !== 'No hay tarea seleccionada' && !allCardsRevealed && (
+    <ul>
+      {cartas.map((carta) => (
+        <li key={carta.value}>
+          <button value={carta.value} className={`carta-btn ${carta.value === selectedCard ? 'selected' : ''}`} onClick={() => handleCardClick(carta)}>
+            <img src={carta.image} alt={carta.value.toString()} className="carta" />
+          </button>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
     </div>
   );
 }
