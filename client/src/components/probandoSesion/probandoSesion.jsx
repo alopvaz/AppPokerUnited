@@ -64,39 +64,33 @@ function ProbandoSesion({ rol, nombre }) {
   const handleSalirClick = () => {
     navigate('/poker'); // Cambia esto por la ruta a la que quieres navegar
   };
-
   const handleButtonClick = () => {
     if (isRevealed) {
-
+      setUsuarios(prevUsuarios => {
+        const updatedUsuarios = prevUsuarios.map(usuario => {
+          return { ...usuario, revealedCard: null, hasVoted: false, isRevealed: false };
+        });
+        return updatedUsuarios;
+      });
+  
       setSelectedCard(null);
       setIsRevealed(false);
+      setAllCardsRevealed(false);
       setButtonText('Revelar');
-      setAllCardsRevealed(false); // Establecer allCardsRevealed en false al resetear
   
-      // Emitir un evento al servidor para resetear todas las cartas
-      socket.emit('reset-all-cards');
-
-
-
-
-
+      // Emitir un evento al servidor para resetear las cartas
+      socket.emit('reset-cards');
     } else {
       setIsRevealed(true);
       setButtonText('Resetear');
       setAllCardsRevealed(true); // Establecer allCardsRevealed en true al revelar
-      console.log("se llama a reveal-all-cards");
       socket.emit('reveal-all-cards'); // Emitir un evento al servidor para revelar todas las cartas
-
   
       // Manejar la lógica de la carta de interrogación si no se ha seleccionado ninguna carta
       if (!selectedCard) {
         setRevealedCard(interrogacion);
       }
   
-
-// En el cliente
-// En el cliente
-
       setUsuarios(prevUsuarios => {
         const updatedUsuarios = prevUsuarios.map(usuario => {
           if (usuario.nombre === nombre && !usuario.hasVoted) {
@@ -106,11 +100,6 @@ function ProbandoSesion({ rol, nombre }) {
         });
         return updatedUsuarios;
       });
-  
-      // Resetear la selección de cartas y su revelación
-      setSelectedCard(null);
-      setIsRevealed(false);
-
     }
   };
  
@@ -283,7 +272,7 @@ socket.on('update-users', (usuariosActualizados) => {
           alt="Carta Reverso" 
           className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''} ${usuario.hasVoted ? 'has-voted' : ''}`}
           style={{
-            boxShadow: usuario.hasVoted ? `0 0 5px 2px #5898b7` : 'none',
+            boxShadow: usuario.hasVoted ? `0 0 10px 10px #5898b7` : 'none',
             border: usuario.hasVoted ? '2px solid #5898b7' : 'none',
           }}
         />        

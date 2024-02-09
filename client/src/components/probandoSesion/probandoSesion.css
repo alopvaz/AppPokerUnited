@@ -1,20 +1,22 @@
 .main-sesion {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #0c192c;
-}
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-height: 100vh;
+    background-color: #0c192c;
+    height: 100vh; 
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
 
 /*main-nav*/
 
 /*sesion-nav*/
 
 .nombreUsuario {
+
   color: white;
 }
 .nombreSesion {
@@ -23,12 +25,13 @@
 }
 
 .sesion-nav {
-  height: 6%;
+  height: 8%;
   display: flex;
   justify-content: space-between;
   color: black;
   width: 100%;
   position: relative;
+  background-color: red;
 }
 /*Diseño olas de POKERUNITED*/
 
@@ -168,7 +171,6 @@
   height: 15%;
   display: flex;
   flex-direction: column;
-  margin-top: -7%; /* Adjust this value as needed */
 
 }
 

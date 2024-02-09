@@ -82,14 +82,28 @@ socket.on('usuario-votado', ({ nombre, revealedCard }) => {
 socket.on('reveal-all-cards', () => {
   // Actualizar el estado de todas las cartas para todos los usuarios
   usuarios.forEach(usuario => {
-    usuario.revealedCard = usuario.hasVoted ? usuario.revealedCard : interrogacion; // Cambiar 'reverso' por 'interrogacion' si el usuario no ha votado
     usuario.isRevealed = true;
   });
 
   // Emitir la lista de usuarios actualizada a todos los clientes
   io.emit('usuarios-actuales', usuarios);
 });
-  })
+
+
+socket.on('reset-cards', () => {
+  // Restablecer el estado de las cartas para todos los usuarios
+  usuarios.forEach(usuario => {
+    usuario.revealedCard = null;
+    usuario.isRevealed = false;
+    usuario.hasVoted = false;
+  });
+
+  // Emitir la lista de usuarios actualizada a todos los clientes después de restablecer las cartas
+  io.emit('usuarios-actuales', usuarios);
+});
+
+
+})
   
   return io;
 };
