@@ -2,7 +2,8 @@
     display: flex;
     justify-content: space-between;
     align-items: stretch;
-    height: 8%;
+    height: 7%;
+    background-color: #FBFBFA;
   }
   
   .sesion-nav > div, .sesion-nav > h2, .sesion-nav > button {
@@ -12,13 +13,13 @@
     align-items: center;
     text-align: center;
   }
+
 /*Estilos olas para POKERUNITED*/
 
 .poker-united {
   position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
 }
   
 /*Modificar para tener color empresa*/
@@ -89,21 +90,23 @@
 /*Estilos para el nombre de la sesion*/
 
 .nombreSesion {
-    color: white;
     font-size: 1em;
     font-weight: normal;
+    color: black;    
   }
   
   .button-salir {
     background: none;
     border: none;
     font-size: 1em; /* Esto hará que el texto sea un poco más grande */
-    color: white;
     transition: background-color 0.3s ease; /* Añade una transición suave al cambiar el color de fondo */
     cursor: pointer; /* Cambia el icono del ratón al de hacer click */
+    font-weight: bold;
+
   }
   
   .button-salir:hover {
     color: #5898b7; /* Cambia esto al color que quieras cuando el cursor esté sobre el botón */
   }
+
 

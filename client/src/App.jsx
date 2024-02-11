@@ -7,6 +7,8 @@ import Sesion from './components/sesion/sesion';
 import useLocalStorage from './localStorage/useLocalStorage';
 import Sidebar from './components/sidebar/sidebar';
 import ProbandoSesion from './components/probandoSesion/probandoSesion';
+import Historial from './components/historial/historial';
+
 function App() {
 
   const [navVisible, showNavbar] = useState(false);
@@ -79,6 +81,11 @@ function App() {
  <Route path='/probandoSesion' element={
   <div className={!navVisible ? "page" : "page page-with-navbar"}>
     {userState.rol && userState.nombre ? <ProbandoSesion rol={userState.rol} nombre = {userState.nombre}/> : null}
+  </div>
+}/>
+<Route path='/settings' element={
+  <div className={!navVisible ? "page" : "page page-with-navbar"}>
+    <Historial />
   </div>
 }/>
         </Routes>

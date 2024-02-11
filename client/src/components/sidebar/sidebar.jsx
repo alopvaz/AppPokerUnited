@@ -1,12 +1,9 @@
-import React from 'react';
 import {
     FaAngleRight,
     FaAngleLeft, 
     FaHome, // Importa FaHome aquí
-    FaShoppingCart, 
     FaCog,
     FaSignOutAlt,
-    FaBars
 } from 'react-icons/fa';
 import { NavLink } from "react-router-dom";
 import "./sidebar.css";

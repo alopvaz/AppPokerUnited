@@ -12,7 +12,6 @@ const socketLogic = (server) => {
   });
   io.on('connection', (socket) => {
     console.log('a user connected');
-  
     socket.on('unirse-a-sesion', (nombreUsuario) => {
       // Crear un nuevo objeto de usuario
       const nuevoUsuario = {
@@ -41,6 +40,9 @@ const socketLogic = (server) => {
       }
     
       socket.nombreUsuario = nombreUsuario;
+    
+      // Emitir el nombre de la sesión actual a este usuario
+      socket.emit('sesion-disponible', nombreSesionActual);
     });
 
     socket.on('crear-sesion', (nombreSesion) => {
@@ -95,6 +97,7 @@ socket.on('reset-cards', () => {
     usuario.revealedCard = null;
     usuario.isRevealed = false;
     usuario.hasVoted = false;
+    usuario.selectedCard = null; // Añadir esta línea
   });
 
   // Emitir la lista de usuarios actualizada a todos los clientes después de restablecer las cartas
@@ -102,8 +105,13 @@ socket.on('reset-cards', () => {
 });
 
 
-})
-  
+socket.on('admin-selected-revealed-card', (card) => {
+  // Emitir un nuevo evento a todos los clientes con la carta seleccionada por el administrador
+  io.emit('admin-selected-revealed-card', card);
+});
+
+
+});
   return io;
 };
 

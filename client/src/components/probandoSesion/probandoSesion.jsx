@@ -5,6 +5,7 @@ import "./sesionJuego.css";
 import "./sesionNav.css";
 import "./sesionTareas.css";
 
+
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from 'prop-types';
@@ -56,6 +57,7 @@ function ProbandoSesion({ rol, nombre }) {
   const [usuarios, setUsuarios] = useState([]);
   const usuariosOrdenados = usuarios.sort((a, b) => a.nombre === nombre ? -1 : b.nombre === nombre ? 1 : 0);
   const [allCardsRevealed, setAllCardsRevealed] = useState(false);
+  const [adminSelectedCard, setAdminSelectedCard] = useState(null);
 
 
   const location = useLocation();
@@ -78,13 +80,13 @@ function ProbandoSesion({ rol, nombre }) {
       setSelectedCard(null);
       setIsRevealed(false);
       setAllCardsRevealed(false);
-      setButtonText('Revelar');
+      setButtonText('Resetear');
   
       // Emitir un evento al servidor para resetear las cartas
       socket.emit('reset-cards');
     } else {
       setIsRevealed(true);
-      setButtonText('Resetear');
+      setButtonText('Revelar');
       setAllCardsRevealed(true); // Establecer allCardsRevealed en true al revelar
       socket.emit('reveal-all-cards'); // Emitir un evento al servidor para revelar todas las cartas
   
@@ -93,7 +95,12 @@ function ProbandoSesion({ rol, nombre }) {
         setRevealedCard(interrogacion);
       }
   
-      setUsuarios(prevUsuarios => {
+      setUsuarios(prevUsuarios => {socket.on('usuarios-actuales', (usuariosActuales) => {
+        // ...
+        const allCardsAreRevealed = usuariosActuales.every(usuario => usuario.isRevealed);
+        setAllCardsRevealed(allCardsAreRevealed);
+        setButtonText(allCardsAreRevealed ? 'Resetear' : 'Revelar'); // Añade esta línea
+      });
         const updatedUsuarios = prevUsuarios.map(usuario => {
           if (usuario.nombre === nombre && !usuario.hasVoted) {
             return { ...usuario, revealedCard: selectedCard ? selectedCard : interrogacion, hasVoted: true, isRevealed: true };
@@ -173,6 +180,12 @@ socket.on('usuarios-actuales', (usuariosActuales) => {
 socket.on('update-users', (usuariosActualizados) => {
   setUsuarios(usuariosActualizados);
 });
+
+socket.on('admin-selected-revealed-card', (card) => {
+  setAdminSelectedCard(card);
+});
+
+
     return () => {
       socket.off('usuario-votado');
       socket.off('usuarios-actuales');
@@ -181,12 +194,15 @@ socket.on('update-users', (usuariosActualizados) => {
       socket.off('tarea-actualizada');
       socket.off('reveal-all-cards');
       socket.off('update-users');
+      socket.off('admin-selected-revealed-card');
 
 
     };
 
 
-  }, [nombre, nombreSesion]);const handleCardClick = (carta) => {
+  }, [nombre, nombreSesion]);
+  
+  const handleCardClick = (carta) => {
     setSelectedCard(carta.value);
     setRevealedCard(carta.image);
     setUsuarios(prevUsuarios => {
@@ -200,26 +216,53 @@ socket.on('update-users', (usuariosActualizados) => {
         console.log("Usuarios después de votar:", updatedUsuarios);
   
         return updatedUsuarios;
+
+
     });
   
     // Emitir un evento al servidor indicando que el usuario ha votado
     console.log("El nombre del usuario es: " + nombre + " y la carta votada es: " + carta.image);
     socket.emit('usuario-votado', { nombre: nombre, revealedCard: carta.image, hasVoted: true }); 
   };
+
+ //Funcion para manejar el click de la carta seleccionada por el administrador 
+const handleAdminCardClick = (card) => {
+  if (rol === 'admin') {
+    setAdminSelectedCard(card);
+    // Emitir el evento al servidor
+    socket.emit('admin-selected-revealed-card', card);
+    // Actualizar el estado local
+    setUsuarios(prevUsuarios => {
+      const updatedUsuarios = prevUsuarios.map(usuario => 
+        usuario.nombre === nombre 
+          ? { ...usuario, adminSelectedCard: card }
+          : usuario
+      );
+      return updatedUsuarios;
+    });
+  }
+};
+  
   
   return (
     <div className="main-sesion">
-      <div className="sesion-nav">
-        <div className="poker-united">
-          <h2 className="border letter">POKERUNITED</h2>
-          <h2 className="wave letter">
-            <span className="poker">POKER</span>
-            <span className="united">UNITED</span>
-          </h2>
-        </div>
-        <h2 className="nombreSesion">{nombreSesion}</h2> {/* Aquí se muestra el nombre de la sesión */}
-        <button className="button-salir" onClick={handleSalirClick}>Salir</button>
-      </div>
+
+<div className="sesion-nav">
+  <div className="poker-united">
+    <h2 className="border letter">POKERUNITED</h2>
+    <h2 className="wave letter">
+      <span className="poker">POKER</span>
+      <span className="united">UNITED</span>
+    </h2>
+  </div>
+  <div className="div-nombreSesion">
+    <h2 className="nombreSesion">{nombreSesion}</h2> {/* Aquí se muestra el nombre de la sesión */}
+  </div>
+  <div className="div-salir">
+    <button className="button-salir" onClick={handleSalirClick}>Salir</button>
+  </div>
+</div>
+
       <div className="sesion-tareas">
     <div className="left-div">
         <div className="left-div-upper">
@@ -260,38 +303,54 @@ socket.on('update-users', (usuariosActualizados) => {
   <ul>
     {usuariosOrdenados.map((usuario, index) => (
       <li key={index}>
-        <img 
-          src={
-            allCardsRevealed || (usuario.nombre === nombre && usuario.isRevealed) 
-              ? (usuario.hasVoted ? usuario.revealedCard : interrogacion) 
-              : reverso
-          }
-          alt="Carta Reverso" 
-          className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''} ${usuario.hasVoted ? 'has-voted' : ''}`}
-          style={{
-            boxShadow: usuario.hasVoted ? `0 0 10px 10px #5898b7` : 'none',
-            border: usuario.hasVoted ? '2px solid #5898b7' : 'none',
-          }}
-        />        
+       <img 
+  src={
+    allCardsRevealed || (usuario.nombre === nombre && usuario.isRevealed) 
+      ? (usuario.hasVoted ? usuario.revealedCard : interrogacion) 
+      : reverso
+  }
+  alt="Carta Reverso" 
+  className={`carta-reverso ${usuario.isRevealed ? 'is-revealed' : ''} ${usuario.hasVoted ? 'has-voted' : ''}`}
+  style={{
+    boxShadow: usuario.hasVoted ? `0 0 10px 10px #5898b7` : 'none',
+    border: usuario.hasVoted ? '2px solid #5898b7' : 'none',
+  }}
+  onClick={() => handleAdminCardClick(usuario.revealedCard)}
+/>              
         <div className="nombreUsuario">{usuario.nombre}</div>
       </li>
     ))}
   </ul>
-</div>
 
+</div>
 <div className="sesion-cartas">
-  {tarea !== 'No hay tarea seleccionada' && !allCardsRevealed && (
+  {tarea !== 'No hay tarea seleccionada' && (
     <ul>
-      {cartas.map((carta) => (
-        <li key={carta.value}>
-          <button value={carta.value} className={`carta-btn ${carta.value === selectedCard ? 'selected' : ''}`} onClick={() => handleCardClick(carta)}>
-            <img src={carta.image} alt={carta.value.toString()} className="carta" />
-          </button>
-        </li>
-      ))}
+      {!allCardsRevealed ? (
+        cartas.map((carta) => (
+          <li key={carta.value}>
+            <button value={carta.value} className={`carta-btn ${carta.value === selectedCard ? 'selected' : ''}`} onClick={() => handleCardClick(carta)}>
+              <img src={carta.image} alt={carta.value.toString()} className="carta" />
+            </button>
+          </li>
+        ))
+      ) : (
+        <>
+          {adminSelectedCard && (
+            <li>
+              <p>Carta seleccionada:</p>
+              <button disabled className="carta-btn">
+                <img src={adminSelectedCard} alt="Carta seleccionada por el administrador" className="carta" />
+              </button>
+            </li>
+          )}
+        </>
+      )}
     </ul>
   )}
 </div>
+
+
     </div>
   );
 }

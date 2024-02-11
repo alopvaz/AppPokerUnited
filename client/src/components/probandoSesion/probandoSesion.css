@@ -15,11 +15,6 @@
 
 /*sesion-nav*/
 
-.nombreUsuario {
-
-  color: white;
-}
-
 
 
 /*Diseño boton de salur*/
@@ -32,7 +27,6 @@
   width: 100%; /* Añade esta línea */
   display: flex; /* Añade esta línea */
   justify-content: flex-start; /* Añade esta línea */
-  margin-left: 2%;
 }
 
 .sesion-cartas {
@@ -79,4 +73,9 @@
   padding: 0;
   display: flex; /* Añade esta línea */
   justify-content: center; /* Añade esta línea */
+}
+
+
+p {
+  color: white;
 }
