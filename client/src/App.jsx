@@ -49,7 +49,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        {userState.isAuthenticated && <Sidebar visible={navVisible} show={showNavbar} logout={logout} />}
+      {userState.isAuthenticated && <Sidebar visible={navVisible} show={showNavbar} logout={logout} rol={userState.rol} />}
         <Routes>
         <Route path="/" element={userState.isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />          
         <Route path="/login" element={<Login authenticate={authenticate} isAuthenticated={userState.isAuthenticated} />} />
@@ -68,11 +68,6 @@ function App() {
               <h1>Orders</h1>
             </div>
           }/> 
-          <Route path='/poker' element={
-            <div className={!navVisible ? "page" : "page page-with-navbar"}>
-              <Principal rol={userState.rol} />
-            </div>
-          }/>
           <Route path="/sesion" element={
     <div className={!navVisible ? "page" : "page page-with-navbar"}>
       <Sesion rol={userState.rol} nombre={userState.nombre} userId={userState.userId} />
@@ -83,10 +78,16 @@ function App() {
     {userState.rol && userState.nombre ? <ProbandoSesion rol={userState.rol} nombre = {userState.nombre}/> : null}
   </div>
 }/>
-<Route path='/settings' element={
+<Route path='/historial' element={
   <div className={!navVisible ? "page" : "page page-with-navbar"}>
     <Historial />
   </div>
+}/>
+
+<Route path="/crearSesion" element={
+    <div className={!navVisible ? "page" : "page page-with-navbar"}>
+        <Principal rol={userState.rol} />
+    </div>
 }/>
         </Routes>
       </div>

@@ -1,30 +1,26 @@
 import {
     FaAngleRight,
     FaAngleLeft, 
-    FaHome, // Importa FaHome aquí
+    FaHome, 
     FaCog,
     FaSignOutAlt,
+    FaPlusSquare, // Icono para "Crear Sesion"
+    FaHistory, // Icono para "Historial de Sesiones"
 } from 'react-icons/fa';
 import { NavLink } from "react-router-dom";
 import "./sidebar.css";
 import { FaRegHandSpock } from 'react-icons/fa';
-import logo from './logo.png'; // Importa tu logo aquí
+import logo from './logo.png'; 
+import { useState } from 'react'; // Importa useState
 
 const ICON_SIZE = 20;
-function Sidebar({visible, show, logout}) {
+
+function Sidebar({visible, show, logout, rol}) { // Añade "rol" como prop
+
+    const [dropdownVisible, setDropdownVisible] = useState(false); // Añade estado para el menú desplegable
 
     return (
         <>
-            {/* Comenta o elimina este bloque de código si no quieres el botón de hamburguesa
-            <div className="mobile-nav">
-                <button
-                    className="mobile-nav-btn"
-                    onClick={() => show(!visible)}
-                >
-                    <FaBars size={24}  />
-                </button>
-            </div>
-            */}
             <nav className={!visible ? 'navbar' : ''}>
                 <button
                     type="button"
@@ -36,20 +32,31 @@ function Sidebar({visible, show, logout}) {
                 </button>
                 <div>
                     <NavLink className="logo" to="/">
-                        <img src={logo} alt="logo" /> {/* Usa tu logo aquí */}
+                        <img src={logo} alt="logo" />
                     </NavLink>
                     <div className="links nav-top">
                         <NavLink to="/home" className="nav-link" end>
-                            <FaHome size={ICON_SIZE} /> {/* Usa FaHome aquí */}
+                            <FaHome size={ICON_SIZE} />
                             <span>Home</span>
                         </NavLink>
-                        <NavLink to="/poker" className="nav-link">
+                        <div className="nav-link" style={{cursor: 'pointer'}} onClick={() => setDropdownVisible(!dropdownVisible)}>
                             <FaRegHandSpock size={ICON_SIZE} />
                             <span>Poker United </span>
-                        </NavLink>
+                        </div>
+                        {dropdownVisible && rol === 'admin' && ( // Si el rol es 'admin', muestra estos elementos
+                            <div className="dropdown">
+                                <NavLink to="/crearSesion" className="nav-link" style={{marginLeft: '10px', fontSize: '0.8em'}}>
+                                    <FaPlusSquare size={ICON_SIZE} />
+                                    <span>Crear Sesion</span>
+                                </NavLink>
+                                <NavLink to="/historial" className="nav-link" style={{marginLeft: '10px', fontSize: '0.8em'}}>
+                                    <FaHistory size={ICON_SIZE} />
+                                    <span>Historial de Sesiones</span>
+                                </NavLink>
+                            </div>
+                        )}
                     </div>
                 </div>
-
                 <div className="links">
                     <NavLink to="/settings" className="nav-link">
                         <FaCog size={ICON_SIZE} />
@@ -62,7 +69,6 @@ function Sidebar({visible, show, logout}) {
                 </div>
             </nav>
         </>
-        
     );
 }
 

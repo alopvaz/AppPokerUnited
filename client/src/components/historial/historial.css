@@ -1,0 +1,29 @@
+.table {
+    width: 100%;
+    border-collapse: collapse; /* Esto asegura que los bordes de las celdas se colapsen en un solo borde */
+}
+
+.table th, .table td {
+    border: 1px solid black; /* Esto agrega un borde a todas las celdas de la tabla */
+    padding: 10px; /* Esto agrega un poco de espacio alrededor del texto en las celdas */
+}
+
+h1 {
+    color: rgb(38, 18, 152);
+}
+
+.table th {
+    color: rgb(38, 18, 152);
+}
+
+.th-nombre {
+    width: 200px;
+}
+
+.th-apellidos {
+    width: 200px;
+}
+
+.th-editar {
+    width: 100px;
+}

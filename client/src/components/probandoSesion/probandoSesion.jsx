@@ -4,6 +4,9 @@ import "./sesionCartas.css";
 import "./sesionJuego.css";
 import "./sesionNav.css";
 import "./sesionTareas.css";
+import Modal from 'react-modal';
+import Button from 'react-bootstrap/Button';
+
 
 
 import { useState, useRef, useEffect } from 'react';
@@ -59,6 +62,16 @@ function ProbandoSesion({ rol, nombre }) {
   const [allCardsRevealed, setAllCardsRevealed] = useState(false);
   const [adminSelectedCard, setAdminSelectedCard] = useState(null);
 
+  const [showModal, setShowModal] = useState(false); // Agrega este Hook de estado al inicio de tu componente
+
+  const handleShow = () => {
+    console.log("Abriendo modal...");
+    setShowModal(true);
+  }
+
+
+  const handleClose = () => setShowModal(false); // Esta función se llama cuando se quiere cerrar el modal
+  
 
   const location = useLocation();
   const [nombreSesion, setNombreSesion] = useState(location.state ? location.state.nombreSesion : '');
@@ -66,7 +79,7 @@ function ProbandoSesion({ rol, nombre }) {
   const navigate = useNavigate();
 
   const handleSalirClick = () => {
-    navigate('/poker'); // Cambia esto por la ruta a la que quieres navegar
+    navigate('/crearSesion'); // Cambia esto por la ruta a la que quieres navegar
   };
   const handleButtonClick = () => {
     if (isRevealed) {
@@ -323,6 +336,7 @@ const handleAdminCardClick = (card) => {
   </ul>
 
 </div>
+
 <div className="sesion-cartas">
   {tarea !== 'No hay tarea seleccionada' && (
     <ul>
@@ -342,6 +356,18 @@ const handleAdminCardClick = (card) => {
               <button disabled className="carta-btn">
                 <img src={adminSelectedCard} alt="Carta seleccionada por el administrador" className="carta" />
               </button>
+              <button id="guardar-btn" onClick={handleShow}>Guardar</button> {/* Botón de Guardar */}
+              <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Título del Modal</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Contenido del Modal</Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={handleClose}>
+                    Cerrar
+                  </Button>
+                </Modal.Footer>
+              </Modal>
             </li>
           )}
         </>

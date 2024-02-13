@@ -3,7 +3,7 @@
     justify-content: space-between;
     align-items: stretch;
     height: 7%;
-    background-color: #FBFBFA;
+    background-color: #0f1928;
   }
   
   .sesion-nav > div, .sesion-nav > h2, .sesion-nav > button {
@@ -92,7 +92,9 @@
 .nombreSesion {
     font-size: 1em;
     font-weight: normal;
-    color: black;    
+    color: white;  
+    font-weight: bold;
+
   }
   
   .button-salir {
@@ -102,7 +104,7 @@
     transition: background-color 0.3s ease; /* Añade una transición suave al cambiar el color de fondo */
     cursor: pointer; /* Cambia el icono del ratón al de hacer click */
     font-weight: bold;
-
+    color: white;
   }
   
   .button-salir:hover {

@@ -1,13 +1,22 @@
 
-/*Tareas*/
+/*Tareas
+
+*/
+
 .sesion-tareas {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center; /* Centra los elementos hijos verticalmente */
-    height: 20%;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; /* Centra los elementos hijos verticalmente */
+  height: 20%;
+  width: 100%;
+  background-color: #0c192c; /* Cambia el color de fondo */
+  color: #fff;
+  border: 3px solid var(--color);
+  z-index: 2;
+  box-shadow: 0 0 20px var(--color);
 }
+
   
   .form-control {
     border: none; /* Elimina los bordes */
@@ -131,3 +140,4 @@
 .botones-centrados button {
     flex: 1;
 }
+
