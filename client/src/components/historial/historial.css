@@ -44,3 +44,7 @@
   background-color: rgba(56, 181, 173, 0.8) !important; /* 0.5 es la opacidad */
   color: white !important;;
 }
+
+.custom-link {
+  color: #5cc1ce;
+}

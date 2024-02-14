@@ -88,8 +88,9 @@ const Historial = () => {
   const [voteDataSource, setVoteDataSource] = useState([]);
   const [viewingTaskId, setViewingTaskId] = useState(null);
 const [viewingVoteId, setViewingVoteId] = useState(null);
+const [sessionName, setSessionName] = useState('');
+const [taskName, setTaskName] = useState('');
 
-  
 const handleView = (record) => {
   if (record.id) {
     if (viewingTaskId === record.id) {
@@ -98,18 +99,25 @@ const handleView = (record) => {
     } else {
       // Si no, buscar y mostrar los datos
       axios.get(`http://localhost:3000/tareas?idSesion=${record.id}`)
-        .then(response => {
-          setTaskDataSource(response.data);
-          setViewingTaskId(record.id);
-        })
-        .catch(error => {
-          console.error('Error al obtener las tareas de la sesión:', error);
-        });
+  .then(response => {
+    setTaskDataSource(response.data);
+    setViewingTaskId(record.id);
+    // Almacenar el nombre de la sesión
+    setSessionName(record.nombre);
+    // Suponiendo que el nombre de la tarea está en el primer elemento
+    if (response.data[0]) {
+      setTaskName(response.data[0].nombre);
+    }
+  })
+  .catch(error => {
+    console.error('Error al obtener las tareas de la sesión:', error);
+  });
     }
   } else {
     console.error('Error: record.key es undefined');
   }
 };
+
 
 const handleHideTasks = () => {
   setViewingTaskId(null);
@@ -124,13 +132,17 @@ const handleViewVote = (record) => {
     } else {
       // Si no, buscar y mostrar los datos
       axios.get(`http://localhost:3000/votaciones?idTarea=${record.id}`)
-        .then(response => {
-          setVoteDataSource(response.data);
-          setViewingVoteId(record.id);
-        })
-        .catch(error => {
-          console.error('Error al obtener las votaciones de la tarea:', error);
-        });
+      .then(response => {
+        setVoteDataSource(response.data);
+        setViewingVoteId(record.id);
+        // Suponiendo que el nombre de la votación está en el primer elemento
+        if (response.data[0]) {
+          setSessionName(response.data[0].nombre);
+        }
+      })
+      .catch(error => {
+        console.error('Error al obtener las votaciones de la tarea:', error);
+      });
     }
   } else {
     console.error('Error: record.key es undefined');
@@ -181,16 +193,16 @@ const handleViewVote = (record) => {
       editable: true,
     },
     {
-      title: 'operation',
+      title: 'Operation',
       dataIndex: 'operation',
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <>
-            <a onClick={() => handleView(record)}>
+            <a className="custom-link" onClick={() => handleView(record)}>
               {viewingTaskId === record.id ? 'Ocultar' : 'Ver'} 
             </a>        
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-              <a style={{ marginLeft: '10px' }}>Delete</a>
+              <a className="custom-link" style={{ marginLeft: '10px' }}>Delete</a>
             </Popconfirm>
           </>
         ) : null,
@@ -205,17 +217,21 @@ const handleViewVote = (record) => {
       handleSave,
     }),
   }));
+
   useEffect(() => {
-    // Llamada a la API para obtener los datos de la tabla de alumnos
+    // Llamada a la API para obtener los datos de la tabla de sesiones
     axios.get('http://localhost:3000/sesiones', { params: dataSource })
     .then(response => {
-        setDataSource(response.data);
-      })
-      .catch(error => {
-        console.error('Error al obtener los datos de los alumnos:', error);
-      });
+      setDataSource(response.data);
+      // Suponiendo que el nombre de la sesión está en el primer elemento
+      if (response.data[0]) {
+        setSessionName(response.data[0].nombre);
+      }
+    })
+    .catch(error => {
+      console.error('Error al obtener los datos de las sesiones:', error);
+    });
   }, []); // Sin dependencias, se ejecuta solo una vez
-
   //Para tareas
 
   const handleAddTask = () => {
@@ -241,16 +257,16 @@ const handleViewVote = (record) => {
       editable: true,
     },
     {
-      title: 'operation',
+      title: 'Operation',
       dataIndex: 'operation',
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <>
-           <a onClick={() => handleViewVote(record)}>
+           <a className="custom-link" onClick={() => handleViewVote(record)}>
             {viewingVoteId === record.id ? 'Ocultar' : 'Ver'} 
           </a>         
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-              <a style={{ marginLeft: '10px' }}>Delete</a>
+              <a className="custom-link" style={{ marginLeft: '10px' }}>Delete</a>
             </Popconfirm>
           </>
         ) : null,
@@ -272,7 +288,7 @@ const handleViewVote = (record) => {
 
   const voteColumns = [
     {
-      title: 'usuario',
+      title: 'Usuario',
       dataIndex: 'nombre',
       width: '30%',
       editable: true,
@@ -283,12 +299,12 @@ const handleViewVote = (record) => {
       editable: true,
     },
     {
-      title: 'operation',
+      title: 'Operation',
       dataIndex: 'operation',
       render: (_, record) =>
         voteDataSource.length >= 1 ? (
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-            <a style={{ marginLeft: '10px' }}>Delete</a>
+            <a className="custom-link" style={{ marginLeft: '10px' }}>Delete</a>
           </Popconfirm>
         ) : null,
     },
@@ -332,7 +348,7 @@ const handleViewVote = (record) => {
       {viewingTaskId && (
         <div className="historial-tareas">
           <div className="tareas-titulo" style={{ color: 'black', zIndex: 1 }}>
-            <h1 style={{ color: 'black' }}>Tabla de tareas</h1>
+          <h1 style={{ color: 'black' }}>Tabla de tareas para {sessionName}</h1>
             <span style={{ display: "block", height: "1px", backgroundColor: "#f0f0f0", margin: "10px 0" }}></span>        
           </div>
           <br></br>
@@ -358,7 +374,7 @@ const handleViewVote = (record) => {
       {viewingVoteId && (
         <div className="historial-votaciones">
           <div className="votaciones-titulo" style={{color: 'black', zIndex: 1 }}>
-            <h1>Tabla de votaciones</h1>
+          <h1>Tabla de votaciones para {taskName}</h1>           
             <span style={{ display: "block", height: "1px", backgroundColor: "#f0f0f0", margin: "10px 0" }}></span>        
           </div>
           <br></br>
