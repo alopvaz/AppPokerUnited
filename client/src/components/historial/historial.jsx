@@ -151,13 +151,13 @@ const Historial = () => {
 
   const columns = [
     {
-      title: 'nombre',
+      title: 'Nombre',
       dataIndex: 'nombre',
       width: '30%',
       editable: true,
     },
     {
-      title: 'fecha',
+      title: 'Fecha',
       dataIndex: 'fecha',
       editable: true,
     },
@@ -284,15 +284,15 @@ const Historial = () => {
   return (
     <div className="main-historial" style={{ width: '100%', padding: '0 20px' }}>
       <div className="historial-sesiones">
-        <div className="sesiones-titulo" style={{top: 0, backgroundColor: 'white', zIndex: 1 }}>
-          <h1 style={{ textAlign: 'center' }}>Tabla de sesiones</h1>
-        </div>
+        <div className="sesiones-titulo" style={{color: 'black', zIndex: 1 }}>
+          <h1 style={{ color: "black" }}>Tabla de sesiones</h1>
+          <span style={{ display: "block", height: "1px", backgroundColor: "#f0f0f0", margin: "10px 0" }}></span>        </div>
         <br></br>
         <Button
           onClick={handleAdd}
           type="primary"
-          style={{ marginBottom: 16 }}
-        >
+          style={{ marginBottom: 16, backgroundColor: '#38B5AD' }}
+          >
           Add a row
         </Button>
         <div className="sesiones-tabla">
@@ -315,8 +315,8 @@ const Historial = () => {
         <Button
           onClick={handleAddTask}
           type="primary"
-          style={{ marginBottom: 16 }}
-        >
+          style={{ marginBottom: 16, backgroundColor: '#38B5AD' }}
+          >
           Add a row
         </Button>
         <div className="tareas-tabla">
