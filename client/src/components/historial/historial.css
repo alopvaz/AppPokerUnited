@@ -24,6 +24,10 @@
 
   /* Reduce el espacio entre las filas de la tabla */
 .ant-table-row {
-    line-height: 1; /* Ajusta este valor según tus necesidades */
+    line-height: 0.5; /* Ajusta este valor según tus necesidades */
 }
 
+.main-historial {
+  overflow-y: scroll;
+  height: 100vh; /* Ajusta esto a la altura que desees */
+}

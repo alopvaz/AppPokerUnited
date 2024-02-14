@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Button, Form, Input, Popconfirm, Table } from 'antd';
 import axios from 'axios'; // No olvides importar axios
-
+import './historial.css';
 
 const EditableContext = React.createContext(null);
 
@@ -85,6 +85,7 @@ const Historial = () => {
   const [count, setCount] = useState(0);
   const [viewingSessionId, setViewingSessionId] = useState(null);
   const [taskDataSource, setTaskDataSource] = useState([]);
+  const [voteDataSource, setVoteDataSource] = useState([]);
 
   const handleView = (record) => {
     if (record.id) {
@@ -95,6 +96,22 @@ const Historial = () => {
         })
         .catch(error => {
           console.error('Error al obtener las tareas de la sesión:', error);
+        });
+    } else {
+      console.error('Error: record.key es undefined');
+    }
+  };
+
+  const handleViewVote = (record) => {
+    if (record.id) {
+      // Llamada a la API para obtener las votaciones de la tarea
+      axios.get(`http://localhost:3000/votaciones?idTarea=${record.id}`)
+        .then(response => {
+          // Actualiza el estado de las votaciones con los datos obtenidos
+          setVoteDataSource(response.data);
+        })
+        .catch(error => {
+          console.error('Error al obtener las votaciones de la tarea:', error);
         });
     } else {
       console.error('Error: record.key es undefined');
@@ -190,6 +207,7 @@ const Historial = () => {
     setCount(count + 1);
   };
 
+
   const taskColumns = [
     {
       title: 'nombre',
@@ -207,8 +225,48 @@ const Historial = () => {
       dataIndex: 'operation',
       render: (_, record) =>
         dataSource.length >= 1 ? (
+          <>
+            <a onClick={() => handleViewVote(record)}>Ver</a>            
+            <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
+              <a style={{ marginLeft: '10px' }}>Delete</a>
+            </Popconfirm>
+          </>
+        ) : null,
+    },
+  ].map((col) => ({
+    ...col,
+    onCell: (record) => ({
+      record,
+      editable: col.editable,
+      dataIndex: col.dataIndex,
+      title: col.title,
+      handleSave,
+    }),
+  }));
+
+  useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+  }, []); 
+
+  const voteColumns = [
+    {
+      title: 'usuario',
+      dataIndex: 'idUsuario',
+      width: '30%',
+      editable: true,
+    },
+    {
+      title: 'votacion',
+      dataIndex: 'votacion',
+      editable: true,
+    },
+    {
+      title: 'operation',
+      dataIndex: 'operation',
+      render: (_, record) =>
+        voteDataSource.length >= 1 ? (
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-            <a>Delete</a>
+            <a style={{ marginLeft: '10px' }}>Delete</a>
           </Popconfirm>
         ) : null,
     },
@@ -223,12 +281,10 @@ const Historial = () => {
     }),
   }));
 
-  
-
   return (
     <div className="main-historial" style={{ width: '100%', padding: '0 20px' }}>
       <div className="historial-sesiones">
-        <div className="sesiones-titulo" style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
+        <div className="sesiones-titulo" style={{top: 0, backgroundColor: 'white', zIndex: 1 }}>
           <h1 style={{ textAlign: 'center' }}>Tabla de sesiones</h1>
         </div>
         <br></br>
@@ -239,7 +295,7 @@ const Historial = () => {
         >
           Add a row
         </Button>
-        <div className="sesiones-tabla" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+        <div className="sesiones-tabla">
           <Table
             components={components}
             rowClassName={() => 'editable-row'}
@@ -263,7 +319,7 @@ const Historial = () => {
         >
           Add a row
         </Button>
-        <div className="tareas-tabla" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+        <div className="tareas-tabla">
         <Table
     components={components}
     rowClassName={() => 'editable-row'}
@@ -274,8 +330,28 @@ const Historial = () => {
   />
         </div>
       </div>
+      
+<div className="historial-votaciones">
+  <div className="votaciones-titulo" style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
+    <h1 style={{ textAlign: 'center' }}>Tabla de votaciones</h1>
+  </div>
+  <br></br>
+  <div className="votaciones-tabla">
+    <Table
+      components={components}
+      rowClassName={() => 'editable-row'}
+      bordered
+      dataSource={voteDataSource} // Usa el estado de las votaciones como fuente de datos para la tabla de votaciones
+      columns={voteColumns}
+      style={{ width: '100%' }}
+    />
+  </div>
+</div>
+      
     </div>
   );
 };
 
 export default Historial;
+
+

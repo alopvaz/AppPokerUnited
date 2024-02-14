@@ -36,5 +36,19 @@ router.get('/tareas', (req, res) => {
   });
 });
 
+router.get('/votaciones', (req, res) => {
+  const idTarea = req.query.idTarea;
+  const sql = `SELECT * FROM votaciones 
+               WHERE idTarea = ${idTarea}`; 
+
+  con.query(sql, (err, result) => {
+    if (err) {
+      res.status(500).send({ error: 'Error fetching data from database' });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
 // Exportamos el router para usarlo en otros archivos
 export default router;

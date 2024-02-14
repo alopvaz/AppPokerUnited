@@ -8,12 +8,13 @@
 }
 
 .body {
-    display: flex; /*Sus elementos serán flexibles*/
-    justify-content: center; /*Con flex, los elementos se centrarán horizontalmente*/
-    align-items: center; /*Con flex, los elementos se centrarán verticalmente*/
-    min-height: 100vh; /*Altura mínima al 100% de la altura de la ventana*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
     background-color: #1c1c1c;
 }
+
 
 .box {
     position:relative; /*Posición relativa para que el elemento sea relativo a su posición normal*/
@@ -21,7 +22,7 @@
     height: 420px;
     background-color: #1c1c1c;
     border-radius: 8px;
-    overFlow: hidden; /*Evita que el contenido se desborde*/
+    overflow: hidden; /*Evita que el contenido se desborde*/
 }
 
 .box::before {
@@ -85,14 +86,9 @@
         display: flex;  
         height: 100vh;
         width: 100vw;
-        align-items: center;
-        justify-content: center;
       }
       
-      * {
-        margin: 0;
-        padding: 0;
-      }
+    
     z-index: 1;
     transform-origin: bottom right; 
     animation: animate 6s linear infinite; 
@@ -225,7 +221,6 @@
     height: 2px;
     background: #fff;
     border-radius: 4px;
-    overflow: hidden;
     transition: 0.5s;
     pointer-events: none;
 }
