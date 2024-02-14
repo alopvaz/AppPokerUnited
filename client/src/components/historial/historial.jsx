@@ -86,37 +86,56 @@ const Historial = () => {
   const [viewingSessionId, setViewingSessionId] = useState(null);
   const [taskDataSource, setTaskDataSource] = useState([]);
   const [voteDataSource, setVoteDataSource] = useState([]);
+  const [viewingTaskId, setViewingTaskId] = useState(null);
+const [viewingVoteId, setViewingVoteId] = useState(null);
 
-  const handleView = (record) => {
-    if (record.id) {
-      // Llamada a la API para obtener las tareas de la sesión
+  
+const handleView = (record) => {
+  if (record.id) {
+    if (viewingTaskId === record.id) {
+      // Si ya estamos viendo esta tarea, ocultarla
+      setViewingTaskId(null);
+    } else {
+      // Si no, buscar y mostrar los datos
       axios.get(`http://localhost:3000/tareas?idSesion=${record.id}`)
         .then(response => {
-          setTaskDataSource(response.data); // Actualiza el estado de las tareas con los datos obtenidos
+          setTaskDataSource(response.data);
+          setViewingTaskId(record.id);
         })
         .catch(error => {
           console.error('Error al obtener las tareas de la sesión:', error);
         });
-    } else {
-      console.error('Error: record.key es undefined');
     }
-  };
+  } else {
+    console.error('Error: record.key es undefined');
+  }
+};
 
-  const handleViewVote = (record) => {
-    if (record.id) {
-      // Llamada a la API para obtener las votaciones de la tarea
+const handleHideTasks = () => {
+  setViewingTaskId(null);
+};
+// Haz lo mismo para la tabla de votaciohnes
+
+const handleViewVote = (record) => {
+  if (record.id) {
+    if (viewingVoteId === record.id) {
+      // Si ya estamos viendo esta votación, ocultarla
+      setViewingVoteId(null);
+    } else {
+      // Si no, buscar y mostrar los datos
       axios.get(`http://localhost:3000/votaciones?idTarea=${record.id}`)
         .then(response => {
-          // Actualiza el estado de las votaciones con los datos obtenidos
           setVoteDataSource(response.data);
+          setViewingVoteId(record.id);
         })
         .catch(error => {
           console.error('Error al obtener las votaciones de la tarea:', error);
         });
-    } else {
-      console.error('Error: record.key es undefined');
     }
-  };
+  } else {
+    console.error('Error: record.key es undefined');
+  }
+};
 
   const handleDelete = (key) => {
     const newData = dataSource.filter((item) => item.key !== key);
@@ -167,13 +186,15 @@ const Historial = () => {
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <>
-            <a  style={{ color: "#5cc1ce" }} onClick={() => handleView(record)}>Ver</a>
+            <a onClick={() => handleView(record)}>
+              {viewingTaskId === record.id ? 'Ocultar' : 'Ver'} 
+            </a>        
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-              <a style={{ marginLeft: '10px', color: "#5cc1ce" }}>Delete</a>
+              <a style={{ marginLeft: '10px' }}>Delete</a>
             </Popconfirm>
           </>
         ) : null,
-    },
+    }
   ].map((col) => ({
     ...col,
     onCell: (record) => ({
@@ -207,16 +228,15 @@ const Historial = () => {
     setCount(count + 1);
   };
 
-
   const taskColumns = [
     {
-      title: 'nombre',
+      title: 'Nombre',
       dataIndex: 'nombre',
       width: '30%',
       editable: true,
     },
     {
-      title: 'estimacion',
+      title: 'Estimacion',
       dataIndex: 'estimacion',
       editable: true,
     },
@@ -226,7 +246,9 @@ const Historial = () => {
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <>
-            <a onClick={() => handleViewVote(record)}>Ver</a>            
+           <a onClick={() => handleViewVote(record)}>
+            {viewingVoteId === record.id ? 'Ocultar' : 'Ver'} 
+          </a>         
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
               <a style={{ marginLeft: '10px' }}>Delete</a>
             </Popconfirm>
@@ -256,7 +278,7 @@ const Historial = () => {
       editable: true,
     },
     {
-      title: 'votacion',
+      title: 'Votacion',
       dataIndex: 'votacion',
       editable: true,
     },
@@ -286,7 +308,8 @@ const Historial = () => {
       <div className="historial-sesiones">
         <div className="sesiones-titulo" style={{color: 'black', zIndex: 1 }}>
           <h1 style={{ color: "black" }}>Tabla de sesiones</h1>
-          <span style={{ display: "block", height: "1px", backgroundColor: "#f0f0f0", margin: "10px 0" }}></span>        </div>
+          <span style={{ display: "block", height: "1px", backgroundColor: "#f0f0f0", margin: "10px 0" }}></span>        
+        </div>
         <br></br>
         <Button
           onClick={handleAdd}
@@ -306,50 +329,53 @@ const Historial = () => {
           />
         </div>
       </div>
-      {/* ... el resto de tu código ... */}
-      <div className="historial-tareas">
-        <div className="tareas-titulo" style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
-          <h1 style={{ textAlign: 'center' }}>Tabla de tareas</h1>
+      {viewingTaskId && (
+        <div className="historial-tareas">
+          <div className="tareas-titulo" style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
+            <h1 style={{ textAlign: 'center' }}>Tabla de tareas</h1>
+          </div>
+          <br></br>
+          <Button
+            onClick={handleAddTask}
+            type="primary"
+            style={{ marginBottom: 16, backgroundColor: '#5cc1ce' }}
+            >
+            Add a row
+          </Button>
+          <div className="tareas-tabla">
+            <Table
+              components={components}
+              rowClassName={() => 'editable-row'}
+              bordered
+              dataSource={taskDataSource}
+              columns={taskColumns}
+              style={{ width: '100%' }}
+            /> 
+          </div>
         </div>
-        <br></br>
-        <Button
-          onClick={handleAddTask}
-          type="primary"
-          style={{ marginBottom: 16, backgroundColor: '#5cc1ce' }}
-          >
-          Add a row
-        </Button>
-        <div className="tareas-tabla">
-        <Table
-    components={components}
-    rowClassName={() => 'editable-row'}
-    bordered
-    dataSource={taskDataSource} // Usa el estado de las tareas como fuente de datos para la tabla de tareas
-    columns={taskColumns}
-    style={{ width: '100%' }}
-  />
+      )}
+      {viewingVoteId && (
+        <div className="historial-votaciones">
+          <div className="votaciones-titulo" style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
+            <h1 style={{ textAlign: 'center' }}>Tabla de votaciones</h1>
+          </div>
+          <br></br>
+          <div className="votaciones-tabla">
+            <Table
+              components={components}
+              rowClassName={() => 'editable-row'}
+              bordered
+              dataSource={voteDataSource}
+              columns={voteColumns}
+              style={{ width: '100%' }}
+            />
+          </div>
         </div>
-      </div>
-      
-<div className="historial-votaciones">
-  <div className="votaciones-titulo" style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
-    <h1 style={{ textAlign: 'center' }}>Tabla de votaciones</h1>
-  </div>
-  <br></br>
-  <div className="votaciones-tabla">
-    <Table
-      components={components}
-      rowClassName={() => 'editable-row'}
-      bordered
-      dataSource={voteDataSource} // Usa el estado de las votaciones como fuente de datos para la tabla de votaciones
-      columns={voteColumns}
-      style={{ width: '100%' }}
-    />
-  </div>
-</div>
-      
+      )}
     </div>
   );
+
+
 };
 
 export default Historial;
