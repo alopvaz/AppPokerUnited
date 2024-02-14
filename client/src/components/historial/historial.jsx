@@ -83,6 +83,23 @@ const EditableCell = ({
 const Historial = () => {
   const [dataSource, setDataSource] = useState([]);
   const [count, setCount] = useState(0);
+  const [viewingSessionId, setViewingSessionId] = useState(null);
+  const [taskDataSource, setTaskDataSource] = useState([]);
+
+  const handleView = (record) => {
+    if (record.id) {
+      // Llamada a la API para obtener las tareas de la sesión
+      axios.get(`http://localhost:3000/tareas?idSesion=${record.id}`)
+        .then(response => {
+          setTaskDataSource(response.data); // Actualiza el estado de las tareas con los datos obtenidos
+        })
+        .catch(error => {
+          console.error('Error al obtener las tareas de la sesión:', error);
+        });
+    } else {
+      console.error('Error: record.key es undefined');
+    }
+  };
 
   const handleDelete = (key) => {
     const newData = dataSource.filter((item) => item.key !== key);
@@ -161,6 +178,53 @@ const Historial = () => {
       });
   }, []); // Sin dependencias, se ejecuta solo una vez
 
+  //Para tareas
+
+  const handleAddTask = () => {
+    const newTask = {
+      key: count.toString(),
+      nombre: `Task ${count}`,
+      estimacion: '1h',
+    };
+    setDataSource([...dataSource, newTask]);
+    setCount(count + 1);
+  };
+
+  const taskColumns = [
+    {
+      title: 'nombre',
+      dataIndex: 'nombre',
+      width: '30%',
+      editable: true,
+    },
+    {
+      title: 'estimacion',
+      dataIndex: 'estimacion',
+      editable: true,
+    },
+    {
+      title: 'operation',
+      dataIndex: 'operation',
+      render: (_, record) =>
+        dataSource.length >= 1 ? (
+          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
+            <a>Delete</a>
+          </Popconfirm>
+        ) : null,
+    },
+  ].map((col) => ({
+    ...col,
+    onCell: (record) => ({
+      record,
+      editable: col.editable,
+      dataIndex: col.dataIndex,
+      title: col.title,
+      handleSave,
+    }),
+  }));
+
+  
+
   return (
     <div className="main-historial" style={{ width: '100%', padding: '0 20px' }}>
       <div className="historial-sesiones">
@@ -184,6 +248,30 @@ const Historial = () => {
             columns={columns}
             style={{ width: '100%' }}
           />
+        </div>
+      </div>
+      {/* ... el resto de tu código ... */}
+      <div className="historial-tareas">
+        <div className="tareas-titulo" style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
+          <h1 style={{ textAlign: 'center' }}>Tabla de tareas</h1>
+        </div>
+        <br></br>
+        <Button
+          onClick={handleAddTask}
+          type="primary"
+          style={{ marginBottom: 16 }}
+        >
+          Add a row
+        </Button>
+        <div className="tareas-tabla" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+        <Table
+    components={components}
+    rowClassName={() => 'editable-row'}
+    bordered
+    dataSource={taskDataSource} // Usa el estado de las tareas como fuente de datos para la tabla de tareas
+    columns={taskColumns}
+    style={{ width: '100%' }}
+  />
         </div>
       </div>
     </div>

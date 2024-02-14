@@ -64,6 +64,18 @@ router.get('/userId', function(req, res) {
     }
 });
 
+router.post('/crear-sesion', function(req, res) {
+    var nombreSesion = req.body.nombreSesion;
+    var fechaHora = new Date();
+    fechaHora.setHours(fechaHora.getHours() + 1); // Ajusta la hora a tu zona horaria
+    fechaHora = fechaHora.toISOString();
+  
+    con.query('INSERT INTO sesiones (nombre, fecha) VALUES (?, ?)', [nombreSesion, fechaHora], function(err, result) {
+      if (err) throw err;
+      res.send({ message: 'Sesión creada con éxito', sessionId: result.insertId }); // Devuelve el ID de la sesión recién creada
+    });
+  });
+  
 // Exportamos el router para usarlo en otros archivos
 export default router;
 

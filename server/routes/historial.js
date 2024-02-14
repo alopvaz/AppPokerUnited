@@ -21,5 +21,20 @@ router.get('/sesiones', (req, res) => {
     });
 });
 
+// Crea una ruta para obtener las tareas de una sesión específica
+router.get('/tareas', (req, res) => {
+  const idSesion = req.query.idSesion;
+  const sql = `SELECT * FROM tareas WHERE idSesion = ${idSesion}`; 
+
+  con.query(sql, (err, result) => {
+    if (err) {
+      res.status(500).send({ error: 'Error fetching data from database' });
+    } else {
+      console.log(result); // Imprime el resultado en la consola
+      res.json(result);
+    }
+  });
+});
+
 // Exportamos el router para usarlo en otros archivos
 export default router;
