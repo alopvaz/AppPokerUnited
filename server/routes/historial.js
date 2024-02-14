@@ -38,8 +38,10 @@ router.get('/tareas', (req, res) => {
 
 router.get('/votaciones', (req, res) => {
   const idTarea = req.query.idTarea;
-  const sql = `SELECT * FROM votaciones 
-               WHERE idTarea = ${idTarea}`; 
+  const sql = `SELECT votaciones.*, participantes.nombre 
+               FROM votaciones 
+               INNER JOIN participantes ON votaciones.idUsuario = participantes.id 
+               WHERE votaciones.idTarea = ${idTarea}`; 
 
   con.query(sql, (err, result) => {
     if (err) {
@@ -49,6 +51,5 @@ router.get('/votaciones', (req, res) => {
     }
   });
 });
-
 // Exportamos el router para usarlo en otros archivos
 export default router;

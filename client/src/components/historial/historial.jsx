@@ -251,7 +251,7 @@ const Historial = () => {
   const voteColumns = [
     {
       title: 'usuario',
-      dataIndex: 'idUsuario',
+      dataIndex: 'nombre',
       width: '30%',
       editable: true,
     },
