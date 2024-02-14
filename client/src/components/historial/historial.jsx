@@ -167,9 +167,9 @@ const Historial = () => {
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <>
-            <a onClick={() => handleView(record)}>Ver</a>
+            <a  style={{ color: "#5cc1ce" }} onClick={() => handleView(record)}>Ver</a>
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-              <a style={{ marginLeft: '10px' }}>Delete</a>
+              <a style={{ marginLeft: '10px', color: "#5cc1ce" }}>Delete</a>
             </Popconfirm>
           </>
         ) : null,
@@ -291,7 +291,7 @@ const Historial = () => {
         <Button
           onClick={handleAdd}
           type="primary"
-          style={{ marginBottom: 16, backgroundColor: '#38B5AD' }}
+          style={{ marginBottom: 16, backgroundColor: '#5cc1ce' }}
           >
           Add a row
         </Button>
@@ -315,7 +315,7 @@ const Historial = () => {
         <Button
           onClick={handleAddTask}
           type="primary"
-          style={{ marginBottom: 16, backgroundColor: '#38B5AD' }}
+          style={{ marginBottom: 16, backgroundColor: '#5cc1ce' }}
           >
           Add a row
         </Button>
