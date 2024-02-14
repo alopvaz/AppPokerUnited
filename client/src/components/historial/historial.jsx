@@ -1,165 +1,194 @@
-import  { useState } from 'react';
-import './historial.css';
+// Historial.jsx
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Button, Form, Input, Popconfirm, Table } from 'antd';
 
-function Historial() {
-  const [formData, setFormData] = useState([]);
-  const [errors, setErrors] = useState({});
+const EditableContext = React.createContext(null);
 
-  /*useEffect(() => {
-    // Llamada a la API para obtener los datos de la tabla de alumnos
-    axios.get('http://localhost:3001/alumnos', formData)
-      .then(response => {
-        setFormData(response.data);
-      })
-      .catch(error => {
-        console.error('Error al obtener los datos de los alumnos:', error);
-        setErrors({ message: 'Error al obtener los datos de los alumnos' });
-      });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // El array vacío como segundo argumento significa que este efecto se ejecutará solo una vez, al montar el componente*/
+const EditableRow = ({ index, ...props }) => {
+  const [form] = Form.useForm();
+  return (
+    <Form form={form} component={false}>
+      <EditableContext.Provider value={form}>
+        <tr {...props} />
+      </EditableContext.Provider>
+    </Form>
+  );
+};
 
-  const handleEdit = (id) => {
-    setFormData(prevData =>
-      prevData.map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-            editing: !item.editing,
-          };
-        } else {
-          return item;
-        }
-      })
-    );
+const EditableCell = ({
+  title,
+  editable,
+  children,
+  dataIndex,
+  record,
+  handleSave,
+  ...restProps
+}) => {
+  const [editing, setEditing] = useState(false);
+  const inputRef = useRef(null);
+  const form = useContext(EditableContext);
+
+  useEffect(() => {
+    if (editing) {
+      inputRef.current.focus();
+    }
+  }, [editing]);
+
+  const toggleEdit = () => {
+    setEditing(!editing);
+    form.setFieldsValue({
+      [dataIndex]: record[dataIndex],
+    });
   };
 
-  const handleInputChange = (event, id) => {
-    const { name, value } = event.target;
-    setFormData(prevData =>
-      prevData.map(item => {
-        if (item.id === id) {
-          return { ...item, [name]: value };
-        }
-        return item;
-      })
-    );
-
-    if (name === 'nombre' || name === 'apellidos' || name === 'email') {
-      if (/[^a-zA-Z\s@.]/.test(value)) {
-        setErrors(prevErrors => ({
-          ...prevErrors,
-          [name]: 'Por favor, introduce un email válido',
-        }));
-      } else {
-        setErrors(prevErrors => {
-          const { [name]: _, ...rest } = prevErrors;
-          return rest;
-        });
-      }
+  const save = async () => {
+    try {
+      const values = await form.validateFields();
+      toggleEdit();
+      handleSave({
+        ...record,
+        ...values,
+      });
+    } catch (errInfo) {
+      console.log('Save failed:', errInfo);
     }
   };
-  const handleSave = (id) => {
-    const item = formData.find(item => item.id === id);
-    
-    console.log('Datos del alumno a enviar:', item);
-    
-    // Extrae solo los campos que quieres enviar
-   // const { nombre, apellidos, email } = item;
-  
-    // Realiza una solicitud PUT al servidor para actualizar los datos del alumno
-   /* axios.put(`http://localhost:3001/alumnos/${id}`, { nombre, apellidos, email })
-      .then(response => {
-        console.log('Alumno actualizado correctamente:', response.data);
-        handleEdit(id); // Cambia el estado de edición después de guardar
-      })
-      .catch(error => {
-        console.error('Error al actualizar el alumno:', error);
-      });*/
+
+  let childNode = children;
+  if (editable) {
+    childNode = editing ? (
+      <Form.Item
+        style={{ margin: 0 }}
+        name={dataIndex}
+        rules={[{ required: true, message: `${title} is required.` }]}
+      >
+        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+      </Form.Item>
+    ) : (
+      <div
+        className="editable-cell-value-wrap"
+        style={{ paddingRight: 24 }}
+        onClick={toggleEdit}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  return <td {...restProps}>{childNode}</td>;
+};
+
+const Historial = () => {
+  const [dataSource, setDataSource] = useState([
+    {
+      key: '0',
+      name: 'Edward King 0',
+      fecha: '32',
+      address: 'London, Park Lane no. 0',
+    },
+    {
+      key: '1',
+      name: 'Edward King 1',
+      fecha: '32',
+      address: 'London, Park Lane no. 1',
+    },
+  ]);
+  const [count, setCount] = useState(2);
+
+  const handleDelete = (key) => {
+    const newData = dataSource.filter((item) => item.key !== key);
+    setDataSource(newData);
   };
-  
-  
+
+  const handleAdd = () => {
+    const newData = {
+      key: count.toString(),
+      name: `Edward King ${count}`,
+      fecha: '32',
+      address: `London, Park Lane no. ${count}`,
+    };
+    setDataSource([...dataSource, newData]);
+    setCount(count + 1);
+  };
+
+  const handleSave = (row) => {
+    const newData = [...dataSource];
+    const index = newData.findIndex((item) => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, { ...item, ...row });
+    setDataSource(newData);
+  };
+
+  const components = {
+    body: {
+      row: EditableRow,
+      cell: EditableCell,
+    },
+  };
+
+  const columns = [
+    {
+      title: 'name',
+      dataIndex: 'name',
+      width: '30%',
+      editable: true,
+    },
+    {
+      title: 'fecha',
+      dataIndex: 'fecha',
+      editable: true,
+    },
+    {
+      title: 'operation',
+      dataIndex: 'operation',
+      render: (_, record) =>
+        dataSource.length >= 1 ? (
+          <>
+            <a onClick={() => handleView(record)}>Ver</a>
+            <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
+              <a style={{ marginLeft: '10px' }}>Delete</a>
+            </Popconfirm>
+          </>
+        ) : null,
+    },
+  ].map((col) => ({
+    ...col,
+    onCell: (record) => ({
+      record,
+      editable: col.editable,
+      dataIndex: col.dataIndex,
+      title: col.title,
+      handleSave,
+    }),
+  }));
 
   return (
-    <div className='main'>
-      <div className='container'>
-        <br />
-        <h1>Edición de usuarios</h1>
-        <br />
-        <table className="table">
-          <thead>
-            <tr>
-              <th className="th-nombre">Nombre</th>
-              <th className="th-apellido">Apellidos</th>
-              <th className="th-email">Email</th>
-              <th className="th-editar">Editar</th>
-            </tr>
-          </thead>
-          <tbody>
-            {formData.map(item => (
-              <tr key={item.id}>
-                <td>
-                  {item.editing ? (
-                    <>
-                      <input
-                        type="text"
-                        name="nombre"
-                        value={item.nombre}
-                        onChange={e => handleInputChange(e, item.id)}
-                        style={{ width: '100%' }}
-                      />
-                      {errors.nombre && <p>{errors.nombre}</p>}
-                    </>
-                  ) : (
-                    item.nombre
-                  )}
-                </td>
-                <td>
-                  {item.editing ? (
-                    <>
-                      <input
-                        type="text"
-                        name="apellidos"
-                        value={item.apellidos}
-                        onChange={e => handleInputChange(e, item.id)}
-                        style={{ width: '100%' }}
-                      />
-                      {errors.apellidos && <p>{errors.apellidos}</p>}
-                    </>
-                  ) : (
-                    item.apellidos
-                  )}
-                </td>
-                <td>
-                  {item.editing ? (
-                    <>
-                      <input
-                        type="text"
-                        name="email"
-                        value={item.email}
-                        onChange={e => handleInputChange(e, item.id)}
-                        style={{ width: '100%' }}
-                      />
-                      {errors.email && <p>{errors.email}</p>}
-                    </>
-                  ) : (
-                    item.email
-                  )}
-                </td>
-                <td>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => (item.editing ? handleSave(item.id) : handleEdit(item.id))}
-                  >
-                    {item.editing ? 'Guardar' : 'Editar'}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="main-historial" style={{ width: '100%', padding: '0 20px' }}>
+      <div className="historial-sesiones">
+        <div className="sesiones-titulo" style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
+          <h1 style={{ textAlign: 'center' }}>Tabla de sesiones</h1>
+        </div>
+        <br></br>
+        <Button
+          onClick={handleAdd}
+          type="primary"
+          style={{ marginBottom: 16 }}
+        >
+          Add a row
+        </Button>
+        <div className="sesiones-tabla">
+          <Table
+            components={components}
+            rowClassName={() => 'editable-row'}
+            bordered
+            dataSource={dataSource}
+            columns={columns}
+            style={{ width: '100%' }}
+          />
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default Historial;

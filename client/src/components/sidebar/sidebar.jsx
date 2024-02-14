@@ -4,15 +4,14 @@ import {
     FaHome, 
     FaCog,
     FaSignOutAlt,
-    FaPlusSquare, // Icono para "Crear Sesion"
-    FaHistory, // Icono para "Historial de Sesiones"
+    FaPlusSquare, 
+    FaHistory, 
 } from 'react-icons/fa';
 import { NavLink } from "react-router-dom";
 import "./sidebar.css";
 import { FaRegHandSpock } from 'react-icons/fa';
 import logo from './logo.png'; 
-import { useState } from 'react'; // Importa useState
-
+import { useState } from 'react'; 
 const ICON_SIZE = 20;
 
 function Sidebar({visible, show, logout, rol}) { // Añade "rol" como prop
