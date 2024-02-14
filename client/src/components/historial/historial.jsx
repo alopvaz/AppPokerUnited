@@ -331,8 +331,9 @@ const handleViewVote = (record) => {
       </div>
       {viewingTaskId && (
         <div className="historial-tareas">
-          <div className="tareas-titulo" style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
-            <h1 style={{ textAlign: 'center' }}>Tabla de tareas</h1>
+          <div className="tareas-titulo" style={{ color: 'black', zIndex: 1 }}>
+            <h1 style={{ color: 'black' }}>Tabla de tareas</h1>
+            <span style={{ display: "block", height: "1px", backgroundColor: "#f0f0f0", margin: "10px 0" }}></span>        
           </div>
           <br></br>
           <Button
@@ -356,8 +357,9 @@ const handleViewVote = (record) => {
       )}
       {viewingVoteId && (
         <div className="historial-votaciones">
-          <div className="votaciones-titulo" style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
-            <h1 style={{ textAlign: 'center' }}>Tabla de votaciones</h1>
+          <div className="votaciones-titulo" style={{color: 'black', zIndex: 1 }}>
+            <h1>Tabla de votaciones</h1>
+            <span style={{ display: "block", height: "1px", backgroundColor: "#f0f0f0", margin: "10px 0" }}></span>        
           </div>
           <br></br>
           <div className="votaciones-tabla">

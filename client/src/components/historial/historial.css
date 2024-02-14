@@ -3,7 +3,9 @@
   height: 100vh; /* Ajusta esto a la altura que desees */
 }
 
-.historial-sesiones {
+.historial-sesiones,
+.historial-tareas,
+.historial-votaciones {
   width: 90%;
   margin: 0 auto;
   margin-top: 1%;
