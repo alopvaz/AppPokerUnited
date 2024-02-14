@@ -6,6 +6,7 @@ import session from 'express-session';
 
 // Importar las rutas express
 import router from './routes.js'; 
+import routesHistorial from './routes/historial.js';
 
 //Importar las rutas de sockets
 import socketLogic from './sockets.js';  
@@ -33,6 +34,7 @@ app.use(session({
 
 // Usar el router
 app.use('/', router); 
+app.use('/', routesHistorial);
 
 // Middleware para añadir el rol a las respuestas locales
 app.use((req, res, next) => {

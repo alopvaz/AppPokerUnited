@@ -1,6 +1,8 @@
 // Historial.jsx
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Button, Form, Input, Popconfirm, Table } from 'antd';
+import axios from 'axios'; // No olvides importar axios
+
 
 const EditableContext = React.createContext(null);
 
@@ -79,21 +81,8 @@ const EditableCell = ({
 };
 
 const Historial = () => {
-  const [dataSource, setDataSource] = useState([
-    {
-      key: '0',
-      name: 'Edward King 0',
-      fecha: '32',
-      address: 'London, Park Lane no. 0',
-    },
-    {
-      key: '1',
-      name: 'Edward King 1',
-      fecha: '32',
-      address: 'London, Park Lane no. 1',
-    },
-  ]);
-  const [count, setCount] = useState(2);
+  const [dataSource, setDataSource] = useState([]);
+  const [count, setCount] = useState(0);
 
   const handleDelete = (key) => {
     const newData = dataSource.filter((item) => item.key !== key);
@@ -103,7 +92,7 @@ const Historial = () => {
   const handleAdd = () => {
     const newData = {
       key: count.toString(),
-      name: `Edward King ${count}`,
+      nombre: `Edward King ${count}`,
       fecha: '32',
       address: `London, Park Lane no. ${count}`,
     };
@@ -128,8 +117,8 @@ const Historial = () => {
 
   const columns = [
     {
-      title: 'name',
-      dataIndex: 'name',
+      title: 'nombre',
+      dataIndex: 'nombre',
       width: '30%',
       editable: true,
     },
@@ -161,6 +150,16 @@ const Historial = () => {
       handleSave,
     }),
   }));
+  useEffect(() => {
+    // Llamada a la API para obtener los datos de la tabla de alumnos
+    axios.get('http://localhost:3000/sesiones', { params: dataSource })
+    .then(response => {
+        setDataSource(response.data);
+      })
+      .catch(error => {
+        console.error('Error al obtener los datos de los alumnos:', error);
+      });
+  }, []); // Sin dependencias, se ejecuta solo una vez
 
   return (
     <div className="main-historial" style={{ width: '100%', padding: '0 20px' }}>
@@ -176,7 +175,7 @@ const Historial = () => {
         >
           Add a row
         </Button>
-        <div className="sesiones-tabla">
+        <div className="sesiones-tabla" style={{ maxHeight: '500px', overflowY: 'auto' }}>
           <Table
             components={components}
             rowClassName={() => 'editable-row'}
