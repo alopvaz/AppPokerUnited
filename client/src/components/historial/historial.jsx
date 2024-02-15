@@ -4,6 +4,7 @@ import { Button, Form, Input, Popconfirm, Table } from 'antd';
 import axios from 'axios'; // No olvides importar axios
 import './historial.css';
 
+
 const EditableContext = React.createContext(null);
 
 const EditableRow = ({ index, ...props }) => {
@@ -91,8 +92,39 @@ const [viewingVoteId, setViewingVoteId] = useState(null);
 const [sessionName, setSessionName] = useState('');
 const [taskName, setTaskName] = useState('');
 const [isAdding, setIsAdding] = useState(false);
+const [sessionSearchText, setSessionSearchText] = useState('');
+const [taskSearchText, setTaskSearchText] = useState('');
+const [voteSearchText, setVoteSearchText] = useState('');
 
+const onSessionSearch = value => {
+  setSessionSearchText(value);
+};
 
+const onTaskSearch = value => {
+  setTaskSearchText(value);
+};
+
+const onVoteSearch = value => {
+  setVoteSearchText(value);
+};
+
+const filteredSessionData = dataSource.filter(item => {
+  return Object.values(item).some(s => 
+    s.toString().toLowerCase().includes(sessionSearchText.toString().toLowerCase())
+  );
+});
+
+const filteredTaskData = taskDataSource.filter(item => {
+  return Object.values(item).some(s => 
+    s.toString().toLowerCase().includes(taskSearchText.toString().toLowerCase())
+  );
+});
+
+const filteredVoteData = voteDataSource.filter(item => {
+  return Object.values(item).some(s => 
+    s.toString().toLowerCase().includes(voteSearchText.toString().toLowerCase())
+  );
+});
 
 const handleSave = (row) => {
   const newData = [...dataSource];
@@ -135,10 +167,7 @@ const components = {
               {viewingTaskId === record.id ? 'Ocultar' : 'Ver'} 
             </a>        
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteSesiones(record.id)}>
-              <a className="custom-link" style={{ marginLeft: '10px' }}>Delete</a>
-            </Popconfirm>
-            <Popconfirm title="Sure to save?" onConfirm={() => handleSaveSesiones(record)}>
-              <a className="custom-link" style={{ marginLeft: '10px' }}>Save</a>
+              <a className="custom-link" style={{ marginLeft: '10px' }}>Eliminar</a>
             </Popconfirm>
           </>
         ) : null,
@@ -249,12 +278,13 @@ const components = {
                 <a className="custom-link" onClick={() => handleViewVote(record)}>
                   {viewingVoteId === record.id ? 'Ocultar' : 'Ver'} 
                 </a>         
-                  <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteTareas(record.id)}>
-                    <a className="custom-link" style={{ marginLeft: '10px' }}>Delete</a>
-                  </Popconfirm>
-                  <Popconfirm title="Sure to save?" onConfirm={() => handleSaveTareas(record)}>
-                  <a className="custom-link" style={{ marginLeft: '10px' }}>Save</a>
-                  </Popconfirm>
+                <Popconfirm 
+                  title="Sure to delete?" 
+                  onConfirm={() => handleDeleteTareas(record.id)}
+                  overlayStyle={{ backgroundColor: 'lightblue', color: 'black', borderRadius: '10px' }}
+                  >
+                  <a className="custom-link" style={{ marginLeft: '10px' }}>Eliminar</a>
+                </Popconfirm>
                 </>
               ) : null,
           },
@@ -358,7 +388,7 @@ const components = {
       render: (_, record) =>
         voteDataSource.length >= 1 ? (
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteVotacion(record.id)}>
-          <a className="custom-link" style={{ marginLeft: '10px' }}>Delete</a>
+          <a className="custom-link" style={{ marginLeft: '10px' }}>Eliminar</a>
           </Popconfirm>
         ) : null,
     },
@@ -438,60 +468,79 @@ const components = {
     
     <div className="main-historial">
 
-      <div className="historial-sesiones">
-        <div className="sesiones-titulo">
-          <h1>Tabla de sesiones</h1>
-          <span className="separator"></span> 
-        </div>
-        <br></br>
-        <div className="sesiones-tabla">
-          <Table
-            components={components}
-            rowClassName={() => 'editable-row'}
-            bordered
-            dataSource={dataSource}
-            columns={columns}
-          />
-        </div>
-      </div>
+<div className="historial-sesiones">
+  <div className="sesiones-titulo">
+    <h1 style={{ fontWeight: 'normal' }}>Tabla de sesiones</h1>          
+    <span className="separator"></span> 
+  </div>
+  <div className="sesiones-buscador" style={{ textAlign: 'right' }}>
+    <Input.Search
+      placeholder="Buscar sesiones"
+      onSearch={onSessionSearch}
+      style={{ width: 200, marginBottom: '1%' }}
+    />
+  </div>
+  <div className="sesiones-tabla">
+    <Table
+      components={components}
+      rowClassName={() => 'editable-row'}
+      bordered
+      dataSource={filteredSessionData}
+      columns={columns}
+    />
+  </div>
+</div>
 
       {viewingTaskId && (
-        <div className="historial-tareas">
-          <div className="tareas-titulo" style={{ color: 'black', zIndex: 1 }}>
-          <h1 style={{ color: 'black' }}>Tabla de tareas para {sessionName}</h1>
-            <span style={{ display: "block", height: "1px", backgroundColor: "#f0f0f0", margin: "10px 0" }}></span>        
-          </div>
-          <br></br>
-          <div className="tareas-tabla">
-            <Table
-              components={components}
-              rowClassName={() => 'editable-row'}
-              bordered
-              dataSource={taskDataSource}
-              columns={taskColumns}
-              style={{ width: '100%' }}
-            /> 
-          </div>
-        </div>
+       <div className="historial-tareas">
+       <div className="tareas-titulo" style={{ color: 'black', zIndex: 1 }}>
+         <h1 style={{ fontWeight: 'normal' }}>Tabla de tareas para {sessionName}</h1>
+         <span style={{ display: "block", height: "1px", backgroundColor: "#f0f0f0", margin: "10px 0" }}></span>        
+       </div>
+       <div className="tareas-buscador" style={{ textAlign: 'right' }}>
+         <Input.Search
+           placeholder="Buscar tareas"
+           onSearch={onTaskSearch}
+           style={{ width: 200, marginBottom: '1%' }}
+         />
+       </div>
+       <div className="tareas-tabla">
+         <Table
+           components={components}
+           rowClassName={() => 'editable-row'}
+           bordered
+           dataSource={filteredTaskData}
+           columns={taskColumns}
+           style={{ width: '100%' }}
+         /> 
+       </div>
+     </div>
       )}
       {viewingVoteId && (
-        <div className="historial-votaciones">
-          <div className="votaciones-titulo" style={{color: 'black', zIndex: 1 }}>
-          <h1>Tabla de votaciones para {taskName}</h1>           
-            <span style={{ display: "block", height: "1px", backgroundColor: "#f0f0f0", margin: "10px 0" }}></span>        
-          </div>
-          <br></br>
-          <div className="votaciones-tabla">
-            <Table
-              components={components}
-              rowClassName={() => 'editable-row'}
-              bordered
-              dataSource={voteDataSource}
-              columns={voteColumns}
-              style={{ width: '100%' }}
-            />
-          </div>
-        </div>
+       
+<div className="historial-votaciones">
+  <div className="votaciones-titulo" style={{ color: 'black', zIndex: 1 }}>
+    <h1 style={{ fontWeight: 'normal' }}>Tabla de votaciones para {taskName}</h1>
+    <span style={{ display: "block", height: "1px", backgroundColor: "#f0f0f0", margin: "10px 0" }}></span>        
+  </div>
+  <div className="votaciones-buscador" style={{ textAlign: 'right' }}>
+    <Input.Search
+      placeholder="Buscar votaciones"
+      onSearch={onVoteSearch}
+      style={{ width: 200, marginBottom: '1%' }}
+    />
+  </div>
+  <div className="votaciones-tabla">
+    <Table
+      components={components}
+      rowClassName={() => 'editable-row'}
+      bordered
+      dataSource={filteredVoteData}
+      columns={voteColumns}
+      style={{ width: '100%' }}
+    /> 
+  </div>
+</div>
       )}
     </div>
   );

@@ -12,7 +12,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #1c1c1c;
+    background-color: #0c192c;
 }
 
 
@@ -20,7 +20,7 @@
     position:relative; /*Posición relativa para que el elemento sea relativo a su posición normal*/
     width: 380px;
     height: 420px;
-    background-color: #1c1c1c;
+    background-color: #0c192c;
     border-radius: 8px;
     overflow: hidden; /*Evita que el contenido se desborde*/
 }
@@ -33,7 +33,7 @@
     width: 380px;
     height: 420px;
     background: linear-gradient(0deg,transparent,
-    transparent,#45f3ff, #45f3ff, #45f3ff);h2 {
+    transparent,#38B5AD, #38B5AD, #38B5AD);h2 {
         font-size: 15vmin;
         position: absolute;
       }
@@ -47,7 +47,7 @@
       }
       
       .wave {
-        color: #5CC1CE;
+        color: #38B5AD;
         animation: wave 3s ease-in-out infinite;
       }
       
@@ -102,7 +102,7 @@
     width: 380px;
     height: 420px;
     background: linear-gradient(0deg,transparent,
-    transparent,#45f3ff, #45f3ff, #45f3ff);
+    transparent,#38B5AD, #38B5AD, #38B5AD);
     z-index: 1;
     transform-origin: bottom right; 
     animation: animate 6s linear infinite; 
@@ -123,7 +123,7 @@
     width: 380px;
     height: 420px;
     background: linear-gradient(0deg,transparent,
-    transparent,#ff2770, #ff2770, #ff2770);
+    transparent,#A0CF9F, #A0CF9F, #A0CF9F);
     z-index: 1;
     transform-origin: bottom right; 
     animation: animate 6s linear infinite; 
@@ -138,7 +138,7 @@
     width: 380px;
     height: 420px;
     background: linear-gradient(0deg,transparent,
-    transparent,#ff2770, #ff2770, #ff2770);
+    transparent,#A0CF9F, #A0CF9F, #A0CF9F);
     z-index: 1;
     transform-origin: bottom right; 
     animation: animate 6s linear infinite; 
@@ -159,7 +159,7 @@
 .box form {
     position:absolute; /*Posición absoluta para que el elemento sea relativo a su primer elemento padre con posición relativa*/
     inset: 4px; /*Posiciona el elemento a 4px de todos los lados*/
-    background-color:#222;
+    background-color:#0c192c;
     padding: 50px 40px;
     border-radius: 8px;
     z-index: 2; /*Posiciona el elemento por encima de los demás*/

@@ -125,7 +125,6 @@ useEffect(() => {
           <input type="submit" value="Login" />
         </form>
       </div>
-      ç
     </div>
   );
 }

@@ -69,3 +69,19 @@
 .custom-link {
   color: #5cc1ce;
 }
+
+
+.custom-popconfirm {
+  background-color: lightblue;
+  color: black;
+  border-radius: 10px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin:0; /*Elimina espacios no deseados alrededor elementos*/
+    padding: 0; /*Eliminar espacio no deseados dentro de los elementos*/
+    box-sizing: border-box; /*Cambia la forma en que se calculan el ancho y la altura de los elementos. En lugar de agregar el relleno y el borde al ancho y la altura especificados, estos se incluyen en el ancho y la altura. */
+    font-family: 'Poppins', sans-serif;
+}
