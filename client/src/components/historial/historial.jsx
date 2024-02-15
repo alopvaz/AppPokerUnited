@@ -96,7 +96,7 @@ const [isAdding, setIsAdding] = useState(false);
 
 const handleSave = (row) => {
   const newData = [...dataSource];
-  const index = newData.findIndex((item) => row.key === item.key);
+  const index = newData.findIndex((item) => row.id === item.id);
   const item = newData[index];
   newData.splice(index, 1, { ...item, ...row });
   setDataSource(newData);
@@ -148,9 +148,10 @@ const components = {
     onCell: (record) => ({
       record,
       editable: col.editable,
+
       dataIndex: col.dataIndex,
       title: col.title,
-      handleSave,
+      handleSave: handleSaveSesiones,
     }),
   }));
 
@@ -204,6 +205,12 @@ const components = {
 
     
     const handleSaveSesiones = (record) => {
+      const newData = [...dataSource]; // replace dataSource with your state variable for sessions
+      const index = newData.findIndex((item) => record.id === item.id);
+      const item = newData[index];
+      newData.splice(index, 1, { ...item, ...record });
+      setDataSource(newData); // replace setDataSource with your state setter function for sessions
+    
       // Aquí puedes recoger los datos que necesitas del registro
       const { id, nombre, fecha } = record;
     
@@ -258,9 +265,29 @@ const components = {
             editable: col.editable,
             dataIndex: col.dataIndex,
             title: col.title,
-            handleSave,
+            handleSave: handleSaveTareas,
           }),
         }));
+
+        const handleSaveTareas = (record) => {
+          const newData = [...taskDataSource];
+          const index = newData.findIndex((item) => record.id === item.id);
+          const item = newData[index];
+          newData.splice(index, 1, { ...item, ...record });
+          setTaskDataSource(newData);
+        
+          // Here you can collect the data you need from the record
+          const { id, nombre, estimacion } = record;
+        
+          // Make a PUT request to the server API with the updated data
+          axios.put(`http://localhost:3000/tareas/${id}`, { nombre, estimacion })
+            .then(() => {
+              console.log('Data updated successfully');
+            })
+            .catch(error => {
+              console.error('Error updating data:', error);
+            });
+        };
 
          //Funciones para manejar las acciones de la tabla de tareas
 
@@ -309,23 +336,6 @@ const components = {
                 }
               }
 
-              //handleSaveTareas: guarda los cambios en una fila de la tabla de tareas
-
-            const handleSaveTareas = (record) => {
-              // Aquí puedes recoger los datos que necesitas del registro
-              const { id, nombre, estimacion } = record;
-              console.log(id + nombre + estimacion);
-            
-              // Hacer una solicitud PUT a la API del servidor con los datos actualizados
-              axios.put(`http://localhost:3000/tareas/${id}`, { nombre, estimacion })
-                .then(() => {
-                  console.log('Datos actualizados con éxito');
-                })
-                .catch(error => {
-                  console.error('Error al actualizar los datos:', error);
-                });
-            };
-
     //TABLA DE VOTACIONES
 
     //Columnas de la tabla de votaciones
@@ -347,8 +357,8 @@ const components = {
       dataIndex: 'operation',
       render: (_, record) =>
         voteDataSource.length >= 1 ? (
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteVotes(record.id)}>
-            <a className="custom-link" style={{ marginLeft: '10px' }}>Delete</a>
+          <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteVotacion(record.id)}>
+          <a className="custom-link" style={{ marginLeft: '10px' }}>Delete</a>
           </Popconfirm>
         ) : null,
     },
@@ -359,30 +369,49 @@ const components = {
       editable: col.editable,
       dataIndex: col.dataIndex,
       title: col.title,
-      handleSave,
+      handleSave: handleSaveVotaciones,
     }),
   }));
 
   //Funciones para manejar las acciones de la tabla de votaciones
 
-  //handleDeleteVotes: elimina una fila de la tabla de votaciones
-
-  const handleDeleteVotes = (id) => {
-    // Primero, encontrar el registro correspondiente
-    /*const record = voteDataSource.find((item) => item.id === id);
-    if (record) {
-      // Luego, hacer una solicitud DELETE a tu servidor
-      axios.delete(`http://localhost:3000/votaciones/${record.id}`)        
+  const handleSaveVotaciones = (record) => {
+    const newData = [...voteDataSource];
+    const index = newData.findIndex((item) => record.id === item.id);
+    const item = newData[index];
+    newData.splice(index, 1, { ...item, ...record });
+    setVoteDataSource(newData);
+  
+    // Aquí puedes recoger los datos que necesitas del registro
+    const { id, votacion } = record;
+    console.log(`Votacion ID: ${id}, Votacion: ${votacion}`);
+    axios.put(`http://localhost:3000/votaciones/${id}`, { votacion })
       .then(() => {
-        // Si la solicitud fue exitosa, eliminar el registro de la vista
-        const newData = voteDataSource.filter((item) => item.id !== id);
+        console.log('Datos actualizados con éxito');
+      })
+      .catch(error => {
+        console.error('Error al actualizar los datos:', error);
+      });
+  };
+
+  const handleDeleteVotacion = (id) => {
+    axios.delete(`http://localhost:3000/votaciones/${id}`)
+      .then(() => {
+        console.log('Votacion eliminada con éxito');
+  
+        // Aquí puedes actualizar tu estado local para reflejar la eliminación
+        const newData = voteDataSource.filter(item => item.id !== id);
         setVoteDataSource(newData);
       })
       .catch(error => {
-        console.error('Error al eliminar la votación:', error);
+        console.error('Error al eliminar la votacion:', error);
       });
-    }*/
-  }
+  };
+
+
+
+
+  
 
   useEffect(() => {
     // Llamada a la API para obtener los datos de la tabla de sesiones
@@ -404,8 +433,6 @@ const components = {
   useEffect(() => {
     window.scrollTo(0, document.body.scrollHeight);
   }, []); 
-
-
 
   return (
     

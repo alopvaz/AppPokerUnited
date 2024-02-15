@@ -67,21 +67,6 @@ router.delete('/tareas/:id', (req, res) => {
   });
 });
 
-// Controlador de ruta para DELETE /votaciones/:id
-/*router.delete('/votaciones/:id', (req, res) => {
-  const id = req.params.id;
-  const sql = 'DELETE FROM votaciones WHERE id = ?';
-
-  con.query(sql, [id], (err, result) => {
-    if (err) {
-      console.error('Error executing query:', err);
-      res.status(500).send({ error: 'Error deleting data from database' });
-    } else {
-      res.json({ message: 'Vote deleted successfully' });
-    }
-  });
-});*/
-
 // Controlador de ruta para PUT /sesiones/:id
 router.put('/sesiones/:id', (req, res) => {
   const id = req.params.id;
@@ -110,6 +95,52 @@ router.put('/tareas/:id', (req, res) => {
       res.status(500).send({ error: 'Error updating data in database' });
     } else {
       res.json({ message: 'Session updated successfully' });
+    }
+  });
+});
+
+// Controlador de ruta para PUT /votaciones/:id
+router.put('/votaciones/:id', (req, res) => {
+  const id = req.params.id;
+  const { votacion } = req.body;
+  const sql = 'UPDATE votaciones SET votacion = ? WHERE id = ?';
+
+  con.query(sql, [votacion, id], (err, result) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send({ error: 'Error updating data in database' });
+    } else {
+      res.json({ message: 'Votacion updated successfully' });
+    }
+  });
+});
+
+// Controlador de ruta para DELETE /votaciones/:id
+router.delete('/votaciones/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = 'DELETE FROM votaciones WHERE id = ?';
+
+  con.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send({ error: 'Error deleting data from database' });
+    } else {
+      res.json({ message: 'Votacion deleted successfully' });
+    }
+  });
+});
+
+// Controlador de ruta para DELETE /sesiones/:id
+router.delete('/sesiones/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = 'DELETE FROM sesiones WHERE id = ?';
+
+  con.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send({ error: 'Error deleting data from database' });
+    } else {
+      res.json({ message: 'Session deleted successfully' });
     }
   });
 });

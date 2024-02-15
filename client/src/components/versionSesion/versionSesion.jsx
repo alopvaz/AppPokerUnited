@@ -50,7 +50,7 @@ function VersionSesion({ rol, nombre }) {
         </div>
         <div className="configuracion-estimacion">
   <div className="nombreEstimacionFijo">
-    <p>Estimación:</p>
+    <p className='esti'>Estimación:</p>
   </div>
   <div className="estimacion-carta">
     <img src={reverso} alt="Carta" className="carta-img" />         

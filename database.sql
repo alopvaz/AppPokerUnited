@@ -21,6 +21,7 @@ CREATE TABLE tareas (
 );
 
 CREATE TABLE votaciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario INT,
     idTarea INT,
     votacion INT,
