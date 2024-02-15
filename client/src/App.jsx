@@ -8,6 +8,8 @@ import useLocalStorage from './localStorage/useLocalStorage';
 import Sidebar from './components/sidebar/sidebar';
 import ProbandoSesion from './components/probandoSesion/probandoSesion';
 import Historial from './components/historial/historial';
+import VersionSesion from './components/versionSesion/versionSesion'; // Importa el componente VersionSesion
+
 
 function App() {
 
@@ -27,7 +29,7 @@ function App() {
       nombre: nombre,
       userId: id
     });
-    showNavbar(true); // Mostrar el Navbar después de iniciar sesión
+    showNavbar(true); 
   };
 
   useEffect(() => {
@@ -88,6 +90,12 @@ function App() {
     <div className={!navVisible ? "page" : "page page-with-navbar"}>
         <Principal rol={userState.rol} />
     </div>
+}/>
+<Route path="/settings" element={ // Añade una nueva ruta para "/settings"
+  <div className={!navVisible ? "page" : "page page-with-navbar"}>
+    {userState.rol && userState.nombre ? <VersionSesion rol={userState.rol} nombre = {userState.nombre}/> : null}
+      
+  </div>
 }/>
         </Routes>
       </div>

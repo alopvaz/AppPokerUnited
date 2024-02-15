@@ -1,0 +1,148 @@
+.main-juego {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-height: 100vh;
+    background-color: #0c192c;
+    height: 100vh; 
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    flex-direction: row;
+    display: flex;
+  }
+
+  .juego-cartas {
+    width: 75%;
+  }
+
+  .juego-configuracion {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+  }
+
+  .configuracion-tareas {
+    height: 50%;
+    width: 100%;
+  }
+
+  .configuracion-estimacion {
+    height: 50%;
+    width: 100%;
+  }
+
+  .tareas-nombreSesion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  } 
+
+  p {
+   color: #38B5AD;
+  }
+  
+  .tareas-nombreTarea {
+    height: 70%;
+  }
+
+  .nombreTareaFijo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tareas-botones {
+    display: flex;
+    flex-direction: row;
+    height: 20%;
+    justify-content: space-around; /* Añade espacio alrededor de los botones */
+    align-items: center; /* Centra los botones verticalmente */
+}
+  /*Botones*/
+
+  .btn{
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #fff;
+    letter-spacing: 2px;
+    text-indent: 2px;
+    z-index: 2;
+    flex-grow: 1;
+    text-align: center;
+    margin: 0 auto;
+}
+
+:root{
+    --color: #38B5AD;
+}
+
+.btn-2{
+    border: 3px solid;
+}
+
+.btn-2:hover{
+    background-color: #001a2b;
+    box-shadow: 0 0 20px var(--color);
+    border-color: var(--color);
+}
+
+.btn-2 span:nth-child(n){
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 3px solid;
+    transition: all 0.6s ease;
+}
+
+.btn-2 span:nth-child(1){
+    right: 10%;
+    top: -10px;
+    background-color: #fff;
+}
+
+.btn-2 span:nth-child(2){
+    left: 10%;
+    bottom: -10px;
+}
+
+.btn-2:hover span:nth-child(1){
+    right: 80%;
+    transform: rotate(90deg);
+    color: var(--color);
+    background-color: var(--color);
+    
+}
+
+.btn-2:hover span:nth-child(2){
+    left: 80%;
+    transform: rotate(90deg);
+    color: var(--color);
+}
+
+.nombreEstimacionFijo {
+    height: 10%; /* Ocupa el 10% de la altura del contenedor padre */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.estimacion-carta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75%; /* Ocupa el 80% restante de la altura del contenedor padre */
+    
+}
+
+.carta-img {
+    max-width: 70%; /* Asegura que la imagen no sobrepase el ancho del contenedor */
+    max-height: 70%; /* Asegura que la imagen no sobrepase la altura del contenedor */
+    object-fit: contain; /* Mantiene la proporción de la imagen */
+}
+
+.estimacion-revelar {
+    background-color: red;
+    height: 15%; /* Ocupa el 15% restante de la altura del contenedor padre */
+}
