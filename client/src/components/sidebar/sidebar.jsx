@@ -38,10 +38,10 @@ function Sidebar({visible, show, logout, rol}) { // Añade "rol" como prop
                             <FaHome size={ICON_SIZE} />
                             <span>Home</span>
                         </NavLink>
-                        <div className="nav-link" style={{cursor: 'pointer'}} onClick={() => setDropdownVisible(!dropdownVisible)}>
-                            <FaRegHandSpock size={ICON_SIZE} />
-                            <span>Poker United </span>
-                        </div>
+                        <NavLink to="/crearSesion" className="nav-link" onClick={() => setDropdownVisible(!dropdownVisible)}>
+  <FaRegHandSpock size={ICON_SIZE} />
+  <span>Poker United </span>
+</NavLink>
                         {dropdownVisible && rol === 'admin' && ( // Si el rol es 'admin', muestra estos elementos
                             <div className="dropdown">
                                 <NavLink to="/crearSesion" className="nav-link" style={{marginLeft: '10px', fontSize: '0.8em'}}>

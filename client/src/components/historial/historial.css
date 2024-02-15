@@ -1,6 +1,27 @@
 .main-historial {
   overflow-y: scroll;
-  height: 100vh; /* Ajusta esto a la altura que desees */
+  height: 100vh;
+  width: 100%;
+  padding: 0 20px;
+}
+
+/*Historial de sesiones*/
+
+.sesiones-titulo {
+  color: 'black';
+  color: 'black';
+}
+
+.separator {
+  display: block;
+  height: 1px;
+  background-color: #f0f0f0;
+  margin: 10px 0;
+}
+
+.boton-anadir {
+  margin-bottom: 16px;
+  background-color: #5cc1ce;
 }
 
 .historial-sesiones,
