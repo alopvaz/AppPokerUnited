@@ -105,7 +105,7 @@ useEffect(() => {
       <div className="box">
         <span className="borderline"></span>
         <form onSubmit={signIn}>
-          <h2>Sign in</h2>
+          <h1>Sign in</h1>
           <div className="inputBox">
             <input type="text" name="username" value={formLogin.username} onChange={updateFormLogin} required="required" />
             <span>Username</span>

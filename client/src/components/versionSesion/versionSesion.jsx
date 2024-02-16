@@ -17,22 +17,24 @@ function VersionSesion({ rol, nombre }) {
           </div>
           <div className="tareas-tareas">
             <div className="tareas-titulo">
-              {/* Contenido de tareas-titulo */}
-              titulo
+              <h2 class="border">TAREA</h2>
+              <h2 class="wave">TAREA</h2>
             </div>
             <div className="tareas-nombre">
-              {/* Contenido de tareas-nombre */}
-              nombre
+            <textarea required></textarea>
             </div>
           </div>
           <div className="tareas-botones">
             <div className="tareas-editar">
-              {/* Contenido de boton-editar */}
-              editar
+              <a href="#" className="btn btn-2">
+                EDITAR
+            </a>
             </div>
             <div className="tareas-revelar">
               {/* Contenido de boton-revelar */}
-              eliminar
+              <a href="#" className="btn btn-2">
+                REVELAR
+              </a>
             </div>
           </div>
         </div>
@@ -47,8 +49,6 @@ function VersionSesion({ rol, nombre }) {
           <div className="estimacion-revelar">
             <a href="#" className="btn btn-2">
             REVELAR
-            <span></span>
-            <span></span>
             </a>
           </div>  
         </div>

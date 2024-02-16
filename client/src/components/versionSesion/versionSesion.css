@@ -16,25 +16,77 @@
 
   /*Configuracion de tareas*/
 
-  .configuracion-tareas {
-    background-color: green;
-  }
-
   .tareas-nav {
-    background-color: rgb(74, 74, 219);
+    height: 15%;
   }
 
+  /**/
   .tareas-tareas {
-    background-color: #38B5AD;
-    height: 40%;
+    height: 70%;
   }
-  
 
   .tareas-botones {
-    background-color: violet;
-    width: 15%;
+    display: flex;
+    justify-content: space-between;
+    height: 15%;
+  }
+  
+  .tareas-editar,
+  .tareas-revelar,
+  .estimacion-revelar {
+    overflow: hidden;
+    margin-bottom: 1%;
   }
 
+  .tareas-titulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; 
+    height: 20%;
+  }
+
+  .tareas-nombre {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 75%; /* Ajusta esto según tus necesidades */
+    background-color: #0c192c; /* Ajusta esto al color de fondo que desees */
+    overflow: auto; /* Add this line */
+
+}
+
+.tareas-nombre textarea {
+  position: relative;
+  width: 85%;
+  height: 85%; /* Ajusta esto según tus necesidades */
+  background: transparent;
+  outline: none;
+  /* border: 1px solid #ffffff; 
+  border-radius: 10px; /* Add this line */
+  box-shadow: none;
+  color: #ffffff; /* Ajusta esto al color de texto que desees */
+  font-size: 1em; /* Ajusta esto para cambiar el tamaño del texto */
+  letter-spacing: 0.05em;
+  transition: 0.5s; 
+  z-index: 10;
+}
+
+
+  .tareas-editar {
+    width: 100%; /* or any other value */
+
+  }
+
+  .tareas-revelar {
+    width: 100%; /* or any other value */
+
+  }
+
+  .tareas-revelar {
+    width: 100%; /* or any other value */
+  }
 
   .juego-cartas {
     width: 75%;
@@ -50,6 +102,10 @@
     height: 50%;
     width: 100%;
     border: 1px solid #ffffff; /* Añade un borde negro de 2px */
+    border-bottom: none; /* Add this line */
+    border-right: none; /* Add this line to remove right border */
+
+
 }
 
 .configuracion-estimacion {
@@ -57,12 +113,13 @@
   width: 100%;
   border: 1px solid #ffffff; /* Adds a black border of 2px */
   /* overflow: hidden; Remove this line if necessary */
+  border-right: none; /* Add this line to remove right border */
+
 }
 
   /*Botones*/
 
   .btn{
-    padding: 10px 20px;
     text-decoration: none;
     color: #fff;
     letter-spacing: 2px;
@@ -81,10 +138,10 @@
 }
 
 .btn-2{
-  border: 3px solid;
+  border: 2px solid;
   box-sizing: border-box; /* Añade esto */
-  width: 40%; /* Ajusta este valor a lo que necesites */
-  max-width: 40%; /* Añade esto */
+  width: 60%; /* Ajusta este valor a lo que necesites */
+  max-width: 60%; /* Añade esto */
   display: flex; /* Añade esto */
   justify-content: center; /* Añade esto */
   align-items: center; /* Añade esto */
@@ -96,37 +153,6 @@
     border-color: var(--color);
 }
 
-.btn-2 span:nth-child(n){
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border: 3px solid;
-    transition: all 0.6s ease;
-}
-
-.btn-2 span:nth-child(1){
-    right: 10%;
-    top: -10px;
-    background-color: #fff;
-}
-
-.btn-2 span:nth-child(2){
-    left: 10%;
-    bottom: -10px;
-}
-
-.btn-2:hover span:nth-child(1){
-    right: 80%;
-    transform: rotate(90deg);
-    color: var(--color);
-    background-color: var(--color);
-}
-
-.btn-2:hover span:nth-child(2){
-    left: 80%;
-    transform: rotate(90deg);
-    color: var(--color);
-}
 
 .estimacion-carta {
     display: flex;
@@ -143,6 +169,7 @@
 
 .estimacion-revelar {
   height: 15%; 
+  width: 100%; /* or any other value */
 }
 
 h2 {
@@ -202,13 +229,14 @@ h2 {
   align-items: center;
   height: 10%;
   position: relative; 
+  margin-top: 1%;
 }
 
 .estimacion-revelar {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 15%;
+  height: 14%;
 }
 
 .estimacion-nombre,
