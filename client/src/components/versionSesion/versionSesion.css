@@ -101,9 +101,6 @@
   .configuracion-tareas {
     height: 50%;
     width: 100%;
-    border: 1px solid #ffffff; /* Añade un borde negro de 2px */
-    border-bottom: none; /* Add this line */
-    border-right: none; /* Add this line to remove right border */
 
 
 }
@@ -111,9 +108,7 @@
 .configuracion-estimacion {
   height: 50%; /* Adjust this value as needed */
   width: 100%;
-  border: 1px solid #ffffff; /* Adds a black border of 2px */
-  /* overflow: hidden; Remove this line if necessary */
-  border-right: none; /* Add this line to remove right border */
+
 
 }
 
@@ -130,6 +125,8 @@
     margin: 0 auto;
     max-width: 100%; /* Asegura que el botón no exceda el ancho de su contenedor */
     max-height: 100%; /* Asegura que el botón no exceda la altura de su contenedor */
+    border: none; /* Añade esta línea para quitar el borde */
+
 }
     
 
@@ -138,13 +135,13 @@
 }
 
 .btn-2{
-  border: 2px solid;
   box-sizing: border-box; /* Añade esto */
   width: 60%; /* Ajusta este valor a lo que necesites */
   max-width: 60%; /* Añade esto */
   display: flex; /* Añade esto */
   justify-content: center; /* Añade esto */
   align-items: center; /* Añade esto */
+  border: none; /* Añade esto para quitar el borde */
 }
 
 .btn-2:hover{
@@ -193,7 +190,6 @@ h2 {
   animation: wave 3s ease-in-out infinite;
 }
 
-
 @keyframes wave {
   0%, 100% {
     clip-path: polygon(
@@ -229,7 +225,7 @@ h2 {
   align-items: center;
   height: 10%;
   position: relative; 
-  margin-top: 1%;
+  margin-top: 2%;
 }
 
 .estimacion-revelar {

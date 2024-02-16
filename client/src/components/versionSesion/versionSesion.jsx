@@ -1,11 +1,56 @@
 import './versionSesion.css';
 import reverso from "./cartas/reverso.png";
+import tapete from "./cartas/tapete.png";
 function VersionSesion({ rol, nombre }) {
   return (
     <div className="main-juego">
 
-      <div className="juego-cartas">
-        {/* Contenido de sesion-juego */}
+
+<div className="juego-cartas" style={{ 
+          backgroundImage: `url(${tapete})`, 
+          backgroundRepeat: 'no-repeat', 
+          backgroundSize: 'cover',
+          position: 'relative' // Añade esto para posicionar los elementos hijos
+        }}>
+
+<img src={reverso} alt="Carta" style={{ 
+          top: 0, 
+          left: 0,
+          width: '15%', 
+          margin: '10px' // Añade esto para agregar un margen
+        }}/>
+        <img src={reverso} alt="Carta" style={{ 
+          top: 0, 
+          left: 0,
+          width: '15%', 
+          margin: '10px' // Añade esto para agregar un margen
+        }}/>
+        <img src={reverso} alt="Carta" style={{ 
+          top: 0, 
+          left: 0,
+          width: '15%', 
+          margin: '10px' // Añade esto para agregar un margen
+        }}/>
+        <img src={reverso} alt="Carta" style={{ 
+          top: 0, 
+          left: 0,
+          width: '15%', 
+          margin: '10px' // Añade esto para agregar un margen
+        }}/>
+        <img src={reverso} alt="Carta" style={{ 
+          top: 0, 
+          left: 0,
+          width: '15%', 
+          margin: '10px' // Añade esto para agregar un margen
+        }}/>
+        <img src={reverso} alt="Carta" style={{ 
+          top: 0, 
+          left: 0,
+          width: '15%', 
+          margin: '10px' // Añade esto para agregar un margen
+        }}/>
+       
+       
       </div>
 
       <div className="juego-configuracion">
