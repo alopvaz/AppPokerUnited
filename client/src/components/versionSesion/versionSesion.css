@@ -1,3 +1,4 @@
+/*Configuracion general*/
 .main-juego {
     margin: 0;
     padding: 0;
@@ -13,6 +14,28 @@
     display: flex;
   }
 
+  /*Configuracion de tareas*/
+
+  .configuracion-tareas {
+    background-color: green;
+  }
+
+  .tareas-nav {
+    background-color: rgb(74, 74, 219);
+  }
+
+  .tareas-tareas {
+    background-color: #38B5AD;
+    height: 40%;
+  }
+  
+
+  .tareas-botones {
+    background-color: violet;
+    width: 15%;
+  }
+
+
   .juego-cartas {
     width: 75%;
   }
@@ -26,42 +49,16 @@
   .configuracion-tareas {
     height: 50%;
     width: 100%;
-    border: 2px solid #ffffff; /* Añade un borde negro de 2px */
+    border: 1px solid #ffffff; /* Añade un borde negro de 2px */
 }
 
 .configuracion-estimacion {
-    height: 50%;
-    width: 100%;
-    border: 2px solid #ffffff; /* Añade un borde negro de 2px */
+  height: 50%; /* Adjust this value as needed */
+  width: 100%;
+  border: 1px solid #ffffff; /* Adds a black border of 2px */
+  /* overflow: hidden; Remove this line if necessary */
 }
 
-  .tareas-nombreSesion {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  } 
-
-  p {
-   color: #38B5AD;
-  }
-  
-  .tareas-nombreTarea {
-    height: 70%;
-  }
-
-  .nombreTareaFijo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .tareas-botones {
-    display: flex;
-    flex-direction: row;
-    height: 20%;
-    justify-content: space-around; /* Añade espacio alrededor de los botones */
-    align-items: center; /* Centra los botones verticalmente */
-}
   /*Botones*/
 
   .btn{
@@ -74,14 +71,23 @@
     flex-grow: 1;
     text-align: center;
     margin: 0 auto;
+    max-width: 100%; /* Asegura que el botón no exceda el ancho de su contenedor */
+    max-height: 100%; /* Asegura que el botón no exceda la altura de su contenedor */
 }
+    
 
 :root{
     --color: #38B5AD;
 }
 
 .btn-2{
-    border: 3px solid;
+  border: 3px solid;
+  box-sizing: border-box; /* Añade esto */
+  width: 40%; /* Ajusta este valor a lo que necesites */
+  max-width: 40%; /* Añade esto */
+  display: flex; /* Añade esto */
+  justify-content: center; /* Añade esto */
+  align-items: center; /* Añade esto */
 }
 
 .btn-2:hover{
@@ -122,29 +128,91 @@
     color: var(--color);
 }
 
-.nombreEstimacionFijo {
-    height: 10%; /* Ocupa el 10% de la altura del contenedor padre */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .estimacion-carta {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 75%; /* Ocupa el 80% restante de la altura del contenedor padre */
-    
-}
+    height: 75%; 
+  }
 
-.carta-img {
-    max-width: 70%; /* Asegura que la imagen no sobrepase el ancho del contenedor */
-    max-height: 70%; /* Asegura que la imagen no sobrepase la altura del contenedor */
+  .carta-img {
+    width: 90%; 
+    height: 90%; 
+    object-fit: contain;
 }
 
 .estimacion-revelar {
-    height: 15%; /* Ocupa el 15% restante de la altura del contenedor padre */
-    display: flex; /* Habilita flexbox */
-    justify-content: center; /* Centra el contenido horizontalmente */
-    align-items: center; /* Centra el contenido verticalmente */
+  height: 15%; 
+}
+
+h2 {
+  font-size: 2vw; /* Ajusta este valor según sea necesario */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.border {
+  color: #0c192c;  
+  text-shadow:
+    -1px -1px 0 white, 
+    1px -1px 0 white,
+    -1px 1px 0 rgb(236, 233, 233),
+    1px 1px 0 white;  
+}
+.wave {
+  color: #38B5AD;
+  animation: wave 3s ease-in-out infinite;
+}
+
+
+@keyframes wave {
+  0%, 100% {
+    clip-path: polygon(
+      0% 47%,
+      10% 48%,
+      33% 54%,
+      54% 60%,
+      70% 61%,
+      84% 59%,
+      100% 52%,
+      100% 100%,
+      0% 100%
+    );
+  }
+
+  50% {
+    clip-path: polygon(0% 60%,
+    15% 65%,
+    34% 66%,
+    51% 62%,
+    67% 50%,
+    84% 45%,
+    100% 46%,
+    100% 100%,
+    0% 100%
+    );
+  }
+}
+
+.estimacion-nombre {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10%;
+  position: relative; 
+}
+
+.estimacion-revelar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 15%;
+}
+
+.estimacion-nombre,
+.estimacion-carta,
+.estimacion-revelar {
+  box-sizing: border-box; /* Añade esto */
 }
