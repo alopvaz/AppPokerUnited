@@ -207,7 +207,7 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   color: black;
   margin-bottom: 5%;
-}}
+}
 
 /* Estilos para el botón cuando se presiona */
 .container .card .content button:active {
