@@ -1,11 +1,22 @@
 import React from 'react';
 import './probandoSesion.css';
 import reverso from "./cartas/reverso.png";
+import { useNavigate } from 'react-router-dom';
 
-function ProbandoSesion() {
+
+function ProbandoSesion({ setSesionCreada }) {
+
+  const navigate = useNavigate();
+
+
+  const handleSalirClick = () => {
+    navigate("/crearSesion");
+    setSesionCreada(false);
+  };
   return (
     <div className="bodyStyle">
-      <div className="container">
+<button className="exit-button" onClick={handleSalirClick}>Salir</button>     
+ <div className="container">
         <div className="left-div"> 
         <div className="div-lista">
           <ul>
@@ -65,8 +76,7 @@ function ProbandoSesion() {
             </li>
           </ul>
         </div>
-          <div className="otro-div">
-            <h1>hola</h1>
+          <div className="otrso-div">
           </div>
         </div>
         <div className="card">

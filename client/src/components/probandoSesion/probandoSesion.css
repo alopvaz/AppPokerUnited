@@ -276,3 +276,10 @@
 .otro-div {
   background-color: rgb(255, 248, 248);
 }
+
+.exit-button {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px 20px;
+}
