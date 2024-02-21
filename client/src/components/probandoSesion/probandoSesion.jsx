@@ -7,6 +7,7 @@ function ProbandoSesion() {
     <div className="bodyStyle">
       <div className="container">
         <div className="left-div"> 
+        <div className="div-lista">
           <ul>
             <li>
               <div className="card-item">
@@ -63,6 +64,10 @@ function ProbandoSesion() {
               </div>
             </li>
           </ul>
+        </div>
+          <div className="otro-div">
+            <h1>hola</h1>
+          </div>
         </div>
         <div className="card">
           <div className="content">

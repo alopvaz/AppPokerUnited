@@ -22,6 +22,10 @@ function App() {
     userId: ''
   });
 
+  const [sesionCreada, setSesionCreada] = useLocalStorage('sesionCreada', false);
+  console.log("Valor de sesionCreada:", sesionCreada);
+
+
   const authenticate = (rol, nombre, id) => {
     setUserState({
       isAuthenticated: true,
@@ -94,7 +98,7 @@ function App() {
 
 <Route path="/crearSesion" element={
     <div className={!navVisible ? "page" : "page page-with-navbar"}>
-        <Principal rol={userState.rol} />
+        <Principal rol={userState.rol} sesionCreada={sesionCreada} setSesionCreada={setSesionCreada} />
     </div>
 }/>
 <Route path="/settings" element={ // Añade una nueva ruta para "/settings"

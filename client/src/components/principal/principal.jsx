@@ -18,12 +18,11 @@ import PropTypes from 'prop-types';
 
 const socket = io('http://localhost:3000');
 
-function Principal({rol}) {
+function Principal({rol, sesionCreada, setSesionCreada}) {
 
   const navigate = useNavigate();
 
   const [nombreSesion, setNombreSesion] = useState('');
-  const [sesionCreada, setSesionCreada] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [sesionDisponible, setSesionDisponible] = useState(false);
 
@@ -45,6 +44,7 @@ function Principal({rol}) {
     axios.post('http://localhost:3000/crear-sesion', { nombreSesion })
       .then(response => {
         navigate('/probandoSesion', { state: { nombreSesion, sessionId: response.data.sessionId } });
+        setSesionCreada(true);
       })
       .catch((error) => {
         console.error('Error:', error);
