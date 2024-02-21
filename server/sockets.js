@@ -45,6 +45,8 @@ const socketLogic = (server) => {
       socket.emit('sesion-disponible', nombreSesionActual);
     });
 
+    io.emit('sesion-creada');
+
     socket.on('crear-sesion', (nombreSesion) => {
       nombreSesionActual = nombreSesion;
       io.emit('sesion-disponible', nombreSesionActual);

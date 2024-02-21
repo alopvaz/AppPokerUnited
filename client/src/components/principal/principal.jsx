@@ -32,14 +32,23 @@ function Principal({rol, sesionCreada, setSesionCreada}) {
       setSesionCreada(true);
     });
 
+    socket.on('sesion-creada', () => {
+      // Cuando se recibe el evento, actualiza 'sesionCreada' a true
+      setSesionCreada(true);
+    });
+
     return () => {
       socket.off('sesion-disponible');
+      socket.off('sesion-creada');
+
     };
   }, []);
 
   const crearSesion = () => {
     
     socket.emit('crear-sesion', nombreSesion);
+    socket.emit('sesion-creada');
+
   
     axios.post('http://localhost:3000/crear-sesion', { nombreSesion })
       .then(response => {
