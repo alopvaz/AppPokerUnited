@@ -14,22 +14,72 @@ function ProbandoSesion() {
                 <div className="card-name">Juan Carlos</div>
               </div>
             </li>
-            {/* Repite el código anterior para cada carta */}
+            <li>
+              <div className="card-item">
+                <img src={reverso} alt="Imagen 1" />
+                <div className="card-name">Juan Carlos</div>
+              </div>
+            </li>
+            <li>
+              <div className="card-item">
+                <img src={reverso} alt="Imagen 1" />
+                <div className="card-name">Juan Carlos</div>
+              </div>
+            </li>
+            <li>
+              <div className="card-item">
+                <img src={reverso} alt="Imagen 1" />
+                <div className="card-name">Juan Carlos</div>
+              </div>
+            </li>
+            <li>
+              <div className="card-item">
+                <img src={reverso} alt="Imagen 1" />
+                <div className="card-name">Juan Carlos</div>
+              </div>
+            </li>
+            <li>
+              <div className="card-item">
+                <img src={reverso} alt="Imagen 1" />
+                <div className="card-name">Juan Carlos</div>
+              </div>
+            </li>
+            <li>
+              <div className="card-item">
+                <img src={reverso} alt="Imagen 1" />
+                <div className="card-name">Juan Carlos</div>
+              </div>
+            </li>
+            <li>
+              <div className="card-item">
+                <img src={reverso} alt="Imagen 1" />
+                <div className="card-name">Juan Carlos</div>
+              </div>
+            </li>
+            <li>
+              <div className="card-item">
+                <img src={reverso} alt="Imagen 1" />
+                <div className="card-name">Juan Carlos</div>
+              </div>
+            </li>
           </ul>
         </div>
         <div className="card">
           <div className="content">
-            <h2>POKER UNITED</h2>
-            <div className="task-title">
-              <h3>TAREA</h3>
-            </div>
-            <div className="task-input">
-              <textarea></textarea>
-            </div>
-            <div className="task-buttons">
-              <a href="#" className="btn">Crear</a>
-              <a href="#" className="btn">Revelar</a>
-            </div>
+              <div className="task-title">
+                <h3>TAREA</h3>
+              </div>
+              <div className="task-input">
+                <textarea></textarea>
+              </div>
+              <div className="task-buttons">
+                <div className="button-create-task">
+                  <button className="btn">Crear</button>
+                  </div>
+                <div className="button-reveal-card">
+                    <button className="btn">Revelar</button>
+                </div>
+              </div>
           </div>
         </div>
       </div>
