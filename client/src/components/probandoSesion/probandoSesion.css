@@ -22,7 +22,6 @@
   height: 100%;
   background: linear-gradient(#38B5AD, #A0CF9F);
   clip-path: circle(20% at right 70%);
-  z-index: 1; 
 }
 
 /* Estilos para el pseudo-elemento ::after del cuerpo del documento */
@@ -187,6 +186,7 @@
   box-sizing: border-box; 
 }
 
+
 /* Estilos para el botón dentro del contenido de la tarjeta */
 .container .card .content button {
   border: none;
@@ -200,12 +200,14 @@
   width: 100px;
   margin-top: 10px;
   position: relative;
-  display: inline-block;
+  display: flex; /* Modificado aquí */
+  justify-content: center; /* Añadido aquí */
+  align-items: center; /* Añadido aquí */
   text-decoration: none;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   color: black;
   margin-bottom: 5%;
-}
+}}
 
 /* Estilos para el botón cuando se presiona */
 .container .card .content button:active {
@@ -219,14 +221,6 @@
   align-items: flex-start;
 }
 
-/* Estilos para las tarjetas en pantallas con un ancho máximo de 960px */
-@media screen and (max-width: 1500px) {
-  .card {
-    width: 80%;
-    height: 80vh; 
-  }
-}
-
 @media screen and (max-width: 1300px) {
   .left-div ul li img {
     width: 110px; 
@@ -238,6 +232,17 @@
   .card-name {
     font-size: 14px;
   }
+  .task-title {
+    font-size: 0.8em; /* Ajusta este valor a tus necesidades */
+  }
+  .container .card .content button {
+    padding: 5px 25px; /* Ajusta este valor a tus necesidades */
+    font-size: 0.8em; /* Ajusta este valor a tus necesidades */
+    width: 90px; /* Ajusta este valor a tus necesidades */
+  }
+  .task-input textarea {
+    font-size: 0.8em;
+  }
 }
 
 /* Estilos para las imágenes en pantallas con un ancho máximo de 768px (por ejemplo, tablets) */
@@ -246,13 +251,22 @@
     width: 90px; 
     height: 110px; 
   }
-
   .left-div ul li {
-    margin-right: 0.5%; /* Ajusta este valor a tus necesidades */
+    margin-right: 0.5%; 
   }
-
   .card-name {
     font-size: 10px;
+  }
+  .task-title {
+    font-size: 0.6em; 
+  }
+  .container .card .content button {
+    padding: 3px 22px; 
+    font-size: 0.8em; 
+    width: 70px; 
+  }
+  .task-input textarea {
+    font-size: 0.6em;
   }
 }
 
