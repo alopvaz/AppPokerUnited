@@ -98,7 +98,8 @@ function Principal({rol}) {
           <span style={{ '--i': 26 }}></span>
           <span style={{ '--i': 17 }}></span>
           <span style={{ '--i': 13 }}></span>
-          <span style={{ '--i': 28 }}></span>       
+          <span style={{ '--i': 28 }}></span> 
+                
            </div>
            <div className="center-div">
   <div className="title-div">

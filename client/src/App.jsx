@@ -57,7 +57,13 @@ function App() {
         <Route path="/login" element={<Login authenticate={authenticate} isAuthenticated={userState.isAuthenticated} />} />
           <Route path='/home' element={
             <div className={!navVisible ? "page" : "page page-with-navbar"}>
-              <h1>Home</h1>
+            <h1 style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                textAlign: 'center'
+              }}>Home</h1>            
             </div>
           } />
           <Route path='/analytics' element={
