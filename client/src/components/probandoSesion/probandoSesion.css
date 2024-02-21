@@ -243,8 +243,8 @@
 /* Estilos para las imágenes en pantallas con un ancho máximo de 768px (por ejemplo, tablets) */
 @media screen and (max-width: 768px) {
   .left-div ul li img {
-    width: 60px; 
-    height: 80px; 
+    width: 90px; 
+    height: 110px; 
   }
 
   .left-div ul li {
@@ -255,4 +255,5 @@
     font-size: 10px;
   }
 }
+
 
