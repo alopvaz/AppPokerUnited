@@ -282,3 +282,36 @@
   right: 0;
   padding: 10px 20px;
 }
+
+.div-lista {
+  height: 80%;
+}
+
+.div-restante {
+  height: 19%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.div-restante img {
+  width: 50px;
+  height: 70px;
+}
+
+.exit-button {
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  outline: inherit;
+  color: white;
+  font-size: 0.9em;
+}
+
+.carta-pequena {
+  margin: 3px;  /* Adjust as needed */
+}

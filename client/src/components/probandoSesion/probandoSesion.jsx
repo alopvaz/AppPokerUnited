@@ -1,11 +1,45 @@
 import React, { useEffect } from 'react';
 import './probandoSesion.css';
-import reverso from "./cartas/reverso.png";
+
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import io from 'socket.io-client';
 import useLocalStorage from '../../localStorage/useLocalStorage';
 // Crear una referencia al elemento textarea
+
+//Importar cartas
+import reverso from "./cartas/reverso.png";
+import cero from "./cartas/0.png";
+import uno from "./cartas/1.png";
+import dos from "./cartas/2.png";
+import tres from "./cartas/3.png";
+import cinco from "./cartas/5.png";
+import ocho from "./cartas/8.png";
+import trece from "./cartas/13.png";
+import veintiuno from "./cartas/21.png";
+import treintaycuatro from "./cartas/34.png";
+import cincuentaycinco from "./cartas/55.png";
+import ochentaynueve from "./cartas/89.png";
+import infinito from "./cartas/infinito.png";
+import interrogacion from "./cartas/interrogacion.png";
+
+// Crear un array de objetos que contenga las cartas
+const cartas = [
+  { img: cero, value: 0 },
+  { img: uno, value: 1 },
+  { img: dos, value: 2 },
+  { img: tres, value: 3 },
+  { img: cinco, value: 5 },
+  { img: ocho, value: 8 },
+  { img: trece, value: 13 },
+  { img: veintiuno, value: 21 },
+  { img: treintaycuatro, value: 34 },
+  { img: cincuentaycinco, value: 55 },
+  { img: ochentaynueve, value: 89 },
+  { img: infinito, value: 'infinito' },
+  { img: interrogacion, value: '?' },
+];
+
 
 const socket = io('http://localhost:3000');
 
@@ -133,6 +167,11 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
       ))}
     </ul>
         </div>
+        <div className="div-restante">
+  {cartas.map((carta, index) => (
+    <img className='carta-pequena' key={index} src={carta.img} alt={`Carta ${carta.value}`} data-value={carta.value} />
+  ))}
+</div>
           <div className="otrso-div">
           </div>
         </div>
@@ -142,12 +181,13 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
                 <h3>TAREA</h3>
               </div>
               <div className="task-input">
-                <textarea ref={tareaRef} value={tarea} disabled={!isTextareaEnabled} onChange={e => setTarea(e.target.value)}></textarea>              </div>
+                <textarea ref={tareaRef} value={tarea} disabled={!isTextareaEnabled} onChange={e => setTarea(e.target.value)}></textarea>              
+                </div>
               <div className="task-buttons">
               {rol === 'admin' && (
               <>
                 <div className="button-create-task">
-                  <button className="btn" onClick={handleEditarClick}>Editar</button>
+                  <button className="tn" onClick={handleEditarClick}>Editar</button>
                 </div>
                 <div className="button-reveal-card">
                   <button className="btn">Revelar</button>
