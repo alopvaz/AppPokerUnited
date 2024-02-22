@@ -11,6 +11,17 @@ const socketLogic = (server) => {
     }
   });
   io.on('connection', (socket) => {
+
+    socket.on('crear-sesion', (nombreSesion) => {
+      nombreSesionActual = nombreSesion;
+      io.emit('sesion-disponible', nombreSesionActual);
+    });
+  
+    socket.on('cerrarSesion', (data) => {
+      socket.broadcast.emit('cerrarSesion');
+    });
+
+
     console.log('a user connected');
     socket.on('unirse-a-sesion', (nombreUsuario) => {
       // Crear un nuevo objeto de usuario

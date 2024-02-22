@@ -1,25 +1,44 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './probandoSesion.css';
 import reverso from "./cartas/reverso.png";
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState } from 'react';import io from 'socket.io-client';
+
+const socket = io('http://localhost:3000');
 
 
-function ProbandoSesion({ setSesionCreada, nombre }) {
+function ProbandoSesion({ setSesionCreada, nombre, rol }) {
 
   const navigate = useNavigate();
 
   //Usuaris conectados
   const [usuarios, setUsuarios] = useState([]);
 
-  const handleSalirClick = () => {
+  //Cuando el admin hace click sobre Salir setSesionCreada a false
+  const handleFinalizarClickAdmin = () => {
+    // Emitir un evento al servidor para hacer que setSesionCreada sea falso
+    socket.emit('cerrarSesion');
+    // Redirigir al admin a la página de crearSesion
     navigate("/crearSesion");
+    // Cambiar el estado de setSesionCreada a false
     setSesionCreada(false);
   };
 
+  useEffect(() => {
+    //Cuando el admin hace click sobre Salir setSesionCreada a false
+    socket.on('cerrarSesion', () => {
+      setSesionCreada(false);
+    });
+
+    // Limpiar el listener cuando el componente se desmonta
+    return () => {
+      socket.off('usuarioSalio');
+    };
+  }, []);
+  
   return (
     <div className="bodyStyle">
-<button className="exit-button" onClick={handleSalirClick}>Salir</button>     
+<button className="exit-button" onClick={handleFinalizarClickAdmin}>Finalizar</button>     
  <div className="container">
         <div className="left-div"> 
         <div className="div-lista">
