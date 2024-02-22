@@ -3,6 +3,8 @@ import { Server } from 'socket.io';
 
 let nombreSesionActual = '';
 let usuarios = [];
+let sesionActiva = false;
+
 
 const socketLogic = (server) => {
   const io = new Server(server, {
@@ -14,13 +16,14 @@ const socketLogic = (server) => {
   io.on('connection', (socket) => {
 
     socket.on('crear-sesion', () => {
+      sesionActiva = true;
       io.emit('sesion-disponible');
     });
   
     socket.on('cerrarSesion', (data) => {
       // Limpiar la lista de usuarios en el servidor
       usuarios = [];
-  
+      sesionActiva = false;
       // Emitir el evento 'cerrarSesion' a todos los sockets conectados
       io.emit('cerrarSesion');
     });
@@ -51,6 +54,8 @@ const socketLogic = (server) => {
       io.emit('actualizarUsuarios', usuarios);
     });
 
+    socket.emit('estado-sesion', sesionActiva);
+    
     /*console.log('a user connected');
     socket.on('unirse-a-sesion', (nombreUsuario) => {
       // Crear un nuevo objeto de usuario

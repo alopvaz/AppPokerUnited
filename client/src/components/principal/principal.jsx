@@ -62,7 +62,17 @@ function Principal({rol, sesionCreada, setSesionCreada}) {
       socket.off('cerrarSesion');
     };
   }, []);
+
+  useEffect(() => {
+    socket.on('estado-sesion', (sesionActiva) => {
+      setSesionCreada(sesionActiva);
+    });
   
+    return () => {
+      socket.off('estado-sesion');
+    };
+  }, []);
+
     return (
       <div className="borrado-principal">
         <div className="bubbles">
