@@ -148,6 +148,21 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
       // Focus the textarea
       tareaRef.current.focus();
     };
+
+// Función para manejar el clic en la carta
+const handleCardClick = (e) => {
+  // Obtener el valor de la carta del atributo 'data-value'
+  const cardValue = e.target.getAttribute('data-value');
+  // Imprimir el valor de la carta en la consola
+  console.log(cardValue);
+
+  // Quitar la clase 'raised' de todas las cartas
+  const cards = document.querySelectorAll('.carta-pequena');
+  cards.forEach(card => card.classList.remove('raised'));
+
+  // Agregar la clase 'raised' a la carta en la que se hizo clic
+  e.target.classList.add('raised');
+};
     
   return (
     <div className="bodyStyle">
@@ -168,9 +183,9 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     </ul>
         </div>
         <div className="div-restante">
-  {cartas.map((carta, index) => (
-    <img className='carta-pequena' key={index} src={carta.img} alt={`Carta ${carta.value}`} data-value={carta.value} />
-  ))}
+        {cartas.map((carta, index) => (
+  <img className='carta-pequena' key={index} src={carta.img} alt={`Carta ${carta.value}`} data-value={carta.value} onClick={handleCardClick} />
+))}
 </div>
           <div className="otrso-div">
           </div>

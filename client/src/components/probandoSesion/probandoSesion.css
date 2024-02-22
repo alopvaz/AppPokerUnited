@@ -314,4 +314,18 @@
 
 .carta-pequena {
   margin: 3px;  /* Adjust as needed */
+  transition: transform 0.3s ease-in-out;  /* Smooth transition */
+  cursor: pointer; /* Change cursor to hand pointer */
+}
+
+.carta-pequena:hover {
+  transform: translateY(-10px);  /* Move the element 10px upwards */
+  transition: transform 0.3s ease;
+}
+
+.raised,
+.raised:hover {
+  transform: translateY(-10px);
+  animation: sway 1s ease-in-out infinite;
+  transition: transform 0.3s ease;
 }
