@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import io from 'socket.io-client';
 import useLocalStorage from '../../localStorage/useLocalStorage';
+// Crear una referencia al elemento textarea
 
 const socket = io('http://localhost:3000');
 
@@ -14,7 +15,7 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
 
   //Estado que maneja la lista de usuarios conectados
   const [usuarios, setUsuarios] = useLocalStorage('usuarios', []);
-
+ 
   //Cuando el admin hace click sobre Salir setSesionCreada a false
   const handleFinalizarClickAdmin = () => {
     // Emitir un evento al servidor para hacer que setSesionCreada sea falso
@@ -96,6 +97,24 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     }
     usuarios.unshift(usuarioActual);
 
+    const [tarea, setTarea] = React.useState("No hay tarea seleccionada");
+    const [isTextareaEnabled, setTextareaEnabled] = React.useState(false);
+    const tareaRef = React.useRef();
+
+
+    const handleEditarClick = () => {
+      // Habilitar el textarea cuando se hace click en "Editar"
+      setTextareaEnabled(true);
+    
+      // If the current task is "No hay tarea seleccionada", clear it
+      if (tarea === "No hay tarea seleccionada") {
+        setTarea("");
+      }
+    
+      // Focus the textarea
+      tareaRef.current.focus();
+    };
+    
   return (
     <div className="bodyStyle">
     {rol === 'admin' && <button className="exit-button" onClick={handleFinalizarClickAdmin}>Finalizar</button>}
@@ -123,15 +142,18 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
                 <h3>TAREA</h3>
               </div>
               <div className="task-input">
-                <textarea></textarea>
-              </div>
+                <textarea ref={tareaRef} value={tarea} disabled={!isTextareaEnabled} onChange={e => setTarea(e.target.value)}></textarea>              </div>
               <div className="task-buttons">
+              {rol === 'admin' && (
+              <>
                 <div className="button-create-task">
-                  <button className="btn">Crear</button>
-                  </div>
-                <div className="button-reveal-card">
-                    <button className="btn">Revelar</button>
+                  <button className="btn" onClick={handleEditarClick}>Editar</button>
                 </div>
+                <div className="button-reveal-card">
+                  <button className="btn">Revelar</button>
+                </div>
+              </>
+            )}
               </div>
           </div>
         </div>
