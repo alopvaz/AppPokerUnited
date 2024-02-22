@@ -23,42 +23,33 @@ function Principal({rol, sesionCreada, setSesionCreada}) {
   const navigate = useNavigate();
 
   const [nombreSesion, setNombreSesion] = useState('');
-  // eslint-disable-next-line no-unused-vars
-  const [sesionDisponible, setSesionDisponible] = useState(false);
-
-  useEffect(() => {
-    socket.on('sesion-disponible', () => {
-      setSesionDisponible(true);
-      setSesionCreada(true);
-    });
-
-    socket.on('sesion-creada', () => {
-      // Cuando se recibe el evento, actualiza 'sesionCreada' a true
-      setSesionCreada(true);
-    });
-
-    return () => {
-      socket.off('sesion-disponible');
-      socket.off('sesion-creada');
-
-    };
-  }, []);
 
   const crearSesion = () => {
-    
-    socket.emit('crear-sesion', nombreSesion);
-    socket.emit('sesion-creada');
 
+    socket.emit('crear-sesion');
   
     axios.post('http://localhost:3000/crear-sesion', { nombreSesion })
       .then(response => {
         navigate('/probandoSesion', { state: { nombreSesion, sessionId: response.data.sessionId } });
         setSesionCreada(true);
+        socket.emit('sesion-creada'); // Emitir el evento 'sesion-creada' sólo después de que se haya creado la sesión
       })
       .catch((error) => {
         console.error('Error:', error);
       });
   }
+
+  useEffect(() => {
+    socket.on('sesion-disponible', () => {
+      setSesionCreada(true);
+    });
+
+    return () => {
+      socket.off('sesion-disponible');
+    };
+  }, []);
+
+  
 
   const entrar = () => {
     navigate('/probandoSesion', { state: { nombreSesion } });

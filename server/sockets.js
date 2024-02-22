@@ -12,13 +12,20 @@ const socketLogic = (server) => {
   });
   io.on('connection', (socket) => {
 
-    socket.on('crear-sesion', (nombreSesion) => {
-      nombreSesionActual = nombreSesion;
-      io.emit('sesion-disponible', nombreSesionActual);
+    socket.on('crear-sesion', () => {
+      io.emit('sesion-disponible');
     });
   
     socket.on('cerrarSesion', (data) => {
       socket.broadcast.emit('cerrarSesion');
+    });
+
+    socket.on('usuarioConectado', (usuario) => {
+      // Añadir el usuario a la lista
+      usuarios.push(usuario);
+  
+      // Emitir un evento a todos los clientes con la lista actualizada de usuarios
+      io.emit('actualizarUsuarios', usuarios);
     });
 
 
