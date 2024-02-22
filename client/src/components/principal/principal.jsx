@@ -49,11 +49,20 @@ function Principal({rol, sesionCreada, setSesionCreada}) {
     };
   }, []);
 
-  
-
   const entrar = () => {
     navigate('/probandoSesion', { state: { nombreSesion } });
   }
+
+  useEffect(() => {
+    socket.on('cerrarSesion', () => {
+      setSesionCreada(false);
+    });
+  
+    return () => {
+      socket.off('cerrarSesion');
+    };
+  }, []);
+  
     return (
       <div className="borrado-principal">
         <div className="bubbles">

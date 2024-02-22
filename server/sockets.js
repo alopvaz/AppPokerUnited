@@ -10,6 +10,7 @@ const socketLogic = (server) => {
       origin: 'http://localhost:5173',
     }
   });
+
   io.on('connection', (socket) => {
 
     socket.on('crear-sesion', () => {
@@ -17,19 +18,40 @@ const socketLogic = (server) => {
     });
   
     socket.on('cerrarSesion', (data) => {
-      socket.broadcast.emit('cerrarSesion');
+      // Limpiar la lista de usuarios en el servidor
+      usuarios = [];
+  
+      // Emitir el evento 'cerrarSesion' a todos los sockets conectados
+      io.emit('cerrarSesion');
     });
 
     socket.on('usuarioConectado', (usuario) => {
-      // Añadir el usuario a la lista
-      usuarios.push(usuario);
-  
+      // Comprobar si el usuario ya está en la lista
+      let usuarioYaExiste = usuarios.some(u => u.nombre === usuario.nombre && u.rol === usuario.rol);
+    
+      // Si el usuario no está en la lista, añadirlo
+      if (!usuarioYaExiste) {
+        usuarios.push(usuario);
+      }
+    
       // Emitir un evento a todos los clientes con la lista actualizada de usuarios
       io.emit('actualizarUsuarios', usuarios);
     });
 
+    socket.on('usuarioSalio', (usuario) => {
+      // Encontrar el índice del usuario en la lista
+      let indiceUsuario = usuarios.findIndex(u => u.nombre === usuario.nombre && u.rol === usuario.rol);
+    
+      // Si el usuario se encuentra en la lista, eliminarlo
+      if (indiceUsuario !== -1) {
+        usuarios.splice(indiceUsuario, 1);
+      }
+    
+      // Emitir un evento a todos los clientes con la lista actualizada de usuarios
+      io.emit('actualizarUsuarios', usuarios);
+    });
 
-    console.log('a user connected');
+    /*console.log('a user connected');
     socket.on('unirse-a-sesion', (nombreUsuario) => {
       // Crear un nuevo objeto de usuario
       const nuevoUsuario = {
@@ -128,7 +150,7 @@ socket.on('reset-cards', () => {
 socket.on('admin-selected-revealed-card', (card) => {
   // Emitir un nuevo evento a todos los clientes con la carta seleccionada por el administrador
   io.emit('admin-selected-revealed-card', card);
-});
+});*/
 
 
 });
