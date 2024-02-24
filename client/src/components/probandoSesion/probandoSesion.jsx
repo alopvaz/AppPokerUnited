@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './probandoSesion.css';
 
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import io from 'socket.io-client';
 import useLocalStorage from '../../localStorage/useLocalStorage';
+import PropTypes from 'prop-types';
+
+
 // Crear una referencia al elemento textarea
 
 //Importar cartas
@@ -39,7 +41,6 @@ const cartas = [
   { img: infinito, value: 'infinito' },
   { img: interrogacion, value: '?' },
 ];
-
 
 const socket = io('http://localhost:3000');
 
@@ -76,6 +77,7 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     return () => {
       socket.off('cerrarSesion');
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -98,11 +100,13 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     return () => {
       socket.off('actualizarUsuarios');
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Eliminado 'usuarios' de las dependencias
 
   useEffect(() => {
     socket.emit('usuarioConectado', { nombre, rol });
     console.log('usuarioConectado', nombre, rol);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSalirClick = () => {
@@ -131,7 +135,16 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     }
     usuarios.unshift(usuarioActual);
 
-    const [tarea, setTarea] = React.useState("No hay tarea seleccionada");
+    const [tarea, setTarea] = useLocalStorage('tarea', "No hay tarea seleccionada");
+    const [tareaEditable, setTareaEditable] = useState(tarea);
+    const handleGuardarClick = () => {
+      // Emitir el evento solo cuando se hace clic en "Guardar"
+      socket.emit('tareaActualizada', tareaEditable);
+      setTarea(tareaEditable);
+      // Cambiar el estado de isTextareaEnabled a false
+      setTextareaEnabled(false);
+    };
+
     const [isTextareaEnabled, setTextareaEnabled] = React.useState(false);
     const tareaRef = React.useRef();
 
@@ -140,13 +153,16 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
       // Habilitar el textarea cuando se hace click en "Editar"
       setTextareaEnabled(true);
     
-      // If the current task is "No hay tarea seleccionada", clear it
+      // Si la tarea actual es "No hay tarea seleccionada", borrarla
       if (tarea === "No hay tarea seleccionada") {
         setTarea("");
       }
     
-      // Focus the textarea
-      tareaRef.current.focus();
+      // Enfocar el textarea
+      // Usar setTimeout para asegurarse de que el textarea esté listo para recibir el foco
+      setTimeout(() => {
+        tareaRef.current.focus();
+      }, 0);
     };
 
 // Función para manejar el clic en la carta
@@ -163,7 +179,31 @@ const handleCardClick = (e) => {
   // Agregar la clase 'raised' a la carta en la que se hizo clic
   e.target.classList.add('raised');
 };
+
+useEffect(() => {
+  // Escuchar el evento 'actualizarTarea'
+  socket.on('actualizarTarea', (tareaActualizada) => {
+    console.log('actualizarTarea', tareaActualizada);
+    // Actualizar el estado de 'tarea' y 'tareaEditable' con la tarea recibida
+    setTarea(tareaActualizada);
+    setTareaEditable(tareaActualizada);
+  });
+
+  // Limpiar el listener cuando el componente se desmonta
+  return () => {
+    socket.off('actualizarTarea');
+  };
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, []); // Sin dependencias
     
+const handleButtonClick = () => {
+  if (isTextareaEnabled) {
+    handleGuardarClick();
+  } else {
+    handleEditarClick();
+  }
+};
+
   return (
     <div className="bodyStyle">
     {rol === 'admin' && <button className="exit-button" onClick={handleFinalizarClickAdmin}>Finalizar</button>}
@@ -183,9 +223,9 @@ const handleCardClick = (e) => {
     </ul>
         </div>
         <div className="div-restante">
-        {cartas.map((carta, index) => (
-  <img className='carta-pequena' key={index} src={carta.img} alt={`Carta ${carta.value}`} data-value={carta.value} onClick={handleCardClick} />
-))}
+        {tarea !== "No hay tarea seleccionada" && cartas.map((carta, index) => (
+      <img className='carta-pequena' key={index} src={carta.img} alt={`Carta ${carta.value}`} data-value={carta.value} onClick={handleCardClick} />
+    ))}
 </div>
           <div className="otrso-div">
           </div>
@@ -196,17 +236,27 @@ const handleCardClick = (e) => {
                 <h3>TAREA</h3>
               </div>
               <div className="task-input">
-                <textarea ref={tareaRef} value={tarea} disabled={!isTextareaEnabled} onChange={e => setTarea(e.target.value)}></textarea>              
+              <textarea 
+    className="textarea-task" 
+    ref={tareaRef} 
+    value={tareaEditable} 
+    disabled={!isTextareaEnabled} 
+    onChange={e => setTareaEditable(e.target.value)}
+  ></textarea>            
                 </div>
               <div className="task-buttons">
               {rol === 'admin' && (
               <>
                 <div className="button-create-task">
-                  <button className="tn" onClick={handleEditarClick}>Editar</button>
-                </div>
-                <div className="button-reveal-card">
-                  <button className="btn">Revelar</button>
-                </div>
+                <button className="tn" onClick={handleButtonClick}>
+                  {isTextareaEnabled ? 'Guardar' : 'Editar'}
+            </button>               
+             </div>
+                {tarea !== "No hay tarea seleccionada" && (
+          <div className="button-reveal-card">
+            <button className="btn">Revelar</button>
+          </div>
+        )}
               </>
             )}
               </div>
@@ -217,4 +267,11 @@ const handleCardClick = (e) => {
   );
 }
 
-export default ProbandoSesion;
+ProbandoSesion.propTypes = {
+  setSesionCreada: PropTypes.func.isRequired,
+  nombre: PropTypes.string.isRequired,
+  rol: PropTypes.string.isRequired,
+};
+
+export default ProbandoSesion; 
+

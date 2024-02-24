@@ -4,6 +4,8 @@ import { Server } from 'socket.io';
 let nombreSesionActual = '';
 let usuarios = [];
 let sesionActiva = false;
+let tareaActual = '';
+
 
 
 const socketLogic = (server) => {
@@ -55,6 +57,17 @@ const socketLogic = (server) => {
     });
 
     socket.emit('estado-sesion', sesionActiva);
+
+    socket.on('tareaActualizada', (tarea) => {
+      io.emit('actualizarTarea', tarea);
+    });
+
+    socket.on('tareaActualizada', (tarea) => {
+      // Actualizar la tarea actual
+      tareaActual = tarea;
+      // Emitir el evento 'actualizarTarea' a todos los clientes
+      io.emit('actualizarTarea', tareaActual);
+    });
     
     /*console.log('a user connected');
     socket.on('unirse-a-sesion', (nombreUsuario) => {

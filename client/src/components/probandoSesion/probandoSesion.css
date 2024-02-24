@@ -329,3 +329,8 @@
   animation: sway 1s ease-in-out infinite;
   transition: transform 0.3s ease;
 }
+
+.textarea-task {
+  resize: none;
+  border: 1px solid #f1efef;
+}
