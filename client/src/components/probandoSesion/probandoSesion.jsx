@@ -81,19 +81,10 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
   }, []);
 
   useEffect(() => {
-    let longitudAnterior = 0;
-  
-    // Luego escuchar el evento 'actualizarUsuarios'
+    // Escuchar el evento 'actualizarUsuarios'
     socket.on('actualizarUsuarios', (usuariosActualizados) => {
       // Actualizar el estado de 'usuarios' con la lista de usuarios recibida
       setUsuarios(usuariosActualizados);
-  
-      // Si la longitud de 'usuarios' aumenta, mostrar un mensaje
-      if (usuariosActualizados.length > longitudAnterior) {
-        console.log('Un nuevo usuario se ha conectado' + usuariosActualizados[usuariosActualizados.length - 1].nombre);
-      }
-  
-      longitudAnterior = usuariosActualizados.length;
     });
   
     // Limpiar el listener cuando el componente se desmonta
@@ -101,10 +92,10 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
       socket.off('actualizarUsuarios');
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Eliminado 'usuarios' de las dependencias
+  }, []); // Sin dependencias
 
   useEffect(() => {
-    socket.emit('usuarioConectado', { nombre, rol });
+    socket.emit('usuarioConectado', { nombre, rol, isSelected: false, cardSelected: null });
     console.log('usuarioConectado', nombre, rol);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -178,7 +169,22 @@ const handleCardClick = (e) => {
 
   // Agregar la clase 'raised' a la carta en la que se hizo clic
   e.target.classList.add('raised');
+
+  // Actualizar el estado del usuario actual
+let usuariosActuales = [...usuarios];
+let usuarioActualIndex = usuariosActuales.findIndex(usuario => usuario.nombre === nombre && usuario.rol === rol);
+if (usuarioActualIndex !== -1) {
+  let usuarioActual = { ...usuariosActuales[usuarioActualIndex] };
+  usuarioActual.isSelected = true;
+  usuarioActual.cardSelected = cardValue;
+  usuariosActuales[usuarioActualIndex] = usuarioActual;
+}
+setUsuarios(usuariosActuales);
+
+// Emitir un evento al servidor para actualizar el estado del usuario
+socket.emit('usuariosActualizados', usuariosActuales);
 };
+
 
 useEffect(() => {
   // Escuchar el evento 'actualizarTarea'

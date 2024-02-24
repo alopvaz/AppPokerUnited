@@ -68,6 +68,13 @@ const socketLogic = (server) => {
       // Emitir el evento 'actualizarTarea' a todos los clientes
       io.emit('actualizarTarea', tareaActual);
     });
+
+    socket.on('usuariosActualizados', (usuariosActualizados) => {
+      // Actualizar la lista completa de usuarios
+      usuarios = usuariosActualizados;
+      // Emitir un evento a todos los clientes con la lista actualizada de usuarios
+      io.emit('actualizarUsuarios', usuarios);
+    });
     
     /*console.log('a user connected');
     socket.on('unirse-a-sesion', (nombreUsuario) => {
