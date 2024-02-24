@@ -50,6 +50,8 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
 
   //Estado que maneja la lista de usuarios conectados
   const [usuarios, setUsuarios] = useLocalStorage('usuarios', []);
+  const [cartaSeleccionada, setCartaSeleccionada] = useState(null);
+
  
   //Cuando el admin hace click sobre Salir setSesionCreada a false
   const handleFinalizarClickAdmin = () => {
@@ -60,6 +62,8 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     navigate("/crearSesion");
     // Cambiar el estado de setSesionCreada a false
     setSesionCreada(false);
+    // Restablecer la tarea a "No hay tarea seleccionada"
+    setTarea("No hay tarea seleccionada");
   };
   
   useEffect(() => {
@@ -100,22 +104,25 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSalirClick = () => {
-    // Obtener la lista actual de usuarios del localStorage
-    let usuariosActuales = [...usuarios];
-    // Encontrar el índice del usuario en la lista
-    let indiceUsuario = usuariosActuales.findIndex(usuario => usuario.nombre === nombre && usuario.rol === rol);
-    // Si el usuario se encuentra en la lista, eliminarlo
-    if (indiceUsuario !== -1) {
-      usuariosActuales.splice(indiceUsuario, 1);
-    }
-    // Actualizar la lista de usuarios en el localStorage
-    setUsuarios(usuariosActuales);
-    // Emitir un evento al servidor para indicar que el usuario ha salido de la sesión
-    socket.emit('usuarioSalio', { nombre, rol });
-    // Redirigir al usuario a la página de inicio
-    navigate("/crearSesion");
-  };
+  
+const handleSalirClick = () => {
+  // Obtener la lista actual de usuarios del localStorage
+  let usuariosActuales = [...usuarios];
+  // Encontrar el índice del usuario en la lista
+  let indiceUsuario = usuariosActuales.findIndex(usuario => usuario.nombre === nombre && usuario.rol === rol);
+  // Si el usuario se encuentra en la lista, eliminarlo
+  if (indiceUsuario !== -1) {
+    usuariosActuales.splice(indiceUsuario, 1);
+  }
+  // Actualizar la lista de usuarios en el localStorage
+  setUsuarios(usuariosActuales);
+  // Emitir un evento al servidor para indicar que el usuario ha salido de la sesión
+  socket.emit('usuarioSalio', { nombre, rol });
+  // Redirigir al usuario a la página de inicio
+  navigate("/crearSesion");
+  // Restablecer la tarea a "No hay tarea seleccionada"
+  setTarea("No hay tarea seleccionada");
+};
 
     // Suponiendo que 'usuarioActual' es el usuario actual
     let usuarioActual = {nombre: nombre, rol: rol}; // reemplaza esto con el usuario actual
@@ -171,14 +178,18 @@ const handleCardClick = (e) => {
   e.target.classList.add('raised');
 
   // Actualizar el estado del usuario actual
-let usuariosActuales = [...usuarios];
-let usuarioActualIndex = usuariosActuales.findIndex(usuario => usuario.nombre === nombre && usuario.rol === rol);
-if (usuarioActualIndex !== -1) {
-  let usuarioActual = { ...usuariosActuales[usuarioActualIndex] };
-  usuarioActual.isSelected = true;
-  usuarioActual.cardSelected = cardValue;
-  usuariosActuales[usuarioActualIndex] = usuarioActual;
-}
+  let usuariosActuales = [...usuarios];
+  let usuarioActualIndex = usuariosActuales.findIndex(usuario => usuario.nombre === nombre && usuario.rol === rol);
+  if (usuarioActualIndex !== -1) {
+    let usuarioActual = { ...usuariosActuales[usuarioActualIndex] };
+    usuarioActual.isSelected = true;
+    usuarioActual.cardSelected = cardValue;
+    usuariosActuales[usuarioActualIndex] = usuarioActual;
+
+    // Actualiza el estado de la carta seleccionada con el valor de la carta del usuario actual
+    setCartaSeleccionada(cardValue);
+  }
+
 setUsuarios(usuariosActuales);
 
 // Emitir un evento al servidor para actualizar el estado del usuario
@@ -218,14 +229,26 @@ const handleButtonClick = () => {
         <div className="left-div"> 
         <div className="div-lista">
         <ul>
-      {usuarios.map((usuario, index) => (
-        <li key={index}>
-          <div className="card-item">
-            <img src={reverso} alt="Imagen 1" />
-            <div className="card-name">{usuario.nombre}</div>
-          </div>
-        </li>
-      ))}
+        {usuarios.map((usuario, index) => (
+  <li key={index}>
+    <div className="card-item">
+      {/* Si el usuario es el usuario actual y ha seleccionado una carta, muestra la carta seleccionada. De lo contrario, muestra el reverso. */}
+      <img 
+  src={
+    usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada 
+    ? (cartas.find(carta => carta.value.toString() === cartaSeleccionada.toString()) || {}).img || reverso
+    : reverso
+  } 
+  alt={
+    usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada 
+    ? `Carta ${cartaSeleccionada}` 
+    : "Imagen 1"
+  } 
+/>
+      <div className="card-name">{usuario.nombre}</div>
+    </div>
+  </li>
+))}
     </ul>
         </div>
         <div className="div-restante">
