@@ -121,7 +121,6 @@ const handleSalirClick = () => {
   // Redirigir al usuario a la página de inicio
   navigate("/crearSesion");
   // Restablecer la tarea a "No hay tarea seleccionada"
-  setTarea("No hay tarea seleccionada");
 };
 
     // Suponiendo que 'usuarioActual' es el usuario actual
@@ -237,7 +236,7 @@ const handleButtonClick = () => {
   src={
     usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada 
     ? (cartas.find(carta => carta.value.toString() === cartaSeleccionada.toString()) || {}).img || reverso
-    : reverso
+    : usuario.isSelected ? reverso : reverso
   } 
   alt={
     usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada 
@@ -245,8 +244,8 @@ const handleButtonClick = () => {
     : "Imagen 1"
   } 
 />
-      <div className="card-name">{usuario.nombre}</div>
-    </div>
+<div className={`card-name ${usuario.isSelected ? 'nombre-usuario-seleccionado' : ''}`}>{usuario.nombre}</div>   
+ </div>
   </li>
 ))}
     </ul>

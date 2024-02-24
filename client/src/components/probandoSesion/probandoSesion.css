@@ -12,6 +12,10 @@
   flex-direction: row;
 }
 
+.nombre-usuario-seleccionado {
+  background-color: #A0CF9F;
+}
+
 /* Estilos para el pseudo-elemento ::before del cuerpo del documento */
 .bodyStyle::before {
   content: '';
