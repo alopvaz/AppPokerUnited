@@ -6,8 +6,6 @@ let usuarios = [];
 let sesionActiva = false;
 let tareaActual = '';
 
-
-
 const socketLogic = (server) => {
   const io = new Server(server, {
     cors: {
@@ -75,109 +73,21 @@ const socketLogic = (server) => {
       // Emitir un evento a todos los clientes con la lista actualizada de usuarios
       io.emit('actualizarUsuarios', usuarios);
     });
-    
-    /*console.log('a user connected');
-    socket.on('unirse-a-sesion', (nombreUsuario) => {
-      // Crear un nuevo objeto de usuario
-      const nuevoUsuario = {
-        nombre: nombreUsuario,
-        isRevealed: false,
-        revealedCard: null,
-        hasVoted: false, 
-      };
-    
-      // Verificar si el usuario ya está en la lista
-      const usuarioExistente = usuarios.find(usuario => usuario.nombre === nombreUsuario);
-    
-      // Si el usuario ya existe, actualizar su información
-      if (usuarioExistente) {
-        usuarioExistente.isRevealed = nuevoUsuario.isRevealed;
-        usuarioExistente.revealedCard = nuevoUsuario.revealedCard;
-      } else {
-        // Si el usuario no existe, agregarlo a la lista
-        usuarios.push(nuevoUsuario);
-    
-        // Emitir la lista de usuarios actuales a todos los usuarios
-        io.emit('usuarios-actuales', usuarios);
-    
-        // Notificar a los demás usuarios sobre el nuevo usuario
-        io.emit('nuevo-usuario', nombreUsuario); // Modificado para emitir a todos los usuarios
-      }
-    
-      socket.nombreUsuario = nombreUsuario;
-    
-      // Emitir el nombre de la sesión actual a este usuario
-      socket.emit('sesion-disponible', nombreSesionActual);
+
+    socket.on('revelarCartas', () => {
+      io.emit('revelarCartas');
     });
 
-    io.emit('sesion-creada');
-
-    socket.on('crear-sesion', (nombreSesion) => {
-      nombreSesionActual = nombreSesion;
-      io.emit('sesion-disponible', nombreSesionActual);
-    });
+    socket.on('reset', () => {
+      // Restablecer el estado de los usuarios
+      usuarios = usuarios.map(usuario => ({ ...usuario, isSelected: false, cardSelected: null }));
   
-    socket.on('actualizar-tarea', (nuevaTarea) => {
-      io.emit('tarea-actualizada', nuevaTarea);
-    });
+      // Emitir un evento de 'usuariosActualizados' con la lista de usuarios actualizada
+      io.emit('usuariosActualizados', usuarios);
   
-   socket.on('disconnect', () => {
-  // Eliminar el usuario de la lista
-  usuarios = usuarios.filter(usuario => usuario.nombre !== socket.nombreUsuario);
-
-  // Emitir la lista de usuarios actuales a todos los usuarios
-  io.emit('usuarios-actuales', usuarios);
-
-  // Notificar a los demás usuarios que el usuario ha dejado la sesión
-  io.emit('usuario-desconectado', socket.nombreUsuario); // Modificado para emitir a todos los usuarios
-});
-
-socket.on('usuario-votado', ({ nombre, revealedCard }) => {
-  const usuarioVotado = usuarios.find(usuario => usuario.nombre === nombre);
-  if (usuarioVotado) {
-    usuarioVotado.isRevealed = true; // Esta línea podría ser opcional, dependiendo de si quieres revelar la carta ahora o más tarde.
-    usuarioVotado.revealedCard = revealedCard;
-    usuarioVotado.hasVoted = true; // Actualiza que el usuario ha votado.
-
-    // Aquí está el cambio clave: asegúrate de emitir la lista completa de usuarios actualizada.
-    io.emit('usuarios-actuales', usuarios); // Esto asegura que todos los clientes reciban la lista actualizada.
-    io.emit('usuario-votado', nombre); // Esto asegura que todos los clientes reciban la lista actualizada.
-
-  }
-
-});
-
-socket.on('reveal-all-cards', () => {
-  // Actualizar el estado de todas las cartas para todos los usuarios
-  usuarios.forEach(usuario => {
-    usuario.isRevealed = true;
-  });
-
-  // Emitir la lista de usuarios actualizada a todos los clientes
-  io.emit('usuarios-actuales', usuarios);
-});
-
-
-socket.on('reset-cards', () => {
-  // Restablecer el estado de las cartas para todos los usuarios
-  usuarios.forEach(usuario => {
-    usuario.revealedCard = null;
-    usuario.isRevealed = false;
-    usuario.hasVoted = false;
-    usuario.selectedCard = null; // Añadir esta línea
-  });
-
-  // Emitir la lista de usuarios actualizada a todos los clientes después de restablecer las cartas
-  io.emit('usuarios-actuales', usuarios);
-});
-
-
-socket.on('admin-selected-revealed-card', (card) => {
-  // Emitir un nuevo evento a todos los clientes con la carta seleccionada por el administrador
-  io.emit('admin-selected-revealed-card', card);
-});*/
-
-
+      // Emitir un evento de 'reset' para indicar que se ha hecho clic en el botón de resetear
+      io.emit('reset');
+    });
 });
   return io;
 };

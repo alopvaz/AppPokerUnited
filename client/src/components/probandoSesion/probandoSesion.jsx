@@ -46,12 +46,78 @@ const socket = io('http://localhost:3000');
 
 function ProbandoSesion({ setSesionCreada, nombre, rol }) {
 
+  const [reveal, setReveal] = useState(false);
+  const handleReveal = () => {
+    setReveal(true);
+    socket.emit('revelarCartas');
+
+  };
+
+  useEffect(() => {
+    // Escuchar el evento 'revelarCartas'
+    socket.on('revelarCartas', () => {
+      // Actualizar el estado 'reveal' a true
+      setReveal(true);
+    });
+  
+    // Limpiar el listener cuando el componente se desmonta
+    return () => {
+      socket.off('revelarCartas');
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Sin dependencias
+
+
   const navigate = useNavigate();
 
   //Estado que maneja la lista de usuarios conectados
   const [usuarios, setUsuarios] = useLocalStorage('usuarios', []);
   const [cartaSeleccionada, setCartaSeleccionada] = useState(null);
 
+  const handleResetClick = () => {
+    // Recorrer el array de usuarios y para cada usuario, cambiar su propiedad `isSelected` a `false` y `cardSelected` a `null`
+    let usuariosActualizados = usuarios.map(usuario => {
+      return { ...usuario, isSelected: false, cardSelected: null };
+    });
+  
+    // Emitir un evento al servidor para actualizar el estado de todos los usuarios
+    socket.emit('usuariosActualizados', usuariosActualizados);
+  
+    // Actualizar el estado local de los usuarios
+    setUsuarios(usuariosActualizados);
+  
+    // Restablecer el estado de 'reveal' a false
+    setReveal(false);
+  
+    // Restablecer el estado de 'cartaSeleccionada' a null
+    setCartaSeleccionada(null);
+  
+    // Emitir un evento de 'reset' al servidor
+    socket.emit('reset');
+  }; 
+  
+  useEffect(() => {
+    // Escuchar el evento 'reset'
+    socket.on('reset', () => {
+      // Restablecer el estado de 'reveal' a false
+      setReveal(false);
+  
+      // Restablecer el estado de 'cartaSeleccionada' a null
+      setCartaSeleccionada(null);
+    });
+  
+    // Escuchar el evento 'usuariosActualizados'
+    socket.on('usuariosActualizados', (usuariosActualizados) => {
+      // Actualizar el estado de 'usuarios' con la lista de usuarios recibida
+      setUsuarios(usuariosActualizados);
+    });
+  
+    // Limpiar los listeners cuando el componente se desmonta
+    return () => {
+      socket.off('reset');
+      socket.off('usuariosActualizados');
+    };
+  }, []); // Sin dependencias
  
   //Cuando el admin hace click sobre Salir setSesionCreada a false
   const handleFinalizarClickAdmin = () => {
@@ -83,12 +149,18 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   useEffect(() => {
     // Escuchar el evento 'actualizarUsuarios'
     socket.on('actualizarUsuarios', (usuariosActualizados) => {
       // Actualizar el estado de 'usuarios' con la lista de usuarios recibida
       setUsuarios(usuariosActualizados);
+  
+      // Encuentra el usuario actual en la lista de usuarios actualizados
+      let usuarioActualizado = usuariosActualizados.find(usuario => usuario.nombre === nombre && usuario.rol === rol);
+      if (usuarioActualizado) {
+        // Actualizar el estado de 'cartaSeleccionada' con el valor de 'cardSelected' del usuario actualizado
+        setCartaSeleccionada(usuarioActualizado.cardSelected);
+      }
     });
   
     // Limpiar el listener cuando el componente se desmonta
@@ -97,7 +169,6 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Sin dependencias
-
   useEffect(() => {
     socket.emit('usuarioConectado', { nombre, rol, isSelected: false, cardSelected: null });
     console.log('usuarioConectado', nombre, rol);
@@ -234,13 +305,13 @@ const handleButtonClick = () => {
       {/* Si el usuario es el usuario actual y ha seleccionado una carta, muestra la carta seleccionada. De lo contrario, muestra el reverso. */}
       <img 
   src={
-    usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada 
-    ? (cartas.find(carta => carta.value.toString() === cartaSeleccionada.toString()) || {}).img || reverso
-    : usuario.isSelected ? reverso : reverso
+    (usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada) || (reveal && usuario.isSelected)
+    ? (cartas.find(carta => carta.value.toString() === (usuario.cardSelected || cartaSeleccionada).toString()) || {}).img || reverso
+    : reverso
   } 
   alt={
-    usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada 
-    ? `Carta ${cartaSeleccionada}` 
+    (usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada) || (reveal && usuario.isSelected)
+    ? `Carta ${(usuario.cardSelected || cartaSeleccionada)}`
     : "Imagen 1"
   } 
 />
@@ -251,9 +322,9 @@ const handleButtonClick = () => {
     </ul>
         </div>
         <div className="div-restante">
-        {tarea !== "No hay tarea seleccionada" && cartas.map((carta, index) => (
-      <img className='carta-pequena' key={index} src={carta.img} alt={`Carta ${carta.value}`} data-value={carta.value} onClick={handleCardClick} />
-    ))}
+        {tarea !== "No hay tarea seleccionada" && !reveal && cartas.map((carta, index) => (
+  <img className='carta-pequena' key={index} src={carta.img} alt={`Carta ${carta.value}`} data-value={carta.value} onClick={handleCardClick} />
+))}
 </div>
           <div className="otrso-div">
           </div>
@@ -282,8 +353,9 @@ const handleButtonClick = () => {
              </div>
                 {tarea !== "No hay tarea seleccionada" && (
           <div className="button-reveal-card">
-            <button className="btn">Revelar</button>
-          </div>
+<button className="btn" onClick={reveal ? handleResetClick : handleReveal}>
+      {reveal ? 'Resetear' : 'Revelar'}
+    </button>          </div>
         )}
               </>
             )}
