@@ -6,7 +6,6 @@ import io from 'socket.io-client';
 import useLocalStorage from '../../localStorage/useLocalStorage';
 import PropTypes from 'prop-types';
 
-
 // Crear una referencia al elemento textarea
 
 //Importar cartas

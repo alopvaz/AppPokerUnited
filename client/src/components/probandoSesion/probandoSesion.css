@@ -13,7 +13,7 @@
 }
 
 .nombre-usuario-seleccionado {
-  background-color: #A0CF9F;
+  color: #A0CF9F !important;
 }
 
 /* Estilos para el pseudo-elemento ::before del cuerpo del documento */
