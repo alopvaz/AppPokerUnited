@@ -13,6 +13,8 @@ import { FaRegHandSpock } from 'react-icons/fa';
 import logo from './logo.png'; 
 import { useState } from 'react'; 
 const ICON_SIZE = 20;
+import PropTypes from 'prop-types';
+
 
 function Sidebar({visible, show, logout, rol}) { // Añade "rol" como prop
 
@@ -70,5 +72,12 @@ function Sidebar({visible, show, logout, rol}) { // Añade "rol" como prop
         </>
     );
 }
+
+Sidebar.propTypes = {
+    visible: PropTypes.bool.isRequired,
+    show: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+    rol: PropTypes.string.isRequired,
+  };
 
 export default Sidebar;
