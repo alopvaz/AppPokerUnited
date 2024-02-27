@@ -46,7 +46,7 @@ const socket = io('http://localhost:3000');
 
 function ProbandoSesion({ setSesionCreada, nombre, rol }) {
 
-  const [reveal, setReveal] = useState(false);
+  const [reveal, setReveal] = useLocalStorage('reveal', false);  
   const handleReveal = () => {
     setReveal(true);
     socket.emit('revelarCartas');

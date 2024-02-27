@@ -5,17 +5,17 @@ import "./style/index.css";
 import Principal from './components/principal/principal';
 import Sesion from './components/sesion/sesion';
 import useLocalStorage from './localStorage/useLocalStorage';
+import sessionStorage from './localStorage/sessionStorage';
 import Sidebar from './components/sidebar/sidebar';
 import ProbandoSesion from './components/probandoSesion/probandoSesion';
 import Historial from './components/historial/historial';
 import VersionSesion from './components/versionSesion/versionSesion'; // Importa el componente VersionSesion
 
-
 function App() {
 
   const [navVisible, showNavbar] = useState(false);
   
-  const [userState, setUserState] = useLocalStorage('userState', {
+  const [userState, setUserState] = sessionStorage('userState', {
     isAuthenticated: false,
     rol: '',
     nombre: '',
@@ -52,6 +52,7 @@ function App() {
     });
     showNavbar(false); 
   };
+
   return (
     <BrowserRouter>
       <div className="App">

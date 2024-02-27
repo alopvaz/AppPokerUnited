@@ -47,6 +47,7 @@ function Principal({rol, sesionCreada, setSesionCreada}) {
     return () => {
       socket.off('sesion-disponible');
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const entrar = () => {
@@ -61,6 +62,7 @@ function Principal({rol, sesionCreada, setSesionCreada}) {
     return () => {
       socket.off('cerrarSesion');
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -71,6 +73,21 @@ function Principal({rol, sesionCreada, setSesionCreada}) {
     return () => {
       socket.off('estado-sesion');
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    // Solicitar el estado de la sesión cuando el componente se monta
+    socket.emit('solicitar-estado-sesion');
+  
+    socket.on('estado-sesion', (sesionActiva) => {
+      setSesionCreada(sesionActiva);
+    });
+  
+    return () => {
+      socket.off('estado-sesion');
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
     return (
@@ -159,6 +176,8 @@ function Principal({rol, sesionCreada, setSesionCreada}) {
 
 Principal.propTypes = {
   rol: PropTypes.string.isRequired,
+  sesionCreada: PropTypes.bool.isRequired,
+  setSesionCreada: PropTypes.func.isRequired,
 };
 
 export default Principal;

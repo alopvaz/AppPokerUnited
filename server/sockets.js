@@ -15,9 +15,16 @@ const socketLogic = (server) => {
 
   io.on('connection', (socket) => {
 
+    socket.emit('estado-sesion', sesionActiva);
+
+    socket.on('solicitar-estado-sesion', () => {
+      socket.emit('estado-sesion', sesionActiva);
+    });
+
     socket.on('crear-sesion', () => {
       sesionActiva = true;
       io.emit('sesion-disponible');
+      io.emit('estado-sesion', sesionActiva); // Emitir el estado de la sesión cuando cambia
     });
   
     socket.on('cerrarSesion', (data) => {
