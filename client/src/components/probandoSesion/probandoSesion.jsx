@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import useLocalStorage from '../../localStorage/useLocalStorage';
 import PropTypes from 'prop-types';
-import { Modal, Button } from 'antd';
+import { Modal } from 'antd';
+import { useLocation } from 'react-router-dom';
 
 // Crear una referencia al elemento textarea
 
@@ -46,10 +47,21 @@ const socket = io('http://localhost:3000');
 
 function ProbandoSesion({ setSesionCreada, nombre, rol }) {
 
+  //recupero el id de la sesion
+  const location = useLocation();
+  let sessionId;
+  if (location && location.state) {
+    sessionId = location.state.sessionId;
+    console.log("SessionId:", sessionId);
+  } else {
+    // Manejar el caso en que location.state es undefined
+  }
+
+
   const [showModal, setShowModal] = useLocalStorage('showModal', false);
   
   const [cartaSeleccionadaAdmin, setCartaSeleccionadaAdmin] = useLocalStorage('cartaSeleccionadaAdmin', null);
-  const handleAdminCardClick = (usuario) => {
+  const handleAdminCardClick  = (usuario) => {
     if (rol === 'admin' && (reveal || (usuario.nombre === nombre && usuario.rol === 'admin'))) {
       if (usuario.cardSelected !== undefined) {
         console.log(`Admin seleccionó la carta: ${usuario.cardSelected}`);
