@@ -5,6 +5,7 @@ let nombreSesionActual = '';
 let usuarios = [];
 let sesionActiva = false;
 let tareaActual = '';
+let cartaSeleccionadaAdmin = null; // Añade esta línea al inicio de tu archivo
 
 const socketLogic = (server) => {
   const io = new Server(server, {
@@ -88,12 +89,29 @@ const socketLogic = (server) => {
     socket.on('reset', () => {
       // Restablecer el estado de los usuarios
       usuarios = usuarios.map(usuario => ({ ...usuario, isSelected: false, cardSelected: null }));
-  
+    
+      // Restablecer la carta seleccionada por el administrador
+      cartaSeleccionadaAdmin = null;
+    
       // Emitir un evento de 'usuariosActualizados' con la lista de usuarios actualizada
       io.emit('usuariosActualizados', usuarios);
-  
+    
       // Emitir un evento de 'reset' para indicar que se ha hecho clic en el botón de resetear
       io.emit('reset');
+    
+      // Emitir un evento a todos los clientes para informarles que la carta seleccionada por el administrador ha cambiado
+      io.emit('cartaSeleccionadaAdminCambiada', cartaSeleccionadaAdmin);
+    });
+    
+    socket.on('cartaSeleccionadaAdmin', (carta) => {
+      console.log(carta);
+      cartaSeleccionadaAdmin = carta;
+      io.emit('cartaSeleccionadaAdmin', cartaSeleccionadaAdmin);
+    });
+
+    socket.on('cartaSeleccionadaAdminCambiada', (carta) => {
+      // Emitir un evento a todos los clientes para informarles que la carta seleccionada por el administrador ha cambiado
+      io.emit('cartaSeleccionadaAdminCambiada', carta);
     });
 });
   return io;

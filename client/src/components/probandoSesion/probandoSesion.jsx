@@ -45,11 +45,36 @@ const socket = io('http://localhost:3000');
 
 function ProbandoSesion({ setSesionCreada, nombre, rol }) {
 
+  const [cartaSeleccionadaAdmin, setCartaSeleccionadaAdmin] = useLocalStorage('cartaSeleccionadaAdmin', null);
+  const handleAdminCardClick = (usuario) => {
+    if (rol === 'admin' && (reveal || (usuario.nombre === nombre && usuario.rol === 'admin'))) {
+      if (usuario.cardSelected !== undefined) {
+        console.log(`Admin seleccionó la carta: ${usuario.cardSelected}`);
+        setCartaSeleccionadaAdmin(usuario.cardSelected);
+        console.log(usuario.cardSelected);
+        socket.emit('cartaSeleccionadaAdmin', usuario.cardSelected);
+        console.log(`Evento 'cartaSeleccionadaAdmin' emitido con carta: ${usuario.cardSelected}`);
+      }
+    }
+  };
+
+  useEffect(() => {
+    socket.on('cartaSeleccionadaAdmin', (carta) => {
+      console.log(`Cliente recibió carta: ${carta}`);
+      setCartaSeleccionadaAdmin(carta);
+    });
+  
+    // Limpiar el listener cuando el componente se desmonta
+    return () => {
+      socket.off('cartaSeleccionadaAdmin');
+    };
+  }, []);
+
   const [reveal, setReveal] = useLocalStorage('reveal', false);  
   const handleReveal = () => {
     setReveal(true);
+    console.log(usuarios);
     socket.emit('revelarCartas');
-
   };
 
   useEffect(() => {
@@ -87,13 +112,29 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
   
     // Restablecer el estado de 'reveal' a false
     setReveal(false);
-  
+    setCartaSeleccionadaAdmin(null);
+    
+
+  // Emitir un evento al servidor para informarle que la carta seleccionada por el administrador ha cambiado
+      socket.emit('cartaSeleccionadaAdminCambiada', null);
+
     // Restablecer el estado de 'cartaSeleccionada' a null
     setCartaSeleccionada(null);
   
     // Emitir un evento de 'reset' al servidor
     socket.emit('reset');
   }; 
+
+  useEffect(() => {
+    socket.on('cartaSeleccionadaAdminCambiada', (carta) => {
+      setCartaSeleccionadaAdmin(carta);
+    });
+  
+    // Limpiar el evento al desmontar el componente
+    return () => {
+      socket.off('cartaSeleccionadaAdminCambiada');
+    };
+  }, []);
   
   useEffect(() => {
     // Escuchar el evento 'reset'
@@ -193,14 +234,22 @@ const handleSalirClick = () => {
   // Restablecer la tarea a "No hay tarea seleccionada"
 };
 
-    // Suponiendo que 'usuarioActual' es el usuario actual
-    let usuarioActual = {nombre: nombre, rol: rol}; // reemplaza esto con el usuario actual
-    // Encuentra el usuario actual en el array y lo elimina
-    let index = usuarios.findIndex(usuario => usuario.nombre === usuarioActual.nombre && usuario.rol === usuarioActual.rol);
-    if (index !== -1) {
-      usuarios.splice(index, 1);
-    }
-    usuarios.unshift(usuarioActual);
+
+// Encuentra el usuario actual en el array
+let index = usuarios.findIndex(usuario => usuario.nombre === nombre && usuario.rol === rol);
+if (index !== -1) {
+  // Suponiendo que 'usuarioActual' es el usuario actual
+  let usuarioActual = {
+    nombre: nombre,
+    rol: rol,
+    isSelected: usuarios[index].isSelected || false,
+    cardSelected: usuarios[index].cardSelected || null
+  }; // reemplaza esto con el usuario actual
+  // Elimina el usuario actual del array
+  usuarios.splice(index, 1);
+  // Añade el nuevo usuario al principio del array
+  usuarios.unshift(usuarioActual);
+}
 
     const [tarea, setTarea] = useLocalStorage('tarea', "No hay tarea seleccionada");
     const [tareaEditable, setTareaEditable] = useState(tarea);
@@ -259,6 +308,7 @@ const handleCardClick = (e) => {
     setCartaSeleccionada(cardValue);
   }
 
+  console.log(usuariosActuales);
 setUsuarios(usuariosActuales);
 
 // Emitir un evento al servidor para actualizar el estado del usuario
@@ -299,10 +349,9 @@ const handleButtonClick = () => {
         <div className="div-lista">
         <ul>
         {usuarios.map((usuario, index) => (
-  <li key={index}>
-    <div className="card-item">
-      {/* Si el usuario es el usuario actual y ha seleccionado una carta, muestra la carta seleccionada. De lo contrario, muestra el reverso. */}
-      <img 
+              <li key={index}>
+                <div className="card-item">
+                <img 
   src={
     (usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada) || (reveal && usuario.isSelected)
     ? (cartas.find(carta => carta.value.toString() === (usuario.cardSelected || cartaSeleccionada).toString()) || {}).img || reverso
@@ -313,18 +362,22 @@ const handleButtonClick = () => {
     ? `Carta ${(usuario.cardSelected || cartaSeleccionada)}`
     : "Imagen 1"
   } 
+ onClick={() => handleAdminCardClick(usuario)}
 />
-<div className={`card-name ${usuario.isSelected ? 'nombre-usuario-seleccionado' : ''}`}>{usuario.nombre}</div>   
- </div>
-  </li>
-))}
+                  <div className={`card-name ${usuario.isSelected ? 'nombre-usuario-seleccionado' : ''}`}>{usuario.nombre}</div>   
+                </div>
+              </li>
+            ))}
     </ul>
         </div>
         <div className="div-restante">
-        {tarea !== "No hay tarea seleccionada" && !reveal && cartas.map((carta, index) => (
-  <img className='carta-pequena' key={index} src={carta.img} alt={`Carta ${carta.value}`} data-value={carta.value} onClick={handleCardClick} />
-))}
-</div>
+          {tarea !== "No hay tarea seleccionada" && !reveal && cartas.map((carta, index) => (
+            <img className='carta-pequena' key={index} src={carta.img} alt={`Carta ${carta.value}`} data-value={carta.value} onClick={handleCardClick} />
+          ))}
+          {reveal && cartaSeleccionadaAdmin && (
+            <img className='carta-pequena' src={(cartas.find(carta => carta.value.toString() === cartaSeleccionadaAdmin.toString()) || {}).img || reverso} alt={`Carta ${cartaSeleccionadaAdmin}`} data-value={cartaSeleccionadaAdmin} />
+          )}
+        </div>
           <div className="otrso-div">
           </div>
         </div>
@@ -352,9 +405,9 @@ const handleButtonClick = () => {
              </div>
                 {tarea !== "No hay tarea seleccionada" && (
           <div className="button-reveal-card">
-<button className="btn" onClick={reveal ? handleResetClick : handleReveal}>
-      {reveal ? 'Resetear' : 'Revelar'}
-    </button>          </div>
+            <button className="btn" onClick={reveal ? handleResetClick : handleReveal}>
+            {reveal ? 'Resetear' : 'Revelar'}
+           </button>          </div>
         )}
               </>
             )}
