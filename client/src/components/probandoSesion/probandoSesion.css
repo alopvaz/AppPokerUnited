@@ -338,3 +338,18 @@
   resize: none;
   border: 1px solid #f1efef;
 }
+
+.my-modal-confirm-button {
+  background-color: #38B5AD; /* Reemplaza #yourColor con el color que quieras */
+}
+
+.my-modal-cancel-button:hover {
+  color: #38B5AD !important;
+  border-color: #38B5AD !important;
+}
+
+.my-modal-confirm-button:hover {
+  background-color: #fff !important;
+  color: #38B5AD !important;
+  border-color: #38B5AD !important;
+}

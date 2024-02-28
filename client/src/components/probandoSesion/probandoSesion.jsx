@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import useLocalStorage from '../../localStorage/useLocalStorage';
 import PropTypes from 'prop-types';
+import { Modal, Button } from 'antd';
 
 // Crear una referencia al elemento textarea
 
@@ -45,6 +46,8 @@ const socket = io('http://localhost:3000');
 
 function ProbandoSesion({ setSesionCreada, nombre, rol }) {
 
+  const [showModal, setShowModal] = useLocalStorage('showModal', false);
+  
   const [cartaSeleccionadaAdmin, setCartaSeleccionadaAdmin] = useLocalStorage('cartaSeleccionadaAdmin', null);
   const handleAdminCardClick = (usuario) => {
     if (rol === 'admin' && (reveal || (usuario.nombre === nombre && usuario.rol === 'admin'))) {
@@ -58,6 +61,10 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     }
   };
 
+  const handleConfirm = () => {
+    console.log('Confirmado');
+  }
+
   useEffect(() => {
     socket.on('cartaSeleccionadaAdmin', (carta) => {
       console.log(`Cliente recibió carta: ${carta}`);
@@ -68,6 +75,7 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     return () => {
       socket.off('cartaSeleccionadaAdmin');
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [reveal, setReveal] = useLocalStorage('reveal', false);  
@@ -134,6 +142,7 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     return () => {
       socket.off('cartaSeleccionadaAdminCambiada');
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   useEffect(() => {
@@ -375,8 +384,7 @@ const handleButtonClick = () => {
             <img className='carta-pequena' key={index} src={carta.img} alt={`Carta ${carta.value}`} data-value={carta.value} onClick={handleCardClick} />
           ))}
           {reveal && cartaSeleccionadaAdmin && (
-            <img className='carta-pequena' src={(cartas.find(carta => carta.value.toString() === cartaSeleccionadaAdmin.toString()) || {}).img || reverso} alt={`Carta ${cartaSeleccionadaAdmin}`} data-value={cartaSeleccionadaAdmin} />
-          )}
+            <img className='carta-pequena' src={(cartas.find(carta => carta.value.toString() === cartaSeleccionadaAdmin.toString()) || {}).img || reverso} alt={`Carta ${cartaSeleccionadaAdmin}`} data-value={cartaSeleccionadaAdmin} onClick={() => setShowModal(true)} />          )}
         </div>
           <div className="otrso-div">
           </div>
@@ -415,6 +423,19 @@ const handleButtonClick = () => {
           </div>
         </div>
       </div>
+      <Modal
+  className="my-modal"
+  title="Confirmar"
+  visible={showModal}
+  onOk={handleConfirm}
+  onCancel={() => setShowModal(false)}
+  cancelText="Cancelar"
+  okText="Aceptar"
+  okButtonProps={{ className: 'my-modal-confirm-button' }}
+  cancelButtonProps={{ className: 'my-modal-cancel-button' }}
+>
+  ¿Estás seguro de que deseas guardar la estimación para esta tarea?
+</Modal>
     </div>
   );
 }
