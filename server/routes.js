@@ -75,7 +75,18 @@ router.post('/crear-sesion', function(req, res) {
       res.send({ message: 'Sesión creada con éxito', sessionId: result.insertId }); // Devuelve el ID de la sesión recién creada
     });
   });
-  
+
+router.post('/crear-tarea', function(req, res) {
+    var nombreTarea = req.body.nombreTarea;
+    var estimacion = req.body.estimacion;
+    var sessionId = req.body.sessionId;
+
+    con.query('INSERT INTO tareas (nombre, estimacion, idSesion) VALUES (?, ?, ?)', [nombreTarea, estimacion, sessionId], function(err, result) {
+        if (err) throw err;
+        res.send({ message: 'Tarea creada con éxito', taskId: result.insertId }); // Devuelve el ID de la tarea recién creada
+});
+});
+
 // Exportamos el router para usarlo en otros archivos
 export default router;
 

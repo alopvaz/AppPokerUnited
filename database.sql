@@ -15,7 +15,7 @@ CREATE TABLE sesiones (
 CREATE TABLE tareas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255),
-    estimacion INT,
+    estimacion VARCHAR(255),
     idSesion INT,
     FOREIGN KEY (idSesion) REFERENCES sesiones(id)
 );

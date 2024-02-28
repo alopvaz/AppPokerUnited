@@ -7,6 +7,7 @@ import useLocalStorage from '../../localStorage/useLocalStorage';
 import PropTypes from 'prop-types';
 import { Modal } from 'antd';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 // Crear una referencia al elemento textarea
 
@@ -57,6 +58,33 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     // Manejar el caso en que location.state es undefined
   }
 
+  const crearTarea = () => {
+
+    axios.post('http://localhost:3000/crear-tarea', { 
+      nombreTarea: tarea, 
+      estimacion: cartaSeleccionadaAdmin, 
+      sessionId: sessionId 
+    })
+    .then(response => {
+      console.log(response.data);
+      // Aquí puedes manejar la respuesta del servidor
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
+  const handleConfirm = () => {
+    console.log('Tarea:', tarea);
+    console.log('Carta seleccionada por el administrador:', cartaSeleccionadaAdmin);
+    console.log('ID de la sesión:', sessionId);
+
+    crearTarea();
+  
+    // crearTarea();
+    setShowModal(false);
+  }
+
 
   const [showModal, setShowModal] = useLocalStorage('showModal', false);
   
@@ -73,9 +101,7 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     }
   };
 
-  const handleConfirm = () => {
-    console.log('Confirmado');
-  }
+ 
 
   useEffect(() => {
     socket.on('cartaSeleccionadaAdmin', (carta) => {
