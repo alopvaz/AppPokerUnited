@@ -1,12 +1,14 @@
 // Historial.jsx
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Button, Form, Input, Popconfirm, Table } from 'antd';
+import {Form, Input, Popconfirm, Table } from 'antd';
 import axios from 'axios'; // No olvides importar axios
 import './historial.css';
+import PropTypes from 'prop-types';
 
 
 const EditableContext = React.createContext(null);
 
+// eslint-disable-next-line no-unused-vars
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
   return (
@@ -83,15 +85,12 @@ const EditableCell = ({
 
 const Historial = () => {
   const [dataSource, setDataSource] = useState([]);
-  const [count, setCount] = useState(0);
-  const [viewingSessionId, setViewingSessionId] = useState(null);
   const [taskDataSource, setTaskDataSource] = useState([]);
   const [voteDataSource, setVoteDataSource] = useState([]);
   const [viewingTaskId, setViewingTaskId] = useState(null);
 const [viewingVoteId, setViewingVoteId] = useState(null);
 const [sessionName, setSessionName] = useState('');
 const [taskName, setTaskName] = useState('');
-const [isAdding, setIsAdding] = useState(false);
 const [sessionSearchText, setSessionSearchText] = useState('');
 const [taskSearchText, setTaskSearchText] = useState('');
 const [voteSearchText, setVoteSearchText] = useState('');
@@ -125,14 +124,6 @@ const filteredVoteData = voteDataSource.filter(item => {
     s.toString().toLowerCase().includes(voteSearchText.toString().toLowerCase())
   );
 });
-
-const handleSave = (row) => {
-  const newData = [...dataSource];
-  const index = newData.findIndex((item) => row.id === item.id);
-  const item = newData[index];
-  newData.splice(index, 1, { ...item, ...row });
-  setDataSource(newData);
-};
 
 const components = {
   body: {
@@ -544,8 +535,21 @@ const components = {
       )}
     </div>
   );
+};
 
+EditableRow.propTypes = {
+  index: PropTypes.number.isRequired,
+  // Aquí puedes añadir validaciones para otras props que puedas pasar a EditableRow
+};
 
+EditableCell.propTypes = {
+  title: PropTypes.string,
+  editable: PropTypes.bool,
+  children: PropTypes.node,
+  dataIndex: PropTypes.string,
+  record: PropTypes.object,
+  handleSave: PropTypes.func,
+  // Aquí puedes añadir validaciones para otras props que puedas pasar a EditableCell
 };
 
 export default Historial;
