@@ -88,7 +88,7 @@ function App() {
   }/>
  <Route path='/probandoSesion' element={
   <div className={!navVisible ? "page" : "page page-with-navbar"}>
-    {userState.rol && userState.nombre ? <ProbandoSesion rol={userState.rol} nombre = {userState.nombre} setSesionCreada={setSesionCreada}/> : null}
+    {userState.rol && userState.nombre ? <ProbandoSesion  id={userState.userId} rol={userState.rol} nombre = {userState.nombre} setSesionCreada={setSesionCreada}/> : null}
   </div>
 }/>
 <Route path='/historial' element={

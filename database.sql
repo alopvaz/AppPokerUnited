@@ -24,7 +24,7 @@ CREATE TABLE votaciones (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario INT,
     idTarea INT,
-    votacion INT,
+    votacion VARCHAR(255),
     FOREIGN KEY (idUsuario) REFERENCES participantes(id),
     FOREIGN KEY (idTarea) REFERENCES tareas(id)
 );

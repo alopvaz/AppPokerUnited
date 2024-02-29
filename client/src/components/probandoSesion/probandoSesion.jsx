@@ -46,7 +46,7 @@ const cartas = [
 
 const socket = io('http://localhost:3000');
 
-function ProbandoSesion({ setSesionCreada, nombre, rol }) {
+function ProbandoSesion({ setSesionCreada, nombre, rol, id }) {
 
   //recupero el id de la sesion
   const location = useLocation();
@@ -59,7 +59,6 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
   }
 
   const crearTarea = () => {
-
     axios.post('http://localhost:3000/crear-tarea', { 
       nombreTarea: tarea, 
       estimacion: cartaSeleccionadaAdmin, 
@@ -67,10 +66,30 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     })
     .then(response => {
       console.log(response.data);
-      // Aquí puedes manejar la respuesta del servidor
+      // Extraer el taskId de la respuesta
+      const taskId = response.data.taskId;
+      // Crear las votaciones
+      crearVotaciones(taskId);
     })
     .catch((error) => {
       console.error('Error:', error);
+    });
+  }
+  
+  const crearVotaciones = (taskId) => {
+    // Suponiendo que usuarios es un array de objetos usuario con propiedades id y cardSelected
+    usuarios.forEach(usuario => {
+      console.log(`Tarea ID: ${taskId}`);
+      console.log(`Usuario ID: ${usuario.id}`);
+      console.log(`Votación: ${usuario.cardSelected}`);
+      // Aquí puedes hacer un axios.post para crear la votación
+      axios.post('http://localhost:3000/crear-votacion', { taskId, userId: usuario.id, vote: usuario.cardSelected })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
     });
   }
 
@@ -78,12 +97,27 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     console.log('Tarea:', tarea);
     console.log('Carta seleccionada por el administrador:', cartaSeleccionadaAdmin);
     console.log('ID de la sesión:', sessionId);
-
+  
     crearTarea();
   
-    // crearTarea();
+    handleResetClick();
+    setTarea("No hay tarea seleccionada");
+    socket.emit('tareaActualizada', "No hay tarea seleccionada"); // Emitir el evento aquí
+  
     setShowModal(false);
   }
+
+  useEffect(() => {
+    socket.on('actualizarTarea', (tarea) => {
+      setTarea(tarea);
+      setTareaEditable(tarea);
+    });
+  
+    // Recuerda limpiar el evento cuando el componente se desmonte
+    return () => {
+      socket.off('actualizarTarea');
+    };
+  }, []);
 
 
   const [showModal, setShowModal] = useLocalStorage('showModal', false);
@@ -236,6 +270,7 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
   useEffect(() => {
     // Escuchar el evento 'actualizarUsuarios'
     socket.on('actualizarUsuarios', (usuariosActualizados) => {
@@ -243,7 +278,7 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
       setUsuarios(usuariosActualizados);
   
       // Encuentra el usuario actual en la lista de usuarios actualizados
-      let usuarioActualizado = usuariosActualizados.find(usuario => usuario.nombre === nombre && usuario.rol === rol);
+      let usuarioActualizado = usuariosActualizados.find(usuario => usuario.id === id);
       if (usuarioActualizado) {
         // Actualizar el estado de 'cartaSeleccionada' con el valor de 'cardSelected' del usuario actualizado
         setCartaSeleccionada(usuarioActualizado.cardSelected);
@@ -255,10 +290,12 @@ function ProbandoSesion({ setSesionCreada, nombre, rol }) {
       socket.off('actualizarUsuarios');
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Sin dependencias
+  }, [id]); // Añade 'id' a la lista de dependencias del useEffect 
+  
+  // Sin dependencias
   useEffect(() => {
-    socket.emit('usuarioConectado', { nombre, rol, isSelected: false, cardSelected: null });
-    console.log('usuarioConectado', nombre, rol);
+    socket.emit('usuarioConectado', {id, nombre, rol, isSelected: false, cardSelected: null });
+    console.log('usuarioConectado', id, nombre, rol);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -267,15 +304,14 @@ const handleSalirClick = () => {
   // Obtener la lista actual de usuarios del localStorage
   let usuariosActuales = [...usuarios];
   // Encontrar el índice del usuario en la lista
-  let indiceUsuario = usuariosActuales.findIndex(usuario => usuario.nombre === nombre && usuario.rol === rol);
-  // Si el usuario se encuentra en la lista, eliminarlo
+  let indiceUsuario = usuariosActuales.findIndex(usuario => usuario.id === id);  // Si el usuario se encuentra en la lista, eliminarlo
   if (indiceUsuario !== -1) {
     usuariosActuales.splice(indiceUsuario, 1);
   }
   // Actualizar la lista de usuarios en el localStorage
   setUsuarios(usuariosActuales);
   // Emitir un evento al servidor para indicar que el usuario ha salido de la sesión
-  socket.emit('usuarioSalio', { nombre, rol });
+  socket.emit('usuarioSalio', {id, nombre, rol });
   // Redirigir al usuario a la página de inicio
   navigate("/crearSesion");
   // Restablecer la tarea a "No hay tarea seleccionada"
@@ -287,6 +323,7 @@ let index = usuarios.findIndex(usuario => usuario.nombre === nombre && usuario.r
 if (index !== -1) {
   // Suponiendo que 'usuarioActual' es el usuario actual
   let usuarioActual = {
+    id: id,
     nombre: nombre,
     rol: rol,
     isSelected: usuarios[index].isSelected || false,
@@ -304,6 +341,7 @@ if (index !== -1) {
       // Emitir el evento solo cuando se hace clic en "Guardar"
       socket.emit('tareaActualizada', tareaEditable);
       setTarea(tareaEditable);
+      setTareaEditable(tareaEditable); // Añade esta línea
       // Cambiar el estado de isTextareaEnabled a false
       setTextareaEnabled(false);
     };
@@ -319,6 +357,7 @@ if (index !== -1) {
       // Si la tarea actual es "No hay tarea seleccionada", borrarla
       if (tarea === "No hay tarea seleccionada") {
         setTarea("");
+        setTareaEditable(""); // Añade esta línea
       }
     
       // Enfocar el textarea
@@ -344,7 +383,7 @@ const handleCardClick = (e) => {
 
   // Actualizar el estado del usuario actual
   let usuariosActuales = [...usuarios];
-  let usuarioActualIndex = usuariosActuales.findIndex(usuario => usuario.nombre === nombre && usuario.rol === rol);
+  let usuarioActualIndex = usuariosActuales.findIndex(usuario => usuario.nombre === nombre && usuario.rol === rol && usuario.id === id);
   if (usuarioActualIndex !== -1) {
     let usuarioActual = { ...usuariosActuales[usuarioActualIndex] };
     usuarioActual.isSelected = true;

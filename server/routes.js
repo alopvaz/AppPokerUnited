@@ -85,6 +85,17 @@ router.post('/crear-tarea', function(req, res) {
         if (err) throw err;
         res.send({ message: 'Tarea creada con éxito', taskId: result.insertId }); // Devuelve el ID de la tarea recién creada
 });
+
+router.post('/crear-votacion', function(req, res) {
+    var taskId = req.body.taskId;
+    var userId = req.body.userId;
+    var vote = req.body.vote;
+
+    con.query('INSERT INTO votaciones (idTarea, idUsuario, votacion) VALUES (?, ?, ?)', [taskId, userId, vote], function(err, result) {
+        if (err) throw err;
+        res.send({ message: 'Votación creada con éxito', voteId: result.insertId }); // Devuelve el ID de la votación recién creada
+    });
+});
 });
 
 // Exportamos el router para usarlo en otros archivos

@@ -38,7 +38,7 @@ const socketLogic = (server) => {
 
     socket.on('usuarioConectado', (usuario) => {
       // Comprobar si el usuario ya está en la lista
-      let usuarioYaExiste = usuarios.some(u => u.nombre === usuario.nombre && u.rol === usuario.rol);
+      let usuarioYaExiste = usuarios.some(u => u.id === usuario.id && u.nombre === usuario.nombre && u.rol === usuario.rol);
     
       // Si el usuario no está en la lista, añadirlo
       if (!usuarioYaExiste) {
@@ -51,7 +51,7 @@ const socketLogic = (server) => {
 
     socket.on('usuarioSalio', (usuario) => {
       // Encontrar el índice del usuario en la lista
-      let indiceUsuario = usuarios.findIndex(u => u.nombre === usuario.nombre && u.rol === usuario.rol);
+      let indiceUsuario = usuarios.findIndex(u => u.id === usuario.id && u.nombre === usuario.nombre && u.rol === usuario.rol);
     
       // Si el usuario se encuentra en la lista, eliminarlo
       if (indiceUsuario !== -1) {
@@ -65,7 +65,10 @@ const socketLogic = (server) => {
     socket.emit('estado-sesion', sesionActiva);
 
     socket.on('tareaActualizada', (tarea) => {
-      io.emit('actualizarTarea', tarea);
+      // Actualizar la tarea actual
+      tareaActual = tarea;
+      // Emitir el evento 'actualizarTarea' a todos los clientes
+      io.emit('actualizarTarea', tareaActual);
     });
 
     socket.on('tareaActualizada', (tarea) => {
