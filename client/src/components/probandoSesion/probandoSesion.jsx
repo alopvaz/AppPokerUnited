@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 import { Modal } from 'antd';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { IoIosExit, IoIosArchive } from "react-icons/io";
+
 
 // Crear una referencia al elemento textarea
 
@@ -434,8 +436,14 @@ const handleButtonClick = () => {
 
   return (
     <div className="bodyStyle">
-    {rol === 'admin' && <button className="exit-button" onClick={handleFinalizarClickAdmin}>Finalizar</button>}
-    {rol !== 'admin' && <button className="exit-button" onClick={handleSalirClick}>Salir</button>}
+   {rol === 'admin' && 
+      <button className="exit-button" onClick={handleFinalizarClickAdmin}>
+        <IoIosExit size={35} style={{ marginRight: '5px' }} /> 
+      </button>}
+    {rol !== 'admin' && 
+      <button className="exit-button" onClick={handleSalirClick}>
+        <IoIosExit size={35} style={{ marginRight: '5px' }} /> 
+      </button>}
  <div className="container">
         <div className="left-div"> 
         <div className="div-lista">
