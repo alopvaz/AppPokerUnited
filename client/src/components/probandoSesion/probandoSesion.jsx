@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { Modal } from 'antd';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { IoIosExit, IoIosArchive } from "react-icons/io";
+import { IoIosExit,IoIosListBox } from "react-icons/io";
 
 
 // Crear una referencia al elemento textarea
@@ -483,17 +483,17 @@ const handleButtonClick = () => {
         <div className="card">
           <div className="content">
               <div className="task-title">
-                <h3>TAREA</h3>
+              <IoIosListBox size={40} style={{ color: 'white' }} />
               </div>
               <div className="task-input">
               <textarea 
-    className="textarea-task" 
-    ref={tareaRef} 
-    value={tareaEditable} 
-    disabled={!isTextareaEnabled} 
-    onChange={e => setTareaEditable(e.target.value)}
-  ></textarea>            
-                </div>
+              className="textarea-task" 
+              ref={tareaRef} 
+              value={tareaEditable} 
+              disabled={!isTextareaEnabled} 
+              onChange={e => setTareaEditable(e.target.value)}
+            ></textarea>            
+                          </div>
               <div className="task-buttons">
               {rol === 'admin' && (
               <>
