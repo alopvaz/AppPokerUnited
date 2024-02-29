@@ -46,8 +46,14 @@ const cartas = [
 
 const socket = io('http://localhost:3000');
 
-function ProbandoSesion({ setSesionCreada, nombre, rol, id }) {
+function ProbandoSesion({ setSesionCreada, nombre, rol, id, showNavbar }) {
 
+  useEffect(() => {
+    console.log("sidebar oculto");
+    showNavbar(false);
+  }, []); // Pasar un array vacío como segundo argumento para que el efecto se ejecute solo una vez
+  
+  // Pasar un array vacío como segundo argumento para que el efecto se ejecute solo una vez
   //recupero el id de la sesion
   const location = useLocation();
   let sessionId;

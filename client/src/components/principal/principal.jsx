@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 
 const socket = io('http://localhost:3000');
 
-function Principal({rol, sesionCreada, setSesionCreada}) {
+function Principal({rol, sesionCreada, setSesionCreada, showNavbar}) {
 
   const navigate = useNavigate();
 
@@ -32,6 +32,7 @@ function Principal({rol, sesionCreada, setSesionCreada}) {
       .then(response => {
         navigate('/probandoSesion', { state: { nombreSesion, sessionId: response.data.sessionId } });
         setSesionCreada(true);
+        showNavbar(false); // Ocultar la barra lateral
         socket.emit('sesion-creada'); // Emitir el evento 'sesion-creada' sólo después de que se haya creado la sesión
       })
       .catch((error) => {
@@ -52,6 +53,8 @@ function Principal({rol, sesionCreada, setSesionCreada}) {
 
   const entrar = () => {
     navigate('/probandoSesion', { state: { nombreSesion } });
+    showNavbar(false); // Ocultar la barra lateral
+
   }
 
   useEffect(() => {

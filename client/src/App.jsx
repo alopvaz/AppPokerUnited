@@ -13,8 +13,13 @@ import VersionSesion from './components/versionSesion/versionSesion'; // Importa
 
 function App() {
 
-  const [navVisible, showNavbar] = useState(false);
-  
+  const [navVisible, setNavVisible] = useState(true);
+
+  const showNavbar = (show) => {
+    setNavVisible(show);
+    localStorage.setItem('navVisible', show);
+  };
+    
   const [userState, setUserState] = sessionStorage('userState', {
     isAuthenticated: false,
     rol: '',
@@ -52,11 +57,15 @@ function App() {
     });
     showNavbar(false); 
   };
+  const toggleNav = (visible) => {
+    setNavVisible(visible);
+  };
 
+  const [shouldRenderSidebar, setShouldRenderSidebar] = useLocalStorage('shouldRenderSidebar', true);
   return (
     <BrowserRouter>
       <div className="App">
-      {userState.isAuthenticated && <Sidebar visible={navVisible} show={showNavbar} logout={logout} rol={userState.rol} />}
+      {shouldRenderSidebar && userState.isAuthenticated && location.pathname !== '/probandoSesion' && <Sidebar visible={navVisible} show={showNavbar} logout={logout} rol={userState.rol} />}
         <Routes>
         <Route path="/" element={userState.isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />          
         <Route path="/login" element={<Login authenticate={authenticate} isAuthenticated={userState.isAuthenticated} />} />
@@ -88,7 +97,7 @@ function App() {
   }/>
  <Route path='/probandoSesion' element={
   <div className={!navVisible ? "page" : "page page-with-navbar"}>
-    {userState.rol && userState.nombre ? <ProbandoSesion  id={userState.userId} rol={userState.rol} nombre = {userState.nombre} setSesionCreada={setSesionCreada}/> : null}
+    {userState.rol && userState.nombre ? <ProbandoSesion id={userState.userId} rol={userState.rol} nombre={userState.nombre} setSesionCreada={setSesionCreada} showNavbar={showNavbar}/> : null}
   </div>
 }/>
 <Route path='/historial' element={
@@ -99,7 +108,7 @@ function App() {
 
 <Route path="/crearSesion" element={
     <div className={!navVisible ? "page" : "page page-with-navbar"}>
-        <Principal rol={userState.rol} sesionCreada={sesionCreada} setSesionCreada={setSesionCreada} />
+        <Principal rol={userState.rol} sesionCreada={sesionCreada} setSesionCreada={setSesionCreada} showNavbar={showNavbar} />
     </div>
 }/>
 <Route path="/settings" element={ // Añade una nueva ruta para "/settings"

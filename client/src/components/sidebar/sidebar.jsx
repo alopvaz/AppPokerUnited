@@ -16,7 +16,7 @@ const ICON_SIZE = 20;
 import PropTypes from 'prop-types';
 
 
-function Sidebar({visible, show, logout, rol}) { // Añade "rol" como prop
+function Sidebar({visible, show, logout, rol}) {
 
     const [dropdownVisible, setDropdownVisible] = useState(false); // Añade estado para el menú desplegable
 
