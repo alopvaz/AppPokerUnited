@@ -449,25 +449,26 @@ const handleButtonClick = () => {
         <div className="div-lista">
         <ul>
         {usuarios.map((usuario, index) => (
-              <li key={index}>
-                <div className="card-item">
-                <img 
-  src={
-    (usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada) || (reveal && usuario.isSelected)
-    ? (cartas.find(carta => carta.value.toString() === (usuario.cardSelected || cartaSeleccionada).toString()) || {}).img || reverso
-    : reverso
-  } 
-  alt={
-    (usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada) || (reveal && usuario.isSelected)
-    ? `Carta ${(usuario.cardSelected || cartaSeleccionada)}`
-    : "Imagen 1"
-  } 
- onClick={() => handleAdminCardClick(usuario)}
-/>
-                  <div className={`card-name ${usuario.isSelected ? 'nombre-usuario-seleccionado' : ''}`}>{usuario.nombre}</div>   
-                </div>
-              </li>
-            ))}
+  <li key={index}>
+    <div className="card-item">
+      <img 
+        className={usuario.isSelected ? 'card-selected' : ''}
+        src={
+          (usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada) || (reveal && usuario.isSelected)
+          ? (cartas.find(carta => carta.value.toString() === (usuario.cardSelected || cartaSeleccionada).toString()) || {}).img || reverso
+          : reverso
+        } 
+        alt={
+          (usuario.nombre === nombre && usuario.rol === rol && cartaSeleccionada) || (reveal && usuario.isSelected)
+          ? `Carta ${(usuario.cardSelected || cartaSeleccionada)}`
+          : "Imagen 1"
+        } 
+        onClick={() => handleAdminCardClick(usuario)}
+      />
+      <div className={`card-name ${usuario.isSelected ? 'nombre-usuario-seleccionado' : ''}`}>{usuario.nombre}</div>   
+    </div>
+  </li>
+))}
     </ul>
         </div>
         <div className="div-restante">

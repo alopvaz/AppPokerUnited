@@ -353,3 +353,7 @@
   color: #38B5AD !important;
   border-color: #38B5AD !important;
 }
+
+.card-selected {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
