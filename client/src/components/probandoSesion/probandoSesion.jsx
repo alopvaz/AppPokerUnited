@@ -484,7 +484,8 @@ const handleButtonClick = () => {
         <div className="card">
           <div className="content">
               <div className="task-title">
-              <IoIosListBox size={40} style={{ color: 'white' }} />
+              <IoIosListBox className="icono" style={{ color: 'white'}} />              
+              
               </div>
               <div className="task-input">
               <textarea 
@@ -516,17 +517,17 @@ const handleButtonClick = () => {
         </div>
       </div>
       <Modal
-  className="my-modal"
-  title="Confirmar"
-  visible={showModal}
-  onOk={handleConfirm}
-  onCancel={() => setShowModal(false)}
-  cancelText="Cancelar"
-  okText="Aceptar"
-  okButtonProps={{ className: 'my-modal-confirm-button' }}
-  cancelButtonProps={{ className: 'my-modal-cancel-button' }}
->
-  ¿Estás seguro de que deseas guardar la estimación para esta tarea?
+        className="my-modal"
+        title="Confirmar"
+        visible={showModal}
+        onOk={handleConfirm}
+        onCancel={() => setShowModal(false)}
+        cancelText="Cancelar"
+        okText="Aceptar"
+        okButtonProps={{ className: 'my-modal-confirm-button' }}
+        cancelButtonProps={{ className: 'my-modal-cancel-button' }}
+      >
+        ¿Estás seguro de que deseas guardar la estimación para esta tarea?
 </Modal>
     </div>
   );
