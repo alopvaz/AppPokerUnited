@@ -7,32 +7,33 @@ import express from 'express';
 // Creamos el router para definir rutas y luego exportarlo al index.js
 var router = express.Router();
 
+import bcrypt from 'bcrypt';
+
 // Ruta de inicio de sesión: cuando se hace una solicitud POST a '/login' se ejecuta la función
 router.post('/login', function(req, res) {
     var username = req.body.username;
-    var password = req.body.password
+    var password = req.body.password;
 
-    // Primero, buscamos al usuario en la base de datos sin verificar la contraseña
     con.query('SELECT * FROM participantes WHERE usuario = ?', [username], function(err, result) {
         if (err) throw err;
 
-        // Si no encontramos ningún usuario que coincida con el nombre de usuario
         if (result.length === 0) {
-            // Enviamos una respuesta con el estado 'UserNotFound' y un mensaje de error
             res.json({ status: 'UserNotFound', message: 'No encontramos ninguna cuenta con ese nombre de usuario.' });
         } else {
-            // Si encontramos un usuario, verificamos la contraseña
-            if (result[0].contrasena === password) {
-                // Si la contraseña es correcta, iniciamos la sesión
-                req.session.role = result[0].rol;
-                req.session.name = result[0].nombre;
-                req.session.userId = result[0].id;
-                console.log("Se ha conectado el usuario " + req.session.name + " con el rol " + req.session.role + " y el ID " + req.session.userId);
-                res.json({ status: 'OK' });
-            } else {
-                // Si la contraseña no es correcta, enviamos una respuesta con el estado 'IncorrectPassword' y un mensaje de error
-                res.json({ status: 'IncorrectPassword', message: 'La contraseña no es correcta.' });
-            }
+            // Comparamos la contraseña proporcionada con la versión codificada en la base de datos
+            bcrypt.compare(password, result[0].contrasena, function(err, isMatch) {
+                if (err) {
+                    throw err;
+                } else if (!isMatch) {
+                    res.json({ status: 'IncorrectPassword', message: 'La contraseña no es correcta.' });
+                } else {
+                    req.session.role = result[0].rol;
+                    req.session.name = result[0].nombre;
+                    req.session.userId = result[0].id;
+                    console.log("Se ha conectado el usuario " + req.session.name + " con el rol " + req.session.role + " y el ID " + req.session.userId);
+                    res.json({ status: 'OK' });
+                }
+            });
         }
     });
 });
