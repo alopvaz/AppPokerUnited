@@ -12,11 +12,11 @@ import routesHistorial from './routes/historial.js';
 import socketLogic from './sockets.js';  
 
 // Crear una nueva aplicación Express
-const app = express(); 
+const app = express();
 
 // Configurar CORS para permitir conexiones desde 'http://localhost:3000'
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://192.168.100.168:5173'],
   credentials: true
 }));
 
@@ -43,12 +43,18 @@ app.use((req, res, next) => {
 });
 
 // Crear un nuevo servidor HTTP a partir de la aplicación Express
-const server = http.createServer(app);
+let server = http.createServer(app);
 
 // Crear un nuevo servidor Socket.IO a partir del servidor HTTP usando socketLogic
-const io = socketLogic(server);
+const io = socketLogic(server, {
+  cors: {
+    origin: "http://192.168.100.168:5173",
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 
 // Iniciar el servidor en el puerto 3000
-server.listen(3000, () => {
+server.listen(3000, '0.0.0.0', () => {
   console.log('Server is running on port 3000');
 });

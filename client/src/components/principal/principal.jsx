@@ -15,20 +15,22 @@ import io from 'socket.io-client';
 import './principal.css';
 
 import PropTypes from 'prop-types';
+import useLocalStorage from '../../localStorage/useLocalStorage';
 
-const socket = io('http://localhost:3000');
+const socket = io('http://192.168.100.168:3000');
 
 function Principal({rol, sesionCreada, setSesionCreada, showNavbar}) {
 
   const navigate = useNavigate();
 
-  const [nombreSesion, setNombreSesion] = useState('');
+  const [nombreSesion, setNombreSesion] = useLocalStorage('');
 
   const crearSesion = () => {
 
     socket.emit('crear-sesion');
-  
-    axios.post('http://localhost:3000/crear-sesion', { nombreSesion })
+    console.log(nombreSesion + ' desde crearSesion');
+    socket.emit('crear-sesion', nombreSesion);  
+    axios.post('http://192.168.100.168:3000/crear-sesion', { nombreSesion })
       .then(response => {
         navigate('/probandoSesion', { state: { nombreSesion, sessionId: response.data.sessionId } });
         setSesionCreada(true);
@@ -89,6 +91,18 @@ function Principal({rol, sesionCreada, setSesionCreada, showNavbar}) {
   
     return () => {
       socket.off('estado-sesion');
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    socket.on('sesion-creada', (sessionName) => {
+      setNombreSesion(sessionName);
+      setSesionCreada(true);
+    });
+  
+    return () => {
+      socket.off('sesion-creada');
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -167,7 +181,8 @@ function Principal({rol, sesionCreada, setSesionCreada, showNavbar}) {
   ) : (
     <div className='mensajeUsuarioContainer'>
       <GiPokerHand className="androidIcon" />
-      <p className='mensajeUsuario'>{sesionCreada ? 'Hay una sesion disponible' : 'No hay sesiones\ndisponibles'}</p>
+      <p className='mensajeUsuario'>  {sesionCreada ? `La sesión ${nombreSesion} está disponible` : 'No hay sesiones\ndisponibles'}
+</p>
       <button onClick={entrar} className={sesionCreada ? "botonEntrar" : "botonEntrarOculto"}>Entrar</button>
     </div>
   )}

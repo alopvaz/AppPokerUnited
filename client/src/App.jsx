@@ -1,6 +1,6 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Login from "./components/login/login";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "./style/index.css";
 import Principal from './components/principal/principal';
 import Sesion from './components/sesion/sesion';
@@ -9,27 +9,21 @@ import sessionStorage from './localStorage/sessionStorage';
 import Sidebar from './components/sidebar/sidebar';
 import ProbandoSesion from './components/probandoSesion/probandoSesion';
 import Historial from './components/historial/historial';
-import VersionSesion from './components/versionSesion/versionSesion'; // Importa el componente VersionSesion
+import VersionSesion from './components/versionSesion/versionSesion';
 
 function App() {
-
-  const [navVisible, setNavVisible] = useState(true);
-
-  const showNavbar = (show) => {
-    setNavVisible(show);
-    localStorage.setItem('navVisible', show);
-  };
-    
+  const [navVisible, setNavVisible] = useLocalStorage(true);
   const [userState, setUserState] = sessionStorage('userState', {
     isAuthenticated: false,
     rol: '',
     nombre: '',
     userId: ''
   });
-
   const [sesionCreada, setSesionCreada] = useLocalStorage('sesionCreada', false);
-  console.log("Valor de sesionCreada:", sesionCreada);
 
+  const showNavbar = (show) => {
+    setNavVisible(show);
+  };
 
   const authenticate = (rol, nombre, id) => {
     setUserState({
@@ -41,13 +35,6 @@ function App() {
     showNavbar(true); 
   };
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, []);
-
   const logout = () => {
     setUserState({
       isAuthenticated: false,
@@ -57,18 +44,25 @@ function App() {
     });
     showNavbar(false); 
   };
-  const toggleNav = (visible) => {
-    setNavVisible(visible);
-  };
 
-  const [shouldRenderSidebar, setShouldRenderSidebar] = useLocalStorage('shouldRenderSidebar', true);
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   return (
     <BrowserRouter>
       <div className="App">
-      {shouldRenderSidebar && userState.isAuthenticated && location.pathname !== '/probandoSesion' && <Sidebar visible={navVisible} show={showNavbar} logout={logout} rol={userState.rol} />}
         <Routes>
-        <Route path="/" element={userState.isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />          
-        <Route path="/login" element={<Login authenticate={authenticate} isAuthenticated={userState.isAuthenticated} />} />
+          <Route path="/" element={userState.isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />          
+          <Route path="/login" element={<Login authenticate={authenticate} isAuthenticated={userState.isAuthenticated} />} />
+
+
+
+
+
           <Route path='/home' element={
             <div className={!navVisible ? "page" : "page page-with-navbar"}>
             <h1 style={{
@@ -97,7 +91,7 @@ function App() {
   }/>
  <Route path='/probandoSesion' element={
   <div className={!navVisible ? "page" : "page page-with-navbar"}>
-    {userState.rol && userState.nombre ? <ProbandoSesion id={userState.userId} rol={userState.rol} nombre={userState.nombre} setSesionCreada={setSesionCreada} showNavbar={showNavbar}/> : null}
+    {userState.rol && userState.nombre ? <ProbandoSesion id={userState.userId} rol={userState.rol} nombre={userState.nombre} setSesionCreada={setSesionCreada} showNavbar={showNavbar} navVisible={navVisible}/> : null}
   </div>
 }/>
 <Route path='/historial' element={
@@ -117,9 +111,40 @@ function App() {
       
   </div>
 }/>
+
+
+
+
+
+
+
+
+
+
+
+
+          {/* ...resto de las rutas... */}
         </Routes>
+        <RenderSidebar userState={userState} showNavbar={showNavbar} logout={logout} navVisible={navVisible} />
       </div>
     </BrowserRouter>
+  );
+}
+
+function RenderSidebar({ userState, showNavbar, logout, navVisible }) {
+  const location = useLocation();
+
+  if (location.pathname === '/probandoSesion' || !userState.isAuthenticated) {
+    return null;
+  }
+
+  return (
+    <Sidebar
+      visible={navVisible}
+      show={showNavbar}
+      logout={logout}
+      rol={userState.rol}
+    />
   );
 }
 

@@ -14,11 +14,12 @@ import logo from './logo.png';
 import { useState } from 'react'; 
 const ICON_SIZE = 20;
 import PropTypes from 'prop-types';
+import useLocalStorage from '../../localStorage/useLocalStorage';
 
 
 function Sidebar({visible, show, logout, rol}) {
 
-    const [dropdownVisible, setDropdownVisible] = useState(false); // Añade estado para el menú desplegable
+    const [dropdownVisible, setDropdownVisible] = useLocalStorage(false); // Añade estado para el menú desplegable
 
     return (
         <>

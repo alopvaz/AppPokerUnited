@@ -46,14 +46,13 @@ const cartas = [
   { img: interrogacion, value: '?' },
 ];
 
-const socket = io('http://localhost:3000');
+const socket = io('http://192.168.100.168:3000');
 
-function ProbandoSesion({ setSesionCreada, nombre, rol, id, showNavbar }) {
+function ProbandoSesion({ setSesionCreada, nombre, rol, id, showNavbar, navVisible }) {
 
   useEffect(() => {
-    console.log("sidebar oculto");
-    showNavbar(false);
-  }, []); // Pasar un array vacío como segundo argumento para que el efecto se ejecute solo una vez
+    showNavbar(navVisible);
+  }, [navVisible, showNavbar]);
   
   // Pasar un array vacío como segundo argumento para que el efecto se ejecute solo una vez
   //recupero el id de la sesion
@@ -67,7 +66,7 @@ function ProbandoSesion({ setSesionCreada, nombre, rol, id, showNavbar }) {
   }
 
   const crearTarea = () => {
-    axios.post('http://localhost:3000/crear-tarea', { 
+    axios.post('http://192.168.100.168:3000/crear-tarea', { 
       nombreTarea: tarea, 
       estimacion: cartaSeleccionadaAdmin, 
       sessionId: sessionId 
@@ -91,7 +90,7 @@ function ProbandoSesion({ setSesionCreada, nombre, rol, id, showNavbar }) {
       console.log(`Usuario ID: ${usuario.id}`);
       console.log(`Votación: ${usuario.cardSelected}`);
       // Aquí puedes hacer un axios.post para crear la votación
-      axios.post('http://localhost:3000/crear-votacion', { taskId, userId: usuario.id, vote: usuario.cardSelected })
+      axios.post('http://192.168.100.168:3000/crear-votacion', { taskId, userId: usuario.id, vote: usuario.cardSelected })
       .then(response => {
         console.log(response.data);
       })
@@ -435,18 +434,23 @@ const handleButtonClick = () => {
 };
 
   return (
+
     <div className="bodyStyle">
-   {rol === 'admin' && 
+
+   {rol === 'admin' &&
+    
       <button className="exit-button" onClick={handleFinalizarClickAdmin}>
         <IoIosExit size={35} style={{ marginRight: '5px' }} /> 
-      </button>}
+      </button>
+      }
     {rol !== 'admin' && 
       <button className="exit-button" onClick={handleSalirClick}>
         <IoIosExit size={35} style={{ marginRight: '5px' }} /> 
       </button>}
  <div className="container">
         <div className="left-div"> 
-        <div className="div-lista">
+        
+         <div className="div-lista">
         <ul>
         {usuarios.map((usuario, index) => (
   <li key={index}>
@@ -476,7 +480,13 @@ const handleButtonClick = () => {
             <img className='carta-pequena' key={index} src={carta.img} alt={`Carta ${carta.value}`} data-value={carta.value} onClick={handleCardClick} />
           ))}
           {reveal && cartaSeleccionadaAdmin && (
-            <img className='carta-pequena' src={(cartas.find(carta => carta.value.toString() === cartaSeleccionadaAdmin.toString()) || {}).img || reverso} alt={`Carta ${cartaSeleccionadaAdmin}`} data-value={cartaSeleccionadaAdmin} onClick={() => setShowModal(true)} />          )}
+            <img className='carta-pequena animated-card' 
+       src={(cartas.find(carta => carta.value.toString() === cartaSeleccionadaAdmin.toString()) || {}).img || reverso} 
+       alt={`Carta ${cartaSeleccionadaAdmin}`} 
+       data-value={cartaSeleccionadaAdmin} 
+       onClick={() => { if (rol === 'admin') setShowModal(true) }} 
+  />             
+            )}
         </div>
           <div className="otrso-div">
           </div>

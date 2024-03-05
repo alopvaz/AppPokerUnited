@@ -7,7 +7,7 @@ import { Container, Row, Col, Card, Modal, Button } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 
 // Conexión con el servidor Socket.IO
-const socket = io('http://localhost:3000');
+const socket = io('http://192.168.100.168:3000');
 
 // Componente Sesion
 function Sesion({ rol, nombre, userId }) {
@@ -161,7 +161,7 @@ const handleAddTarea = () => {
     var nombre = tarea;
     var estimacion = cartaReveladaSeleccionada;
   
-    fetch('http://localhost:3000/crear-tarea', {
+    fetch('http://192.168.100.168:3000/crear-tarea', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -179,7 +179,7 @@ const handleAddTarea = () => {
         
           console.log(`Enviando votación: usuarioId=${usuarioId}, tareaId=${tareaId}, votacion=${votacion}`);
         
-          fetch('http://localhost:3000/guardar-votacion', {
+          fetch('http://192.168.100.168:3000/guardar-votacion', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

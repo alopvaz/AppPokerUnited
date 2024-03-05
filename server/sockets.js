@@ -5,12 +5,12 @@ let nombreSesionActual = '';
 let usuarios = [];
 let sesionActiva = false;
 let tareaActual = '';
-let cartaSeleccionadaAdmin = null; // Añade esta línea al inicio de tu archivo
+let cartaSeleccionadaAdmin = null; 
 
 const socketLogic = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: 'http://localhost:5173',
+      origin: 'http://192.168.100.168:5173',
     }
   });
 
@@ -22,10 +22,11 @@ const socketLogic = (server) => {
       socket.emit('estado-sesion', sesionActiva);
     });
 
-    socket.on('crear-sesion', () => {
+    socket.on('crear-sesion', (nombreSesion) => {
       sesionActiva = true;
       io.emit('sesion-disponible');
       io.emit('estado-sesion', sesionActiva); // Emitir el estado de la sesión cuando cambia
+      io.emit('sesion-creada', nombreSesion); // Emitir el nombre de la sesión cuando se crea una nueva sesión
     });
   
     socket.on('cerrarSesion', (data) => {

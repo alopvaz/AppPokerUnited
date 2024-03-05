@@ -180,11 +180,11 @@ const components = {
     //handleViewTareas: muestra u oculta las tareas de una sesión
 
         const handleViewTareas = (record) => {
-          if (record.id) {
+          if (record.id) { 
             if (viewingTaskId === record.id) {
               setViewingTaskId(null);
             } else {
-              axios.get(`http://localhost:3000/tareas?idSesion=${record.id}`)
+              axios.get(`http://192.168.100.168:3000/tareas?idSesion=${record.id}`)
           .then(response => {
             setTaskDataSource(response.data);
             setViewingTaskId(record.id);
@@ -209,7 +209,7 @@ const components = {
       const record = dataSource.find((item) => item.id === id);
       if (record) {
         // Luego, hacer una solicitud DELETE a tu servidor
-        axios.delete(`http://localhost:3000/sesiones/${record.id}`)        
+        axios.delete(`http://192.168.100.168:3000/sesiones/${record.id}`)        
         .then(() => {
           // Si la solicitud fue exitosa, eliminar el registro de la vista
           const newData = dataSource.filter((item) => item.id !== id);
@@ -235,7 +235,7 @@ const components = {
       const { id, nombre, fecha } = record;
     
       // Hacer una solicitud PUT a la API del servidor con los datos actualizados
-      axios.put(`http://localhost:3000/sesiones/${id}`, { nombre, fecha })
+      axios.put(`http://192.168.100.168:3000/sesiones/${id}`, { nombre, fecha })
         .then(() => {
           console.log('Datos actualizados con éxito');
         })
@@ -301,7 +301,7 @@ const components = {
           const { id, nombre, estimacion } = record;
         
           // Make a PUT request to the server API with the updated data
-          axios.put(`http://localhost:3000/tareas/${id}`, { nombre, estimacion })
+          axios.put(`http://192.168.100.168:3000/tareas/${id}`, { nombre, estimacion })
             .then(() => {
               console.log('Data updated successfully');
             })
@@ -321,7 +321,7 @@ const components = {
                     setViewingVoteId(null);
                   } else {
                     // Si no, buscar y mostrar los datos
-                    axios.get(`http://localhost:3000/votaciones?idTarea=${record.id}`)
+                    axios.get(`http://192.168.100.168:3000/votaciones?idTarea=${record.id}`)
                     .then(response => {
                       setVoteDataSource(response.data);
                       setViewingVoteId(record.id);
@@ -345,7 +345,7 @@ const components = {
                 const record = taskDataSource.find((item) => item.id === id);
                 if (record) {
                   // Luego, hacer una solicitud DELETE a tu servidor
-                  axios.delete(`http://localhost:3000/tareas/${record.id}`)        
+                  axios.delete(`http://192.168.100.168:3000/tareas/${record.id}`)        
                   .then(() => {
                     // Si la solicitud fue exitosa, eliminar el registro de la vista
                     const newData = taskDataSource.filter((item) => item.id !== id);
@@ -406,7 +406,7 @@ const components = {
     // Aquí puedes recoger los datos que necesitas del registro
     const { id, votacion } = record;
     console.log(`Votacion ID: ${id}, Votacion: ${votacion}`);
-    axios.put(`http://localhost:3000/votaciones/${id}`, { votacion })
+    axios.put(`http://192.168.100.168:3000/votaciones/${id}`, { votacion })
       .then(() => {
         console.log('Datos actualizados con éxito');
       })
@@ -416,7 +416,7 @@ const components = {
   };
 
   const handleDeleteVotacion = (id) => {
-    axios.delete(`http://localhost:3000/votaciones/${id}`)
+    axios.delete(`http://192.168.100.168:3000/votaciones/${id}`)
       .then(() => {
         console.log('Votacion eliminada con éxito');
   
@@ -436,7 +436,7 @@ const components = {
 
   useEffect(() => {
     // Llamada a la API para obtener los datos de la tabla de sesiones
-    axios.get('http://localhost:3000/sesiones', { params: dataSource })
+    axios.get('http://192.168.100.168:3000/sesiones', { params: dataSource })
     .then(response => {
       setDataSource(response.data);
       // Suponiendo que el nombre de la sesión está en el primer elemento
