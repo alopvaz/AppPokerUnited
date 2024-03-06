@@ -60,10 +60,6 @@ function Sidebar({visible, show, logout, rol}) {
                     </div>
                 </div>
                 <div className="links">
-                    <NavLink to="/settings" className="nav-link">
-                        <FaCog size={ICON_SIZE} />
-                        <span>Settings</span> 
-                    </NavLink>
                     <NavLink to="/login" className="nav-link" onClick={logout}>
                         <FaSignOutAlt size={ICON_SIZE} />
                         <span>Logout</span> 

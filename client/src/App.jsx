@@ -9,7 +9,6 @@ import sessionStorage from './localStorage/sessionStorage';
 import Sidebar from './components/sidebar/sidebar';
 import ProbandoSesion from './components/probandoSesion/probandoSesion';
 import Historial from './components/historial/historial';
-import VersionSesion from './components/versionSesion/versionSesion';
 
 function App() {
   const [navVisible, setNavVisible] = useLocalStorage(true);
@@ -100,25 +99,7 @@ function App() {
         <Principal rol={userState.rol} sesionCreada={sesionCreada} setSesionCreada={setSesionCreada} showNavbar={showNavbar} />
     </div>
 }/>
-<Route path="/settings" element={ // Añade una nueva ruta para "/settings"
-  <div className={!navVisible ? "page" : "page page-with-navbar"}>
-    {userState.rol && userState.nombre ? <VersionSesion rol={userState.rol} nombre = {userState.nombre}/> : null}
-      
-  </div>
-}/>
 
-
-
-
-
-
-
-
-
-
-
-
-          {/* ...resto de las rutas... */}
         </Routes>
         <RenderSidebar userState={userState} showNavbar={showNavbar} logout={logout} navVisible={navVisible} />
       </div>
