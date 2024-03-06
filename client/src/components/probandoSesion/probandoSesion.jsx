@@ -46,7 +46,7 @@ const cartas = [
   { img: interrogacion, value: '?' },
 ];
 
-const socket = io('http://192.168.100.168:3000');
+const socket = io('http://192.168.20.103:3000');
 
 function ProbandoSesion({ setSesionCreada, nombre, rol, id, showNavbar, navVisible }) {
 
@@ -66,7 +66,7 @@ function ProbandoSesion({ setSesionCreada, nombre, rol, id, showNavbar, navVisib
   }
 
   const crearTarea = () => {
-    axios.post('http://192.168.100.168:3000/crear-tarea', { 
+    axios.post('http://192.168.20.103:3000/crear-tarea', { 
       nombreTarea: tarea, 
       estimacion: cartaSeleccionadaAdmin, 
       sessionId: sessionId 
@@ -90,7 +90,7 @@ function ProbandoSesion({ setSesionCreada, nombre, rol, id, showNavbar, navVisib
       console.log(`Usuario ID: ${usuario.id}`);
       console.log(`Votación: ${usuario.cardSelected}`);
       // Aquí puedes hacer un axios.post para crear la votación
-      axios.post('http://192.168.100.168:3000/crear-votacion', { taskId, userId: usuario.id, vote: usuario.cardSelected })
+      axios.post('http://192.168.20.103:3000/crear-votacion', { taskId, userId: usuario.id, vote: usuario.cardSelected })
       .then(response => {
         console.log(response.data);
       })

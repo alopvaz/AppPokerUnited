@@ -58,11 +58,6 @@ function App() {
         <Routes>
           <Route path="/" element={userState.isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />          
           <Route path="/login" element={<Login authenticate={authenticate} isAuthenticated={userState.isAuthenticated} />} />
-
-
-
-
-
           <Route path='/home' element={
             <div className={!navVisible ? "page" : "page page-with-navbar"}>
             <h1 style={{

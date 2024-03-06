@@ -10,7 +10,7 @@ let cartaSeleccionadaAdmin = null;
 const socketLogic = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: 'http://192.168.100.168:5173',
+      origin: 'http://192.168.20.103:5173',
     }
   });
 

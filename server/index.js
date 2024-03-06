@@ -16,7 +16,7 @@ const app = express();
 
 // Configurar CORS para permitir conexiones desde 'http://localhost:3000'
 app.use(cors({
-  origin: ['http://192.168.100.168:5173'],
+  origin: ['http://192.168.20.103:5173'],
   credentials: true
 }));
 
@@ -48,7 +48,7 @@ let server = http.createServer(app);
 // Crear un nuevo servidor Socket.IO a partir del servidor HTTP usando socketLogic
 const io = socketLogic(server, {
   cors: {
-    origin: "http://192.168.100.168:5173",
+    origin: "http://192.168.20.103:5173",
     methods: ["GET", "POST"],
     credentials: true
   }

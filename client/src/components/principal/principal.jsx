@@ -17,7 +17,7 @@ import './principal.css';
 import PropTypes from 'prop-types';
 import useLocalStorage from '../../localStorage/useLocalStorage';
 
-const socket = io('http://192.168.100.168:3000');
+const socket = io('http://192.168.20.103:3000');
 
 function Principal({rol, sesionCreada, setSesionCreada, showNavbar}) {
 
@@ -30,7 +30,7 @@ function Principal({rol, sesionCreada, setSesionCreada, showNavbar}) {
     socket.emit('crear-sesion');
     console.log(nombreSesion + ' desde crearSesion');
     socket.emit('crear-sesion', nombreSesion);  
-    axios.post('http://192.168.100.168:3000/crear-sesion', { nombreSesion })
+    axios.post('http://192.168.20.103:3000/crear-sesion', { nombreSesion })
       .then(response => {
         navigate('/probandoSesion', { state: { nombreSesion, sessionId: response.data.sessionId } });
         setSesionCreada(true);

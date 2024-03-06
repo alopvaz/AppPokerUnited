@@ -28,12 +28,12 @@ function Login({ authenticate, isAuthenticated }) {
   const signIn = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://192.168.100.168:3000/login', formLogin, { withCredentials: true });
+      const res = await axios.post('http://192.168.20.103:3000/login', formLogin, { withCredentials: true });
 
       if (res.data.status === 'OK') {
-        const resRole = await axios.get('http://192.168.100.168:3000/role', { withCredentials: true });
-        const resName = await axios.get('http://192.168.100.168:3000/name', { withCredentials: true });
-        const resId = await axios.get('http://192.168.100.168:3000/userId', { withCredentials: true }); 
+        const resRole = await axios.get('http://192.168.20.103:3000/role', { withCredentials: true });
+        const resName = await axios.get('http://192.168.20.103:3000/name', { withCredentials: true });
+        const resId = await axios.get('http://192.168.20.103:3000/userId', { withCredentials: true }); 
         setFormLogin({
           ...formLogin,
           role: resRole.data.trim().toLowerCase(),
