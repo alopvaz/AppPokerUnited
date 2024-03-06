@@ -69,13 +69,16 @@ router.post('/crear-sesion', function(req, res) {
     var nombreSesion = req.body.nombreSesion;
     var fechaHora = new Date();
     fechaHora.setHours(fechaHora.getHours() + 1); // Ajusta la hora a tu zona horaria
-    fechaHora = fechaHora.toISOString();
-  
-    con.query('INSERT INTO sesiones (nombre, fecha) VALUES (?, ?)', [nombreSesion, fechaHora], function(err, result) {
+
+    // Convertir la fecha a un formato que MySQL pueda interpretar
+    var fechaHoraMySQL = fechaHora.toISOString().slice(0, 19).replace('T', ' ');
+
+    con.query('INSERT INTO sesiones (nombre, fecha) VALUES (?, ?)', [nombreSesion, fechaHoraMySQL], function(err, result) {
       if (err) throw err;
       res.send({ message: 'Sesión creada con éxito', sessionId: result.insertId }); // Devuelve el ID de la sesión recién creada
     });
-  });
+});
+
 
 router.post('/crear-tarea', function(req, res) {
     var nombreTarea = req.body.nombreTarea;
