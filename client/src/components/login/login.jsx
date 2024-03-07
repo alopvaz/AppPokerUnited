@@ -6,7 +6,10 @@ import Cookies from 'js-cookie';
 import './login.css';
 
 function Login({ authenticate, isAuthenticated }) {
+
   const navigate = useNavigate();
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [formLogin, setFormLogin] = useState({
     username: "",
     password: "",
@@ -14,9 +17,6 @@ function Login({ authenticate, isAuthenticated }) {
     role: "",
     userId: ""
   });
-
-  const [usernameError, setUsernameError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
 
   const updateFormLogin = (e) => {
     setFormLogin({
@@ -73,7 +73,7 @@ function Login({ authenticate, isAuthenticated }) {
   }, [isAuthenticated, navigate]);
 
   return (
-<div className="body">
+    <div className="body">
       <div className="box">
         <span className="borderline"></span>
         <form onSubmit={signIn}>

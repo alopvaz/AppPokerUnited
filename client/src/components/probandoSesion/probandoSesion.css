@@ -1,4 +1,3 @@
-/* Estilos para el cuerpo del documento */
 .bodyStyle {
   display: flex;
   justify-content: center;
@@ -19,7 +18,6 @@
   color: #A0CF9F !important;
 }
 
-/* Estilos para el pseudo-elemento ::before del cuerpo del documento */
 .bodyStyle::before {
   content: '';
   position: absolute;
@@ -31,7 +29,6 @@
   clip-path: circle(20% at right 70%);
 }
 
-/* Estilos para el pseudo-elemento ::after del cuerpo del documento */
 .bodyStyle::after {
   content: '';
   position: absolute;
@@ -43,7 +40,6 @@
   clip-path: circle(20% at left 20%);
 }
 
-/* Estilos para el contenedor principal */
 .container {
   position: relative;
   display: flex;
@@ -53,7 +49,6 @@
   width: 100%;
 }
 
-/* Estilos para las tarjetas dentro del contenedor */
 .container .card {
   position: relative; 
   width: 12%;
@@ -72,21 +67,18 @@
   transform: translateX(-10%); 
 }
 
-/* Estilos para el contenido dentro de las tarjetas */
 .container .card .content {
   text-align: center;
   transform: traslate(100px);
   transition: 0.5s;
 }
 
-/* Estilos para los párrafos dentro de las tarjetas */
 .container .card .content p {
   font-size: 1em;
   color: #fff;
   font-weight: 300;
 }
 
-/* Estilos para el div izquierdo (tabla de juego) */
 .container .left-div {
   position: relative; 
   width: 80%;
@@ -100,44 +92,37 @@
   flex-direction: column;
 }
 
-/* Estilos para la lista dentro del div izquierdo */
 .left-div ul {
   display: flex; 
   flex-wrap: wrap; 
   list-style: none; 
 }
 
-/* Estilos para los elementos de la lista dentro del div izquierdo */
 .left-div ul li {
   margin: 1%; 
 }
 
-/* Estilos para las imágenes dentro de los elementos de la lista */
 .left-div ul li img {
   width: 160px; 
   height: 210px; 
 }
 
-/* Estilos para los elementos de la tarjeta */
 .card-item {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Estilos para las imágenes dentro de los elementos de la tarjeta */
 .card-item img {
   margin-bottom: 10px; 
 }
 
-/* Estilos para el nombre de la tarjeta */
 .card-name {
   text-align: center;
   color: #fff;
   font-size: 1.1em;
 }
 
-/* Estilos para el textarea dentro de .task-input */
 .task-input textarea {
   background: transparent; 
   color: #fff;
@@ -146,7 +131,6 @@
   outline: none; 
 }
 
-/* Estilos para el contenido de .card */
 .content {
   width: 100%; 
   height: 100%; 
@@ -156,27 +140,23 @@
   align-items: center; 
 }
 
-/* Estilos para el título de la tarea */
 .task-title {
   height: 20%;
   width: 100%;
   margin-top: 2%;
 }
 
-/* Estilos para el input de la tarea */
 .task-input {
   width: 100%;
   height: 60%;
   padding: 7px; 
 }
 
-/* Estilos para el textarea dentro del input de la tarea */
 .task-input textarea {
   width: 100%;
   height: 100%;
 }
 
-/* Estilos para el botón dentro del contenido de la tarjeta */
 .container .card .content button {
   border: none;
   outline: none;
@@ -189,16 +169,15 @@
   width: 100px;
   margin-top: 10px;
   position: relative;
-  display: flex; /* Modificado aquí */
-  justify-content: center; /* Añadido aquí */
-  align-items: center; /* Añadido aquí */
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
   text-decoration: none;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   color: black;
   margin-bottom: 5%;
 }
 
-/* Estilos para el botón cuando se presiona */
 .container .card .content button:active {
   opacity: 0.4;
 }
@@ -209,9 +188,6 @@
   justify-content: center; 
   align-items: flex-start;
 }
-
-
-
 
 .otro-div {
   background-color: rgb(255, 248, 248);
@@ -234,7 +210,7 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  align-items: flex-end; /* Align items to the bottom */
+  align-items: flex-end; 
 }
 
 .div-restante img {
@@ -255,12 +231,12 @@
 }
 
 .carta-pequena {
-  margin: 3px;  /* Adjust as needed */
-  transition: transform 0.3s ease-in-out;  /* Smooth transition */
+  margin: 3px;  
+  transition: transform 0.3s ease-in-out;  
 }
 
 .carta-pequena:hover {
-  transform: translateY(-10px);  /* Move the element 10px upwards */
+  transform: translateY(-10px);  
   transition: transform 0.3s ease;
 }
 
@@ -278,7 +254,7 @@
 }
 
 .my-modal-confirm-button {
-  background-color: #38B5AD; /* Reemplaza #yourColor con el color que quieras */
+  background-color: #38B5AD; 
 }
 
 .my-modal-cancel-button:hover {
@@ -296,52 +272,42 @@
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
 }
 
-
 @media screen and (max-width: 1300px) {
-  
   .div-restante img {
     width: 40px;
     height: 60px;
   }
-
   .icono {
-    font-size: 28px; /* Ajusta este valor a tus necesidades */
+    font-size: 28px; 
   }
-
   .left-div ul li img {
     width: 110px; 
     height: 150px; 
   }
 
   .left-div ul li {
-    margin-right: 0.5%; /* Ajusta este valor a tus necesidades */
+    margin-right: 0.5%; 
   }
-
   .card-name {
     font-size: 14px;
   }
-
   .task-title {
-    font-size: 0.8em; /* Ajusta este valor a tus necesidades */
+    font-size: 0.8em; 
   }
-
   .container .card .content button {
-    padding: 2px 20px; /* Ajusta este valor a tus necesidades */
-    font-size: 0.6em; /* Ajusta este valor a tus necesidades */
-    width: 50px; /* Ajusta este valor a tus necesidades */
+    padding: 2px 20px; 
+    font-size: 0.6em; 
+    width: 50px;
     height: 20px;
-    margin-right: 5px; /* Ajusta este valor a tus necesidades */
+    margin-right: 5px; 
   }
-
   .task-buttons {
     display: flex;
-    justify-content: space-between; /* Ajusta este valor a tus necesidades */
+    justify-content: space-between; 
   }
-
   .task-input textarea {
     font-size: 0.9em;
   }
-  
 } 
 
 @media screen and (min-width: 1301px) {
@@ -349,32 +315,26 @@
     width: 50px;
     height: 70px;
   }
-
   .icono {
     font-size: 40px;
   }
-
   .container .card .content button {
-    padding: 2px 20px; /* Ajusta este valor a tus necesidades */
-    font-size: 0.8em; /* Ajusta este valor a tus necesidades */
-    width: 70px; /* Ajusta este valor a tus necesidades */
+    padding: 2px 20px; 
+    font-size: 0.8em; 
+    width: 70px; 
     height: 30px;
-    margin-right: 5px; /* Ajusta este valor a tus necesidades */
+    margin-right: 5px; 
   }
-
   .task-buttons {
     display: flex;
-    justify-content: space-between; /* Ajusta este valor a tus necesidades */
+    justify-content: space-between; 
   }
 }
 
-/* Estilos para las imágenes en pantallas con un ancho máximo de 768px (por ejemplo, tablets) */
 @media screen and (max-width: 768px) {
-
   .icono {
     font-size: 25px;
   }
-
   .left-div ul li img {
     width: 70px; 
     height: 90px; 
@@ -396,24 +356,20 @@
   .task-input textarea {
     font-size: 0.6em;
   }
-
   .container .card .content button {
-    padding: 2px 15px; /* Ajusta este valor a tus necesidades */
-    font-size: 0.4em; /* Ajusta este valor a tus necesidades */
-    width: 10px; /* Ajusta este valor a tus necesidades */
+    padding: 2px 15px; 
+    font-size: 0.4em; 
+    width: 10px;
     height: 15px;
-    margin-right: 5px; /* Ajusta este valor a tus necesidades */
+    margin-right: 5px; 
   }
-
   .task-buttons {
     display: flex;
-    justify-content: space-between; /* Ajusta este valor a tus necesidades */
+    justify-content: space-between; 
   }
-
   .task-input textarea {
     font-size: 0.5em;
   }
-
   .div-restante img {
     width: 25px;
     height: 45px;
@@ -434,7 +390,7 @@
 
 .animated-card {
   animation: swing 2s infinite;
-  transform-origin: center bottom; /* This makes the card swing from the bottom center */
+  transform-origin: center bottom; 
   margin-bottom: 1%;
-  box-shadow: 0px 0px 3px 3px white; /* This adds a white shadow around the card */
+  box-shadow: 0px 0px 3px 3px white; 
 }

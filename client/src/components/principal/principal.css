@@ -32,9 +32,6 @@
 
 .borrado-principal .bubbles span:nth-child(even) {
   background:    #A0CF9F;
-
-
-
   box-shadow: 0 0 0 10px #4fc3dc44, 
   0 0 50px    #A0CF9F,
   0 0 100px    #A0CF9F;
@@ -50,32 +47,30 @@
 }
 
 .borrado-principal {
-  position: relative; /* Asegúrate de que borrado-principal tiene una posición establecida */
+  position: relative; 
 }
 
 .center-div {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centra el div */
-  z-index: 2; /* Asegúrate de que el div está encima de los círculos */
+  transform: translate(-50%, -50%); 
+  z-index: 2; 
   width: 400px;
   height: 400px;
   background-color:  #0c192c;
   color: white;
-  border: 2px solid white; /* Establece un borde blanco de 2px */
-  border-radius: 10px; /* Hace que el borde sea redondeado */
+  border: 2px solid white; 
+  border-radius: 10px; 
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: center; /* Centrado vertical */
+  justify-content: center; 
 }
-
 
 .bubbles span {
   position: absolute;
-  z-index: 1; /* Asegúrate de que los círculos están debajo del div */
-  /* Resto de las propiedades de los círculos */
+  z-index: 1; 
 }
 
 .poker {
@@ -88,31 +83,29 @@
 
 .mensajeUsuario {
   color: #fff;
-  font-size: 20px; /* Ajusta esto al tamaño que necesites */
+  font-size: 20px; 
   width: 5px;
-  letter-spacing: 0.1em; /*Espaciado entre letras*/
+  letter-spacing: 0.1em; 
 }
 
 .info-div {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centrado vertical */
-  align-items: center; /* Centrado horizontal */
-  height: 200px; /* Ajusta esto a la altura que necesites */
+  justify-content: center; 
+  align-items: center; 
+  height: 200px; 
   width: 100%;
 }
 
 .mensajeUsuario {
   display: flex;
-  justify-content: center; /* Centrado horizontal */
-  align-items: center; /* Centrado vertical */
+  justify-content: center; 
+  align-items: center; 
   color: #fff;
   font-weight: 500;
-  width: 100%; /* Ajusta esto al ancho que necesites */
-  letter-spacing: 0.1em; /*Espaciado entre letras*/
-  font-size: 1.3em; /* Aumenta el tamaño de la letra */
-
-  
+  width: 100%; 
+  letter-spacing: 0.1em; 
+  font-size: 1.3em; 
 }
 
 .botonEntrar {
@@ -133,15 +126,14 @@
 }
 
 .botonEntrar:disabled {
-background:#A0CF9F; /* Cambia el color de fondo a gris claro */
-cursor: not-allowed; /* Cambia el cursor a not-allowed */
-color: #000000; /* Cambia el color del texto a gris oscuro */
+background:#A0CF9F; 
+cursor: not-allowed; 
+color: #000000; 
 }
-
 
 .androidIcon {
 animation: move 10s linear infinite;
-font-size: 1000%; /* Ajusta esto al tamaño que necesites */
+font-size: 1000%; 
 color: #A0CF9F;
 
 }
@@ -153,10 +145,10 @@ visibility: hidden;
 .mensajeUsuarioContainer {
 display: flex;
 flex-direction: column;
-justify-content: center; /* Centrado vertical */
-align-items: center; /* Centrado horizontal */
-height: 200px; /* Ajusta esto a la altura que necesites */
-width: 100%; /* Ajusta esto al ancho que necesites */
+justify-content: center;
+align-items: center; 
+height: 200px; 
+width: 100%; 
 }
 .inputBox-session {
 position: relative;
@@ -167,23 +159,23 @@ margin-top: 35px;
 .inputBox-session input {
 position: relative;
 width: 100%;
-padding: 20px 10px 10px; /*Arriba, derecha, abajo, izquierda*/
+padding: 20px 10px 10px; 
 background: transparent;
-outline: none; /*Elimina el borde al hacer click*/
+outline: none; 
 border: none;
-box-shadow: none; /*Elimina la sombra al hacer click*/
+box-shadow: none; 
 color: #23242a;
 font-size: 1em;
 letter-spacing: 0.05em;
 transition: 0.5s; 
-z-index: 10; /*Posiciona el elemento por encima de los demás*/
+z-index: 10; 
 }
 
 .inputBox-session span {
 position: absolute;
 left: 0; 
-padding: 20px 0px 10px; /*Arriba, derecha, abajo, izquierda*/
-pointer-events: none; /*Evita que el elemento sea seleccionado*/
+padding: 20px 0px 10px; 
+pointer-events: none; 
 color: #8f8f8f;
 font-size: 1em;
 letter-spacing: 0.05em;

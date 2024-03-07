@@ -5,8 +5,6 @@
   padding: 0 20px;
 }
 
-/*Historial de sesiones*/
-
 .sesiones-titulo {
   color: 'black';
   color: 'black';
@@ -51,18 +49,16 @@
   width: 100%;
 }
 
-/* Reduce el padding de las celdas de la tabla */
 .ant-table-cell {
   padding: 8px;
 }
 
-/* Reduce el espacio entre las filas de la tabla */
 .ant-table-row {
-  line-height: 0.5; /* Ajusta este valor según tus necesidades */
+  line-height: 0.5; 
 }
 
 .ant-table-thead > tr > th {
-  background-color: rgba(56, 181, 173, 0.8) !important; /* 0.5 es la opacidad */
+  background-color: rgba(56, 181, 173, 0.8) !important; 
   color: white !important;;
 }
 
@@ -80,8 +76,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
 * {
-    margin:0; /*Elimina espacios no deseados alrededor elementos*/
-    padding: 0; /*Eliminar espacio no deseados dentro de los elementos*/
-    box-sizing: border-box; /*Cambia la forma en que se calculan el ancho y la altura de los elementos. En lugar de agregar el relleno y el borde al ancho y la altura especificados, estos se incluyen en el ancho y la altura. */
-    font-family: 'Poppins', sans-serif;
+    margin:0;
+    padding: 0; 
+    box-sizing: border-box; 
 }

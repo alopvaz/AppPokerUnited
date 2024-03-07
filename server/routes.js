@@ -59,27 +59,25 @@ router.get('/name', function(req, res) {
 // Ruta que responde con el ID del usuario que ha iniciado sesión
 router.get('/userId', function(req, res) {
     if (req.session.userId) {
-        res.send(req.session.userId.toString()) // Envía el ID del usuario
+        res.send(req.session.userId.toString()) 
     } else {
         res.status(401).send('No autorizado')
     }
 });
 
+// Ruta para crear sesión
 router.post('/crear-sesion', function(req, res) {
     var nombreSesion = req.body.nombreSesion;
     var fechaHora = new Date();
-    fechaHora.setHours(fechaHora.getHours() + 1); // Ajusta la hora a tu zona horaria
-
-    // Convertir la fecha a un formato que MySQL pueda interpretar
+    fechaHora.setHours(fechaHora.getHours() + 1); 
     var fechaHoraMySQL = fechaHora.toISOString().slice(0, 19).replace('T', ' ');
-
     con.query('INSERT INTO sesiones (nombre, fecha) VALUES (?, ?)', [nombreSesion, fechaHoraMySQL], function(err, result) {
       if (err) throw err;
-      res.send({ message: 'Sesión creada con éxito', sessionId: result.insertId }); // Devuelve el ID de la sesión recién creada
+      res.send({ message: 'Sesión creada con éxito', sessionId: result.insertId }); 
     });
 });
 
-
+// Ruta para crear tarea
 router.post('/crear-tarea', function(req, res) {
     var nombreTarea = req.body.nombreTarea;
     var estimacion = req.body.estimacion;
@@ -87,9 +85,10 @@ router.post('/crear-tarea', function(req, res) {
 
     con.query('INSERT INTO tareas (nombre, estimacion, idSesion) VALUES (?, ?, ?)', [nombreTarea, estimacion, sessionId], function(err, result) {
         if (err) throw err;
-        res.send({ message: 'Tarea creada con éxito', taskId: result.insertId }); // Devuelve el ID de la tarea recién creada
+        res.send({ message: 'Tarea creada con éxito', taskId: result.insertId }); 
 });
 
+// Ruta para crear votación
 router.post('/crear-votacion', function(req, res) {
     var taskId = req.body.taskId;
     var userId = req.body.userId;
@@ -97,7 +96,7 @@ router.post('/crear-votacion', function(req, res) {
 
     con.query('INSERT INTO votaciones (idTarea, idUsuario, votacion) VALUES (?, ?, ?)', [taskId, userId, vote], function(err, result) {
         if (err) throw err;
-        res.send({ message: 'Votación creada con éxito', voteId: result.insertId }); // Devuelve el ID de la votación recién creada
+        res.send({ message: 'Votación creada con éxito', voteId: result.insertId }); 
     });
 });
 });

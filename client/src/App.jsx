@@ -3,9 +3,8 @@ import Login from "./components/login/login";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "./style/index.css";
 import Principal from './components/principal/principal';
-import Sesion from './components/sesion/sesion';
-import useLocalStorage from './localStorage/useLocalStorage';
-import sessionStorage from './localStorage/sessionStorage';
+import useLocalStorage from './Storage/useLocalStorage';
+import sessionStorage from './Storage/sessionStorage';
 import Sidebar from './components/sidebar/sidebar';
 import ProbandoSesion from './components/probandoSesion/probandoSesion';
 import Historial from './components/historial/historial';
@@ -78,28 +77,21 @@ function App() {
               <h1>Orders</h1>
             </div>
           }/> 
-          <Route path="/sesion" element={
-    <div className={!navVisible ? "page" : "page page-with-navbar"}>
-      <Sesion rol={userState.rol} nombre={userState.nombre} userId={userState.userId} />
-    </div>
-  }/>
- <Route path='/probandoSesion' element={
-  <div className={!navVisible ? "page" : "page page-with-navbar"}>
-    {userState.rol && userState.nombre ? <ProbandoSesion id={userState.userId} rol={userState.rol} nombre={userState.nombre} setSesionCreada={setSesionCreada} showNavbar={showNavbar} navVisible={navVisible}/> : null}
-  </div>
-}/>
-<Route path='/historial' element={
-  <div className={!navVisible ? "page" : "page page-with-navbar"}>
-    <Historial />
-  </div>
-}/>
-
-<Route path="/crearSesion" element={
-    <div className={!navVisible ? "page" : "page page-with-navbar"}>
-        <Principal rol={userState.rol} sesionCreada={sesionCreada} setSesionCreada={setSesionCreada} showNavbar={showNavbar} />
-    </div>
-}/>
-
+          <Route path='/probandoSesion' element={
+            <div className={!navVisible ? "page" : "page page-with-navbar"}>
+              {userState.rol && userState.nombre ? <ProbandoSesion id={userState.userId} rol={userState.rol} nombre={userState.nombre} setSesionCreada={setSesionCreada} showNavbar={showNavbar} navVisible={navVisible}/> : null}
+            </div>
+          }/>
+          <Route path='/historial' element={
+            <div className={!navVisible ? "page" : "page page-with-navbar"}>
+              <Historial />
+            </div>
+          }/>
+          <Route path="/crearSesion" element={
+            <div className={!navVisible ? "page" : "page page-with-navbar"}>
+                <Principal rol={userState.rol} sesionCreada={sesionCreada} setSesionCreada={setSesionCreada} showNavbar={showNavbar} />
+            </div>
+          }/>
         </Routes>
         <RenderSidebar userState={userState} showNavbar={showNavbar} logout={logout} navVisible={navVisible} />
       </div>
@@ -109,11 +101,9 @@ function App() {
 
 function RenderSidebar({ userState, showNavbar, logout, navVisible }) {
   const location = useLocation();
-
   if (location.pathname === '/probandoSesion' || !userState.isAuthenticated) {
     return null;
   }
-
   return (
     <Sidebar
       visible={navVisible}

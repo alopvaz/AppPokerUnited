@@ -1,7 +1,7 @@
 //Importar biblioteca bcrypt para generar un hash de la contrasena proporcionada
 import bcrypt from 'bcrypt';
 //Contrasena proporcionada
-var password = "alvaro";
+var password = "javi";
 
 //Llamada a la funcion hash() que genera un hash de la contrasena proporcionada
     //Argumentos: 

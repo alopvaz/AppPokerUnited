@@ -2,7 +2,6 @@ import {
     FaAngleRight,
     FaAngleLeft, 
     FaHome, 
-    FaCog,
     FaSignOutAlt,
     FaPlusSquare, 
     FaHistory, 
@@ -11,16 +10,12 @@ import { NavLink } from "react-router-dom";
 import "./sidebar.css";
 import { FaRegHandSpock } from 'react-icons/fa';
 import logo from './logo.png'; 
-import { useState } from 'react'; 
 const ICON_SIZE = 20;
 import PropTypes from 'prop-types';
-import useLocalStorage from '../../localStorage/useLocalStorage';
-
+import useLocalStorage from '../../Storage/useLocalStorage';
 
 function Sidebar({visible, show, logout, rol}) {
-
-    const [dropdownVisible, setDropdownVisible] = useLocalStorage(false); // Añade estado para el menú desplegable
-
+    const [dropdownVisible, setDropdownVisible] = useLocalStorage(false); 
     return (
         <>
             <nav className={!visible ? 'navbar' : ''}>
@@ -29,8 +24,7 @@ function Sidebar({visible, show, logout, rol}) {
                     className="nav-btn"
                     onClick={() => show(!visible)}
                 >
-                    { !visible
-                        ? <FaAngleRight size={30} /> : <FaAngleLeft size={30} />}
+                    { !visible ? <FaAngleRight size={30} /> : <FaAngleLeft size={30} />}
                 </button>
                 <div>
                     <NavLink className="logo" to="/">
@@ -42,10 +36,10 @@ function Sidebar({visible, show, logout, rol}) {
                             <span>Home</span>
                         </NavLink>
                         <NavLink to="/crearSesion" className="nav-link" onClick={() => setDropdownVisible(!dropdownVisible)}>
-  <FaRegHandSpock size={ICON_SIZE} />
-  <span>Poker United </span>
-</NavLink>
-                        {dropdownVisible && rol === 'admin' && ( // Si el rol es 'admin', muestra estos elementos
+                            <FaRegHandSpock size={ICON_SIZE} />
+                            <span>Poker United </span>
+                        </NavLink>
+                        {dropdownVisible && rol === 'admin' && ( 
                             <div className="dropdown">
                                 <NavLink to="/crearSesion" className="nav-link" style={{marginLeft: '10px', fontSize: '0.8em'}}>
                                     <FaPlusSquare size={ICON_SIZE} />
@@ -75,6 +69,6 @@ Sidebar.propTypes = {
     show: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     rol: PropTypes.string.isRequired,
-  };
+};
 
 export default Sidebar;

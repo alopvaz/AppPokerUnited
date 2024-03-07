@@ -5,15 +5,13 @@
 	margin: 0;
 	box-sizing: border-box;
 	font-family: 'Open Sans', sans-serif;
-
 }
 
 .App{
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-    min-height: 100vh; /* Cambiado de 'height' a 'min-height' */
-
+    min-height: 100vh;
 }
 
 .page{
@@ -21,7 +19,6 @@
     display: flex;
     justify-content: center;
 	flex-basis: 100%;
-
 }
 
 .page-with-navbar{
@@ -33,5 +30,4 @@
 		width: 100%;
 		margin-left: 0;
 	}
-
 }
