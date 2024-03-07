@@ -1,63 +1,59 @@
-import React from 'react';
 import {
     FaAngleRight,
     FaAngleLeft, 
-    FaHome, // Importa FaHome aquí
-    FaShoppingCart, 
-    FaCog,
+    FaHome, 
     FaSignOutAlt,
-    FaBars
+    FaPlusSquare, 
+    FaHistory, 
 } from 'react-icons/fa';
 import { NavLink } from "react-router-dom";
 import "./sidebar.css";
 import { FaRegHandSpock } from 'react-icons/fa';
-import logo from './logo.png'; // Importa tu logo aquí
-
+import logo from './logo.png'; 
 const ICON_SIZE = 20;
-function Sidebar({visible, show, logout}) {
+import PropTypes from 'prop-types';
+import useLocalStorage from '../../Storage/useLocalStorage';
 
+function Sidebar({visible, show, logout, rol}) {
+    const [dropdownVisible, setDropdownVisible] = useLocalStorage(false); 
     return (
         <>
-            {/* Comenta o elimina este bloque de código si no quieres el botón de hamburguesa
-            <div className="mobile-nav">
-                <button
-                    className="mobile-nav-btn"
-                    onClick={() => show(!visible)}
-                >
-                    <FaBars size={24}  />
-                </button>
-            </div>
-            */}
             <nav className={!visible ? 'navbar' : ''}>
                 <button
                     type="button"
                     className="nav-btn"
                     onClick={() => show(!visible)}
                 >
-                    { !visible
-                        ? <FaAngleRight size={30} /> : <FaAngleLeft size={30} />}
+                    { !visible ? <FaAngleRight size={30} /> : <FaAngleLeft size={30} />}
                 </button>
                 <div>
                     <NavLink className="logo" to="/">
-                        <img src={logo} alt="logo" /> {/* Usa tu logo aquí */}
+                        <img src={logo} alt="logo" />
                     </NavLink>
                     <div className="links nav-top">
                         <NavLink to="/home" className="nav-link" end>
-                            <FaHome size={ICON_SIZE} /> {/* Usa FaHome aquí */}
+                            <FaHome size={ICON_SIZE} />
                             <span>Home</span>
                         </NavLink>
-                        <NavLink to="/poker" className="nav-link">
+                        <NavLink to="/crearSesion" className="nav-link" onClick={() => setDropdownVisible(!dropdownVisible)}>
                             <FaRegHandSpock size={ICON_SIZE} />
                             <span>Poker United </span>
                         </NavLink>
+                        {dropdownVisible && rol === 'admin' && ( 
+                            <div className="dropdown">
+                                <NavLink to="/crearSesion" className="nav-link" style={{marginLeft: '10px', fontSize: '0.8em'}}>
+                                    <FaPlusSquare size={ICON_SIZE} />
+                                    <span>Crear Sesion</span>
+                                </NavLink>
+                                <NavLink to="/historial" className="nav-link" style={{marginLeft: '10px', fontSize: '0.8em'}}>
+                                    <FaHistory size={ICON_SIZE} />
+                                    <span>Historial de Sesiones</span>
+                                </NavLink>
+                            </div>
+                        )}
                     </div>
                 </div>
-
                 <div className="links">
-                    <NavLink to="/settings" className="nav-link">
-                        <FaCog size={ICON_SIZE} />
-                        <span>Settings</span> 
-                    </NavLink>
                     <NavLink to="/login" className="nav-link" onClick={logout}>
                         <FaSignOutAlt size={ICON_SIZE} />
                         <span>Logout</span> 
@@ -65,8 +61,14 @@ function Sidebar({visible, show, logout}) {
                 </div>
             </nav>
         </>
-        
     );
 }
+
+Sidebar.propTypes = {
+    visible: PropTypes.bool.isRequired,
+    show: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+    rol: PropTypes.string.isRequired,
+};
 
 export default Sidebar;

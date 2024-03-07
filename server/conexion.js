@@ -1,15 +1,15 @@
 import { createConnection } from 'mysql';
 
 var con = createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "pokerunited"
+    host: "db",
+    user: "user",
+    password: "password",
+    database: "mydatabase"
 });
 
 con.connect(function(err) {
     if (err) throw err;
-    console.log("Conectado a la base de datos 'pokerunited'!");
+    console.log("Conectado a la base de datos 'mydatabase'!");
 });
 
-export default con; 
+export default con;

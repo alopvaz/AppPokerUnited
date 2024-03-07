@@ -1,27 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
 * {
-    margin:0; /*Elimina espacios no deseados alrededor elementos*/
-    padding: 0; /*Eliminar espacio no deseados dentro de los elementos*/
-    box-sizing: border-box; /*Cambia la forma en que se calculan el ancho y la altura de los elementos. En lugar de agregar el relleno y el borde al ancho y la altura especificados, estos se incluyen en el ancho y la altura. */
+    margin:0; 
+    padding: 0; 
+    box-sizing: border-box; 
     font-family: 'Poppins', sans-serif;
 }
 
 .body {
-    display: flex; /*Sus elementos serán flexibles*/
-    justify-content: center; /*Con flex, los elementos se centrarán horizontalmente*/
-    align-items: center; /*Con flex, los elementos se centrarán verticalmente*/
-    min-height: 100vh; /*Altura mínima al 100% de la altura de la ventana*/
-    background-color: #1c1c1c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #0c192c;
 }
 
 .box {
-    position:relative; /*Posición relativa para que el elemento sea relativo a su posición normal*/
+    position:relative; 
     width: 380px;
     height: 420px;
-    background-color: #1c1c1c;
+    background-color: #0c192c;
     border-radius: 8px;
-    overFlow: hidden; /*Evita que el contenido se desborde*/
+    overflow: hidden; 
 }
 
 .box::before {
@@ -32,67 +32,57 @@
     width: 380px;
     height: 420px;
     background: linear-gradient(0deg,transparent,
-    transparent,#45f3ff, #45f3ff, #45f3ff);h2 {
+    transparent,#38B5AD, #38B5AD, #38B5AD);h2 {
         font-size: 15vmin;
         position: absolute;
-      }
-      .border {
+    }
+    .border {
         color: black;  
         text-shadow:
-          -1px -1px 0 white, 
-          1px -1px 0 white,
-          -1px 1px 0 white,
-          1px 1px 0 white;  
-      }
-      
-      .wave {
-        color: #5CC1CE;
+        -1px -1px 0 white, 
+        1px -1px 0 white,
+        -1px 1px 0 white,
+        1px 1px 0 white;  
+    }
+    .wave {
+        color: #38B5AD;
         animation: wave 3s ease-in-out infinite;
-      }
-      
-      @keyframes wave {
+    }
+    @keyframes wave {
         0%, 100% {
-          clip-path: polygon(
-            0% 47%,
-            10% 48%,
-            33% 54%,
-            54% 60%,
-            70% 61%,
-            84% 59%,
-            100% 52%,
-            100% 100%,
-            0% 100%
-          );
-        }
-      
-        50% {
-          clip-path: polygon(0% 60%,
-          15% 65%,
-          34% 66%,
-          51% 62%,
-          67% 50%,
-          84% 45%,
-          100% 46%,
-          100% 100%,
-          0% 100%
-          );
-        }
-      }
-      
-      body {
+        clip-path: polygon(
+        0% 47%,
+        10% 48%,
+        33% 54%,
+        54% 60%,
+        70% 61%,
+        84% 59%,
+        100% 52%,
+        100% 100%,
+        0% 100%
+        );
+    }
+    
+    50% {
+        clip-path: polygon(0% 60%,
+        15% 65%,
+        34% 66%,
+        51% 62%,
+        67% 50%,
+        84% 45%,
+        100% 46%,
+        100% 100%,
+        0% 100%
+        );
+    }
+    }
+    body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         background: black;
         display: flex;  
         height: 100vh;
         width: 100vw;
-        align-items: center;
-        justify-content: center;
-      }
-      
-      * {
-        margin: 0;
-        padding: 0;
-      }
+    }
     z-index: 1;
     transform-origin: bottom right; 
     animation: animate 6s linear infinite; 
@@ -106,7 +96,7 @@
     width: 380px;
     height: 420px;
     background: linear-gradient(0deg,transparent,
-    transparent,#45f3ff, #45f3ff, #45f3ff);
+    transparent,#38B5AD, #38B5AD, #38B5AD);
     z-index: 1;
     transform-origin: bottom right; 
     animation: animate 6s linear infinite; 
@@ -127,7 +117,7 @@
     width: 380px;
     height: 420px;
     background: linear-gradient(0deg,transparent,
-    transparent,#ff2770, #ff2770, #ff2770);
+    transparent,#A0CF9F, #A0CF9F, #A0CF9F);
     z-index: 1;
     transform-origin: bottom right; 
     animation: animate 6s linear infinite; 
@@ -142,7 +132,7 @@
     width: 380px;
     height: 420px;
     background: linear-gradient(0deg,transparent,
-    transparent,#ff2770, #ff2770, #ff2770);
+    transparent,#A0CF9F, #A0CF9F, #A0CF9F);
     z-index: 1;
     transform-origin: bottom right; 
     animation: animate 6s linear infinite; 
@@ -161,17 +151,17 @@
 }
 
 .box form {
-    position:absolute; /*Posición absoluta para que el elemento sea relativo a su primer elemento padre con posición relativa*/
-    inset: 4px; /*Posiciona el elemento a 4px de todos los lados*/
-    background-color:#222;
+    position:absolute; 
+    inset: 4px; 
+    background-color:#0c192c;
     padding: 50px 40px;
     border-radius: 8px;
-    z-index: 2; /*Posiciona el elemento por encima de los demás*/
+    z-index: 2; 
     display: flex;
     flex-direction: column;
 }
 
-.box form h2 {
+.box form h1 {
     color: #fff;
     font-weight: 500;
     text-align: center;
@@ -187,23 +177,23 @@
 .box form .inputBox input {
     position: relative;
     width: 100%;
-    padding: 20px 10px 10px; /*Arriba, derecha, abajo, izquierda*/
+    padding: 20px 10px 10px;
     background: transparent;
-    outline: none; /*Elimina el borde al hacer click*/
+    outline: none;
     border: none;
-    box-shadow: none; /*Elimina la sombra al hacer click*/
+    box-shadow: none; 
     color: #23242a;
     font-size: 1em;
     letter-spacing: 0.05em;
     transition: 0.5s; 
-    z-index: 10; /*Posiciona el elemento por encima de los demás*/
+    z-index: 10; 
 }
 
 .box form .inputBox span {
     position: absolute;
     left: 0; 
-    padding: 20px 0px 10px; /*Arriba, derecha, abajo, izquierda*/
-    pointer-events: none; /*Evita que el elemento sea seleccionado*/
+    padding: 20px 0px 10px; 
+    pointer-events: none;
     color: #8f8f8f;
     font-size: 1em;
     letter-spacing: 0.05em;
@@ -225,7 +215,6 @@
     height: 2px;
     background: #fff;
     border-radius: 4px;
-    overflow: hidden;
     transition: 0.5s;
     pointer-events: none;
 }

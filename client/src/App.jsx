@@ -1,22 +1,27 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Login from "./components/login/login";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "./style/index.css";
 import Principal from './components/principal/principal';
-import Sesion from './components/sesion/sesion';
-import useLocalStorage from './localStorage/useLocalStorage';
+import useLocalStorage from './Storage/useLocalStorage';
+import sessionStorage from './Storage/sessionStorage';
 import Sidebar from './components/sidebar/sidebar';
 import ProbandoSesion from './components/probandoSesion/probandoSesion';
-function App() {
+import Historial from './components/historial/historial';
 
-  const [navVisible, showNavbar] = useState(false);
-  
-  const [userState, setUserState] = useLocalStorage('userState', {
+function App() {
+  const [navVisible, setNavVisible] = useLocalStorage(true);
+  const [userState, setUserState] = sessionStorage('userState', {
     isAuthenticated: false,
     rol: '',
     nombre: '',
     userId: ''
   });
+  const [sesionCreada, setSesionCreada] = useLocalStorage('sesionCreada', false);
+
+  const showNavbar = (show) => {
+    setNavVisible(show);
+  };
 
   const authenticate = (rol, nombre, id) => {
     setUserState({
@@ -25,7 +30,17 @@ function App() {
       nombre: nombre,
       userId: id
     });
-    showNavbar(true); // Mostrar el Navbar después de iniciar sesión
+    showNavbar(true); 
+  };
+
+  const logout = () => {
+    setUserState({
+      isAuthenticated: false,
+      rol: '',
+      nombre: '',
+      userId: ''
+    });
+    showNavbar(false); 
   };
 
   useEffect(() => {
@@ -35,25 +50,21 @@ function App() {
     };
   }, []);
 
-  const logout = () => {
-    setUserState({
-      isAuthenticated: false,
-      rol: '',
-      nombre: '',
-      userId: ''
-    });
-    showNavbar(false); // Ocultar el Navbar después de cerrar sesión
-  };
   return (
     <BrowserRouter>
       <div className="App">
-        {userState.isAuthenticated && <Sidebar visible={navVisible} show={showNavbar} logout={logout} />}
         <Routes>
-        <Route path="/" element={userState.isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />          
-        <Route path="/login" element={<Login authenticate={authenticate} isAuthenticated={userState.isAuthenticated} />} />
+          <Route path="/" element={userState.isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />          
+          <Route path="/login" element={<Login authenticate={authenticate} isAuthenticated={userState.isAuthenticated} />} />
           <Route path='/home' element={
             <div className={!navVisible ? "page" : "page page-with-navbar"}>
-              <h1>Home</h1>
+            <h1 style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                textAlign: 'center'
+              }}>Home</h1>            
             </div>
           } />
           <Route path='/analytics' element={
@@ -66,24 +77,40 @@ function App() {
               <h1>Orders</h1>
             </div>
           }/> 
-          <Route path='/poker' element={
+          <Route path='/probandoSesion' element={
             <div className={!navVisible ? "page" : "page page-with-navbar"}>
-              <Principal rol={userState.rol} />
+              {userState.rol && userState.nombre ? <ProbandoSesion id={userState.userId} rol={userState.rol} nombre={userState.nombre} setSesionCreada={setSesionCreada} showNavbar={showNavbar} navVisible={navVisible}/> : null}
             </div>
           }/>
-          <Route path="/sesion" element={
-    <div className={!navVisible ? "page" : "page page-with-navbar"}>
-      <Sesion rol={userState.rol} nombre={userState.nombre} userId={userState.userId} />
-    </div>
-  }/>
- <Route path='/probandoSesion' element={
-  <div className={!navVisible ? "page" : "page page-with-navbar"}>
-    {userState.rol && userState.nombre ? <ProbandoSesion rol={userState.rol} nombre = {userState.nombre}/> : null}
-  </div>
-}/>
+          <Route path='/historial' element={
+            <div className={!navVisible ? "page" : "page page-with-navbar"}>
+              <Historial />
+            </div>
+          }/>
+          <Route path="/crearSesion" element={
+            <div className={!navVisible ? "page" : "page page-with-navbar"}>
+                <Principal rol={userState.rol} sesionCreada={sesionCreada} setSesionCreada={setSesionCreada} showNavbar={showNavbar} />
+            </div>
+          }/>
         </Routes>
+        <RenderSidebar userState={userState} showNavbar={showNavbar} logout={logout} navVisible={navVisible} />
       </div>
     </BrowserRouter>
+  );
+}
+
+function RenderSidebar({ userState, showNavbar, logout, navVisible }) {
+  const location = useLocation();
+  if (location.pathname === '/probandoSesion' || !userState.isAuthenticated) {
+    return null;
+  }
+  return (
+    <Sidebar
+      visible={navVisible}
+      show={showNavbar}
+      logout={logout}
+      rol={userState.rol}
+    />
   );
 }
 
