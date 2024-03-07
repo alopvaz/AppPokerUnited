@@ -1,0 +1,122 @@
+
+nav{
+    position: fixed; 
+    top:0;
+    left:0;
+    display:flex;
+    flex-direction:column;
+    justify-content: space-between;
+    width:15%;
+    min-height: 100vh;
+    background-color: #FBFBFA;
+    padding:2rem 1rem 1rem 1rem;
+    transition: visibility 0s;
+    visibility: visible;
+    min-width: 200px; 
+    z-index: 2; 
+}
+
+.navbar{
+    transform: translateX(-100%);
+    background-color: #FFFFFF;
+}
+
+.nav-btn{
+    position: absolute;
+    transform: translateX(38px);
+    top: 20px;
+    right: 0;
+    width:40px;
+    height: 60px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #38B5AD;
+    outline: none;
+    border: none;
+    font-size: 1rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: #fff;
+    z-index: 9999; 
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background: transparent;
+}
+
+.logo img {
+    display: block;
+    width: 50px; 
+    height: auto;
+    margin-left: -25px; 
+}
+
+.nav-link{
+    display: flex;
+    align-items: center;
+    color: #000000;
+    text-decoration: none;
+    padding: 10px 1rem;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.nav-link:hover{
+    background-color:#38B5AD;
+    color: #4e4e4e;
+}
+
+.nav-link span{
+    margin-left: 10px;
+}
+
+.nav-top{
+    margin-top: 4rem; 
+}
+
+@media only screen and (min-width: 1200px){
+    nav{
+        width: 15%;
+    }
+}
+
+@media only screen and (max-width: 1199px){
+    nav{
+        width: 20%;
+    }
+}
+
+@media only screen and (max-width: 992px){
+    nav{
+        width: 25%;
+    }
+}
+
+@media only screen and (max-width: 768px){
+    nav{
+        width: 30%;
+    }
+}
+
+@media only screen and (max-width: 576px){
+    nav{
+        width: 35%;
+    }
+}
+
+@media only screen and (max-width: 450px){
+    nav{
+        width: 40%;
+        min-height: calc(100vh - 38px);
+    }
+    .nav-top{
+        margin-top: 2rem; 
+    }
+}
+

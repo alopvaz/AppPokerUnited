@@ -1,0 +1,82 @@
+.main-historial {
+  overflow-y: scroll;
+  height: 100vh;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.sesiones-titulo {
+  color: 'black';
+  color: 'black';
+}
+
+.separator {
+  display: block;
+  height: 1px;
+  background-color: #f0f0f0;
+  margin: 10px 0;
+}
+
+.boton-anadir {
+  margin-bottom: 16px;
+  background-color: #5cc1ce;
+}
+
+.historial-sesiones,
+.historial-tareas,
+.historial-votaciones {
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 1%;
+}
+
+.editable-cell {
+    position: relative;
+}
+  
+.editable-cell-value-wrap {
+  padding: 5px 12px;
+  cursor: pointer;
+}
+  
+.editable-row:hover .editable-cell-value-wrap {
+  padding: 4px 11px;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+}
+
+.my-table {
+  width: 100%;
+}
+
+.ant-table-cell {
+  padding: 8px;
+}
+
+.ant-table-row {
+  line-height: 0.5; 
+}
+
+.ant-table-thead > tr > th {
+  background-color: rgba(56, 181, 173, 0.8) !important; 
+  color: white !important;;
+}
+
+.custom-link {
+  color: #5cc1ce;
+}
+
+
+.custom-popconfirm {
+  background-color: lightblue;
+  color: black;
+  border-radius: 10px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin:0;
+    padding: 0; 
+    box-sizing: border-box; 
+}

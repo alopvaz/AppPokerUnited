@@ -1,0 +1,212 @@
+.borrado-principal {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  min-height: 100vh;
+  background-color: #0c192c;
+  height: 100vh; 
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.borrado-principal .bubbles {
+  position: relative;
+  display: flex;
+}
+
+.borrado-principal .bubbles span {
+  position: relative;
+  width: 2vw;
+  height: 2vw;
+  background: #38B5AD;
+  margin: 0 4px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 10px #4fc3dc44, 
+  0 0 50px #38B5AD, 
+  0 0 100px #38B5AD;
+  animation: animateBorradoPrincipal 15s linear infinite;
+  animation-duration: calc(120s / var(--i));
+}
+
+.borrado-principal .bubbles span:nth-child(even) {
+  background:    #A0CF9F;
+  box-shadow: 0 0 0 10px #4fc3dc44, 
+  0 0 50px    #A0CF9F,
+  0 0 100px    #A0CF9F;
+}
+
+@keyframes animateBorradoPrincipal {
+  0% {
+      transform: translateY(100vh) scale(0);
+  }
+  100% {
+      transform: translateY(-10vh) scale(1);
+  }
+}
+
+.borrado-principal {
+  position: relative; 
+}
+
+.center-div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  z-index: 2; 
+  width: 400px;
+  height: 400px;
+  background-color:  #0c192c;
+  color: white;
+  border: 2px solid white; 
+  border-radius: 10px; 
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center; 
+}
+
+.bubbles span {
+  position: absolute;
+  z-index: 1; 
+}
+
+.poker {
+  color: #38B5AD;
+}
+
+.united {
+  color: #A0CF9F;
+}
+
+.mensajeUsuario {
+  color: #fff;
+  font-size: 20px; 
+  width: 5px;
+  letter-spacing: 0.1em; 
+}
+
+.info-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center; 
+  height: 200px; 
+  width: 100%;
+}
+
+.mensajeUsuario {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  color: #fff;
+  font-weight: 500;
+  width: 100%; 
+  letter-spacing: 0.1em; 
+  font-size: 1.3em; 
+}
+
+.botonEntrar {
+  border: none;
+  outline: none;
+  padding: 9px 25px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9em;
+  border-radius: 4px;
+  font-weight: 600;
+  width: 100px;
+  margin-top: 10px;
+}
+
+.botonEntrar:active {
+  opacity: 0.4;
+}
+
+.botonEntrar:disabled {
+background:#A0CF9F; 
+cursor: not-allowed; 
+color: #000000; 
+}
+
+.androidIcon {
+animation: move 10s linear infinite;
+font-size: 1000%; 
+color: #A0CF9F;
+
+}
+
+.botonEntrarOculto {
+visibility: hidden;
+}
+
+.mensajeUsuarioContainer {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center; 
+height: 200px; 
+width: 100%; 
+}
+.inputBox-session {
+position: relative;
+width: 300px;
+margin-top: 35px;
+}
+
+.inputBox-session input {
+position: relative;
+width: 100%;
+padding: 20px 10px 10px; 
+background: transparent;
+outline: none; 
+border: none;
+box-shadow: none; 
+color: #23242a;
+font-size: 1em;
+letter-spacing: 0.05em;
+transition: 0.5s; 
+z-index: 10; 
+}
+
+.inputBox-session span {
+position: absolute;
+left: 0; 
+padding: 20px 0px 10px; 
+pointer-events: none; 
+color: #8f8f8f;
+font-size: 1em;
+letter-spacing: 0.05em;
+transition: 0.5s;
+} 
+
+.inputBox-session input:valid ~ span,
+.inputBox-session input:focus ~ span {
+color: #fff;
+font-size: 0.75em;
+transform: translateY(-34px);
+}
+
+.inputBox-session i {
+position: absolute;
+left: 0;
+bottom: 0;
+width: 100%;
+height: 2px;
+background: #fff;
+border-radius: 4px;
+overflow: hidden;
+transition: 0.5s;
+pointer-events: none;
+}
+
+.inputBox-session input:valid ~ i, 
+.inputBox-session input:focus ~ i {
+height: 44px; 
+}
+
+.mensajeUsuario {
+  text-align: center;
+}

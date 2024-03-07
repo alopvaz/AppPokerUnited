@@ -1,0 +1,396 @@
+.bodyStyle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #0c192c;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  flex-direction: row;
+}
+
+.session-name {
+  color: white;
+}
+.nombre-usuario-seleccionado {
+  color: #A0CF9F !important;
+}
+
+.bodyStyle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(#38B5AD, #A0CF9F);
+  clip-path: circle(20% at right 70%);
+}
+
+.bodyStyle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(#A0CF9F, #38B5AD);
+  clip-path: circle(20% at left 20%);
+}
+
+.container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.container .card {
+  position: relative; 
+  width: 12%;
+  height: 30vh; 
+  box-shadow: 20xp 20px 50px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  background: rgba(255,255,255,0.1);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 2; 
+  transform: translateX(-10%); 
+}
+
+.container .card .content {
+  text-align: center;
+  transform: traslate(100px);
+  transition: 0.5s;
+}
+
+.container .card .content p {
+  font-size: 1em;
+  color: #fff;
+  font-weight: 300;
+}
+
+.container .left-div {
+  position: relative; 
+  width: 80%;
+  height: 90vh; 
+  z-index: 1; 
+  background-color: #0c192c;
+  overflow: auto; 
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.left-div ul {
+  display: flex; 
+  flex-wrap: wrap; 
+  list-style: none; 
+}
+
+.left-div ul li {
+  margin: 1%; 
+}
+
+.left-div ul li img {
+  width: 160px; 
+  height: 210px; 
+}
+
+.card-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-item img {
+  margin-bottom: 10px; 
+}
+
+.card-name {
+  text-align: center;
+  color: #fff;
+  font-size: 1.1em;
+}
+
+.task-input textarea {
+  background: transparent; 
+  color: #fff;
+  font-size:90%;
+  width: 80%;
+  outline: none; 
+}
+
+.content {
+  width: 100%; 
+  height: 100%; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+}
+
+.task-title {
+  height: 20%;
+  width: 100%;
+  margin-top: 2%;
+}
+
+.task-input {
+  width: 100%;
+  height: 60%;
+  padding: 7px; 
+}
+
+.task-input textarea {
+  width: 100%;
+  height: 100%;
+}
+
+.container .card .content button {
+  border: none;
+  outline: none;
+  padding: 9px 25px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9em;
+  border-radius: 4px;
+  font-weight: 600;
+  width: 100px;
+  margin-top: 10px;
+  position: relative;
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
+  text-decoration: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  color: black;
+  margin-bottom: 5%;
+}
+
+.container .card .content button:active {
+  opacity: 0.4;
+}
+
+.left-div ul {
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: center; 
+  align-items: flex-start;
+}
+
+.otro-div {
+  background-color: rgb(255, 248, 248);
+}
+
+.exit-button {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px 20px;
+}
+
+.div-lista {
+  height: 80%;
+}
+
+.div-restante {
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  align-items: flex-end; 
+}
+
+.div-restante img {
+  width: 50px;
+  height: 70px;
+}
+
+.exit-button {
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  outline: inherit;
+  color: white;
+  font-size: 0.9em;
+}
+
+.carta-pequena {
+  margin: 3px;  
+  transition: transform 0.3s ease-in-out;  
+}
+
+.carta-pequena:hover {
+  transform: translateY(-10px);  
+  transition: transform 0.3s ease;
+}
+
+.raised,
+.raised:hover {
+  transform: translateY(-10px);
+  animation: sway 1s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.textarea-task {
+  resize: none;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 5px;
+}
+
+.my-modal-confirm-button {
+  background-color: #38B5AD; 
+}
+
+.my-modal-cancel-button:hover {
+  color: #38B5AD !important;
+  border-color: #38B5AD !important;
+}
+
+.my-modal-confirm-button:hover {
+  background-color: #fff !important;
+  color: #38B5AD !important;
+  border-color: #38B5AD !important;
+}
+
+.card-selected {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+@media screen and (max-width: 1300px) {
+  .div-restante img {
+    width: 40px;
+    height: 60px;
+  }
+  .icono {
+    font-size: 28px; 
+  }
+  .left-div ul li img {
+    width: 110px; 
+    height: 150px; 
+  }
+
+  .left-div ul li {
+    margin-right: 0.5%; 
+  }
+  .card-name {
+    font-size: 14px;
+  }
+  .task-title {
+    font-size: 0.8em; 
+  }
+  .container .card .content button {
+    padding: 2px 20px; 
+    font-size: 0.6em; 
+    width: 50px;
+    height: 20px;
+    margin-right: 5px; 
+  }
+  .task-buttons {
+    display: flex;
+    justify-content: space-between; 
+  }
+  .task-input textarea {
+    font-size: 0.9em;
+  }
+} 
+
+@media screen and (min-width: 1301px) {
+  .div-restante img {
+    width: 50px;
+    height: 70px;
+  }
+  .icono {
+    font-size: 40px;
+  }
+  .container .card .content button {
+    padding: 2px 20px; 
+    font-size: 0.8em; 
+    width: 70px; 
+    height: 30px;
+    margin-right: 5px; 
+  }
+  .task-buttons {
+    display: flex;
+    justify-content: space-between; 
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .icono {
+    font-size: 25px;
+  }
+  .left-div ul li img {
+    width: 70px; 
+    height: 90px; 
+  }
+  .left-div ul li {
+    margin-right: 0.5%; 
+  }
+  .card-name {
+    font-size: 10px;
+  }
+  .task-title {
+    font-size: 0.6em; 
+  }
+  .container .card .content button {
+    padding: 3px 22px; 
+    font-size: 0.8em; 
+    width: 70px; 
+  }
+  .task-input textarea {
+    font-size: 0.6em;
+  }
+  .container .card .content button {
+    padding: 2px 15px; 
+    font-size: 0.4em; 
+    width: 10px;
+    height: 15px;
+    margin-right: 5px; 
+  }
+  .task-buttons {
+    display: flex;
+    justify-content: space-between; 
+  }
+  .task-input textarea {
+    font-size: 0.5em;
+  }
+  .div-restante img {
+    width: 25px;
+    height: 45px;
+  }
+}
+
+@keyframes swing {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(-10deg);
+  }
+}
+
+.animated-card {
+  animation: swing 2s infinite;
+  transform-origin: center bottom; 
+  margin-bottom: 1%;
+  box-shadow: 0px 0px 3px 3px white; 
+}
