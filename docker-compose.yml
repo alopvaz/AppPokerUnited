@@ -14,11 +14,9 @@ services:
     tty: true
     ports: 
       - "3000:3000"
-    command: node index.js
+    command: /bin/sh -c "sleep 20 && node index.js"
     depends_on:
-       - db
-    restart: always
-
+       - db 
   client:
     build: 
       context: ./client
