@@ -16,7 +16,8 @@ services:
       - "3000:3000"
     command: /bin/sh -c "sleep 20 && node index.js"
     depends_on:
-       - db 
+       - db
+    restart: always 
   client:
     build: 
       context: ./client
